@@ -11,6 +11,72 @@ namespace ConsoleApp
     {
         static void Main(string[] args)
         {
+            LinkedList();
+            Console.ReadLine();
+        }
+
+        static void LinkedList()
+        {
+            ListNode list1 = new ListNode("Mumbai");
+
+            list1.Next = new ListNode("Baroda");
+            list1.Next.Next = new ListNode("Pune");
+            list1.Next.Next.Next = new ListNode("Noida");
+            list1.Next.Next.Next.Next = new ListNode("Gurgaon");
+
+
+            ListNode list2 = new ListNode("Noida");
+
+            list2.Next = new ListNode("Mumbai");
+            Console.WriteLine("List1");
+            list1.Print();
+            Console.WriteLine("List2");
+            list2.Print();
+            
+            
+
+            return null;
+        }
+    }
+
+    class ListNode
+    {
+        public string Data { get; set; }
+        public ListNode Next { get; set; }
+        private ListNode Tail { get; set; }
+        
+        public ListNode(string city, ListNode next = null)
+        {
+            this.Data = city;
+            this.Next = next;
+            this.Tail = this.Next;
+        }
+
+        public void Add(string city)
+        {
+            ListNode newNode  = new ListNode(city);
+            this.Tail.Next = newNode;
+            this.Tail = newNode.Next;
+        }
+
+        public void Print()
+        {
+            var curr = this;
+            while (curr != null)
+            {
+                Console.Write("{0}->", curr.Data);
+                curr = curr.Next;
+            }
+            Console.Write("NULL");
+        }
+    }
+
+
+
+    class Pogram1
+    {
+        static void Main(string[] args)
+        {
             //UniqueCharacters();
             //Reverse();
            // ReplaceSpaces("Rajesh Sharma".ToCharArray(), "Rajesh Sharma".Length); 
@@ -26,8 +92,8 @@ namespace ConsoleApp
             //Console.WriteLine(sub(-5, -3));
             //Console.WriteLine(sub(5, -3));
             //Console.WriteLine(sub(5, 3));
-            Console.WriteLine(multiply(3,-5));
-
+            //Console.WriteLine(multiply(3,-5));
+            Console.WriteLine(lengthOfLongestSubstring("Rajesh Sharma is great"));
 
             Console.ReadLine();
         }
@@ -115,6 +181,26 @@ namespace ConsoleApp
                     break;
                 }
             }
+        }
+
+        static int lengthOfLongestSubstring(String s) {
+            int[] charMap = new int[256];
+            for (int a = 0; a < charMap.Length; a++)
+            {
+                charMap[a] = -1;
+            }
+            
+            int i = 0, maxLen = 0;
+            
+            for (int j = 0; j < s.Length; j++) {
+                if (charMap[s[j]] >= i) {
+                    i = charMap[s[j]] + 1;
+                }
+                charMap[s[j]] = j;
+                maxLen = Math.Max(j - i + 1, maxLen);
+            }
+
+            return maxLen;
         }
 
 
@@ -277,8 +363,6 @@ namespace ConsoleApp
         }
         #endregion
     }
-
-
     class TwoSumClass : Dictionary<int, int> { 
         public void Add(int value) {
             if (!ContainsKey(value))
@@ -314,6 +398,5 @@ namespace ConsoleApp
             Add(1); Add(3); Add(5); Find(4); Find(7);
         }
     }
-
 }
 
