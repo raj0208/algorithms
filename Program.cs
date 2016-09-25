@@ -35,7 +35,7 @@ namespace ConsoleApp
             
             
 
-            return null;
+           
         }
     }
 
@@ -73,9 +73,9 @@ namespace ConsoleApp
 
 
 
-    class Pogram1
+    class Program1
     {
-        static void Main(string[] args)
+        static void Main1(string[] args)
         {
             //UniqueCharacters();
             //Reverse();
