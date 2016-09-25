@@ -1,5 +1,5 @@
-﻿using MongoDB.Bson;
-using MongoDB.Driver;
+﻿//using MongoDB.Bson;
+//using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -118,93 +118,93 @@ namespace ConsoleApp
         }
 
 
+        #region Mongo
+        //static async Task MainAsync(string[] args) {
+        //    // await AssignmentWeek2();
+        //    //await AssignmentWeek3();
+        //    //await AssignmentWeek4();
+        //}
 
-        static async Task MainAsync(string[] args) {
-            // await AssignmentWeek2();
-            //await AssignmentWeek3();
-            await AssignmentWeek4();
-        }
+        //#region Week 4 Assignment
+        //static async Task AssignmentWeek4()
+        //{
+        //}
+        //#endregion
 
-        #region Week 4 Assignment
-        static async Task AssignmentWeek4()
-        {
-        }
-        #endregion
+        //#region Week 3 Assignment
+        //static async Task AssignmentWeek3()
+        //{
+        //    var client = new MongoClient();
+        //    var db = client.GetDatabase("schoo");
+        //    var col = db.GetCollection<Student>("students");
 
-        #region Week 3 Assignment
-        static async Task AssignmentWeek3()
-        {
-            var client = new MongoClient();
-            var db = client.GetDatabase("schoo");
-            var col = db.GetCollection<Student>("students");
+        //    var scores = await col.Find<Student>(x => 1 == 1).ToListAsync<Student>();
+        //    for (int i = 0; i < scores.Count; i++)
+        //    {
+        //        var score = scores[i].scores.ToList();
+        //        List<Scores> final = new List<Scores>();
+        //        Scores hw = null;
+        //        for (int j = 0; j < score.Count; j++)
+        //        {
+        //            if (score[j].type == "homework")
+        //            {
+        //                if (hw == null || hw.score < score[j].score) hw = score[j];
+        //            }
+        //            else
+        //                final.Add(score[j]);
+        //        }
+        //        if (hw!=null) final.Add(hw);
 
-            var scores = await col.Find<Student>(x => 1 == 1).ToListAsync<Student>();
-            for (int i = 0; i < scores.Count; i++)
-            {
-                var score = scores[i].scores.ToList();
-                List<Scores> final = new List<Scores>();
-                Scores hw = null;
-                for (int j = 0; j < score.Count; j++)
-                {
-                    if (score[j].type == "homework")
-                    {
-                        if (hw == null || hw.score < score[j].score) hw = score[j];
-                    }
-                    else
-                        final.Add(score[j]);
-                }
-                if (hw!=null) final.Add(hw);
-
-                await col.UpdateOneAsync(Builders<Student>.Filter.Eq(x => x._id, scores[i]._id),
-                    Builders<Student>.Update.Set(x => x.scores, final));
-            }
+        //        await col.UpdateOneAsync(Builders<Student>.Filter.Eq(x => x._id, scores[i]._id),
+        //            Builders<Student>.Update.Set(x => x.scores, final));
+        //    }
                 
-            Console.WriteLine("done");
-        }
+        //    Console.WriteLine("done");
+        //}
 
-        class Student { 
-            public int _id { get; set; }
-            public string name { get; set; }
-            public List<Scores> scores { get; set; }
-        }
+        //class Student { 
+        //    public int _id { get; set; }
+        //    public string name { get; set; }
+        //    public List<Scores> scores { get; set; }
+        //}
         
-        class Scores {
-            public string type { get; set; }
-            public double score { get; set; }
-        }
-        #endregion
+        //class Scores {
+        //    public string type { get; set; }
+        //    public double score { get; set; }
+        //}
+        //#endregion
 
-        #region Week 2 Assignment
-        static async Task AssignmentWeek2()
-        {
-            var client = new MongoClient();
-            var db = client.GetDatabase("students");
-            var col = db.GetCollection<Grade>("grades");
+        //#region Week 2 Assignment
+        //static async Task AssignmentWeek2()
+        //{
+        //    var client = new MongoClient();
+        //    var db = client.GetDatabase("students");
+        //    var col = db.GetCollection<Grade>("grades");
 
-            var hw = await col.Find(x => x.type == "homework").SortBy(x => x.student_id).ThenBy(x => x.score).ToListAsync<Grade>();
+        //    var hw = await col.Find(x => x.type == "homework").SortBy(x => x.student_id).ThenBy(x => x.score).ToListAsync<Grade>();
 
-            int studid = -1;
-            int delCount = 0;
-            Console.WriteLine("total count : {0}", hw.Count);
-            for (int i = 0; i < hw.Count; i++)
-            {
-                if (studid != hw[i].student_id)
-                {
-                    studid = hw[i].student_id;
-                    await col.DeleteOneAsync(x => x._id == hw[i]._id);
-                    delCount++;
-                }
-            }
-            Console.WriteLine("delete count : {0}", delCount);
-        }
+        //    int studid = -1;
+        //    int delCount = 0;
+        //    Console.WriteLine("total count : {0}", hw.Count);
+        //    for (int i = 0; i < hw.Count; i++)
+        //    {
+        //        if (studid != hw[i].student_id)
+        //        {
+        //            studid = hw[i].student_id;
+        //            await col.DeleteOneAsync(x => x._id == hw[i]._id);
+        //            delCount++;
+        //        }
+        //    }
+        //    Console.WriteLine("delete count : {0}", delCount);
+        //}
 
-        class Grade
-        {
-            public ObjectId _id { get; set; }
-            public int student_id { get; set; }
-            public string type { get; set; }
-            public double score { get; set; }
-        } 
+        //class Grade
+        //{
+        //    public ObjectId _id { get; set; }
+        //    public int student_id { get; set; }
+        //    public string type { get; set; }
+        //    public double score { get; set; }
+        //} 
         #endregion
 
         #region UniqueCharacters
