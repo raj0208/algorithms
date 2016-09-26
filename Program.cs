@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 namespace ConsoleApp
 {
     class Program
@@ -32,13 +33,36 @@ namespace ConsoleApp
             list1.Print();
             Console.WriteLine("List2");
             list2.Print();
-            
-            
 
-           
+            GetExcept(list1, list2);
         }
+
+        private static void GetExcept(ListNode list1, ListNode list2)
+        {
+            HashSet<string> excludeCities = new HashSet<string>();
+
+            while (list2 != null) 
+            {
+                if (excludeCities.Contains(list2.Data))
+                    excludeCities.Add(list2.Data);
+            }
+
+            ListNode pointer = list1;
+            while (pointer != null)
+            {
+                if (excludeCities.Contains(pointer.Data))
+                {
+                    
+                }
+            
+            }
+        }
+
     }
 
+    private static GetExcept(ListNode list1, listN
+
+    [DebuggerDisplay("Node {Data}")]
     class ListNode
     {
         public string Data { get; set; }
@@ -67,7 +91,7 @@ namespace ConsoleApp
                 Console.Write("{0}->", curr.Data);
                 curr = curr.Next;
             }
-            Console.Write("NULL");
+            Console.WriteLine("NULL");
         }
     }
 
