@@ -18,69 +18,152 @@ namespace ConsoleApp
 
         static void LinkedList()
         {
-            ListNode list1 = new ListNode("Mumbai");
+            ListNode list1 = null;
+            list1 = new ListNode("Mumbai");
+            //list1.Next = new ListNode("Baroda");
+            //list1.Next.Next = new ListNode("Pune");
+            //list1.Next.Next.Next = new ListNode("Noida");
+            //list1.Next.Next.Next.Next = new ListNode("Gurgaon");
 
-            list1.Next = new ListNode("Baroda");
-            list1.Next.Next = new ListNode("Pune");
-            list1.Next.Next.Next = new ListNode("Noida");
-            list1.Next.Next.Next.Next = new ListNode("Gurgaon");
+
+            ListNode list2 = null;
+            //list2 = new ListNode("Noida");
+            //list2.Next = new ListNode("Mumbai");
+            //list2.Next.Next = new ListNode("Gurgaon");
 
 
-            ListNode list2 = new ListNode("Noida");
 
-            list2.Next = new ListNode("Mumbai");
-            Console.WriteLine("List1");
-            list1.Print();
-            Console.WriteLine("List2");
-            list2.Print();
+            //Console.WriteLine("List1");
+            //list1.Print();
+            //Console.WriteLine("List2");
+            //list2.Print();
 
-            GetExcept(list1, list2);
+            var list = GetExcept(list1, list2);
+            if (list != null)
+                list.Print();
+            else
+                Console.WriteLine("NULL");
         }
 
-        private static void GetExcept(ListNode list1, ListNode list2)
+        private static ListNode GetExcept(ListNode list1, ListNode list2)
         {
-            HashSet<string> excludeCities = new HashSet<string>();
+            // check input parameter.  If either list is empty, return list1
+            if (list1 == null || list2 == null) 
+                return list1;
 
+            // create a hashset from cities to be excluded
+            HashSet<string> excludeCities = new HashSet<string>();
             while (list2 != null) 
             {
-                if (excludeCities.Contains(list2.Data))
+                if (!excludeCities.Contains(list2.Data))
                     excludeCities.Add(list2.Data);
+
+                list2 = list2.Next;
             }
 
-            ListNode pointer = list1;
-            while (pointer != null)
+            // first node removal
+            while (list1 != null && excludeCities.Contains(list1.Data))
+                list1 = list1.Next;
+
+            if (list1 != null)
             {
-                if (excludeCities.Contains(pointer.Data))
+                ListNode current = list1.Next;
+                ListNode keep = list1;
+                while (current != null)
                 {
-                    
+                    if (excludeCities.Contains(current.Data))
+                    {
+                        keep.Next = current.Next; // remove current city
+                    }
+                    else
+                    {
+                        keep = current; // retain current city
+                    }
+
+                    current = current.Next;
                 }
-            
             }
+
+            return list1;
+        }
+
+        private static bool ReverseLinkedList(int[] nodes)
+        { 
+            var head = LinkedNode.GetLinkedNodes(nodes);
+
+            LinkedNode fast = head, slow = head, slowptr = head, newHead = null;
+
+            while (fast != null && fast.Next != null)
+            {
+                fast = fast.Next.Next;
+                slow = slow.Next;
+                slowptr.Next = newHead;
+                newHead = slowptr;
+                slowptr = slow;
+            }
+
+            if (fast != null)
+                slow = slow.Next;
+
+            while (slow != null && newHead != null)
+            {
+                if (slow.Value != newHead.Value) return false;
+                slow = slow.Next;
+                newHead = newHead.Next;
+            }
+
+            return (slow == null && newHead == null);
+
         }
 
     }
 
-    private static GetExcept(ListNode list1, listN
+    [DebuggerDisplay("value : {Value}, Next : {Next}")]
+    class LinkedNode
+    {
+        public LinkedNode Next;
+        public int Value;
+
+        public LinkedNode(int value = 0)
+        {
+            this.Value = value;
+        }
+
+        public static LinkedNode GetLinkedNodes(int[] nodes)
+        {
+            var head = new LinkedNode();
+            var curr = head;
+            foreach (var item in nodes)
+            {
+                head.Next = new LinkedNode(item);
+                head = head.Next;
+            }
+
+            return curr.Next;
+        }
+    }
+
+
+    
 
     [DebuggerDisplay("Node {Data}")]
     class ListNode
     {
         public string Data { get; set; }
         public ListNode Next { get; set; }
-        private ListNode Tail { get; set; }
+        
         
         public ListNode(string city, ListNode next = null)
         {
             this.Data = city;
             this.Next = next;
-            this.Tail = this.Next;
+            
         }
 
         public void Add(string city)
         {
             ListNode newNode  = new ListNode(city);
-            this.Tail.Next = newNode;
-            this.Tail = newNode.Next;
+            
         }
 
         public void Print()
