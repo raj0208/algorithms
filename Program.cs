@@ -6,14 +6,270 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.IO;
 namespace ConsoleApp
 {
     class Program
     {
+        void HackerRank()
+        {
+
+            string fileName = System.Environment.GetEnvironmentVariable("OUTPUT_PATH");
+            TextWriter tw = new StreamWriter(@fileName, true);
+            int res = 0;
+
+            int _numbers_size = 0;
+            _numbers_size = Convert.ToInt32(Console.ReadLine());
+            int[] _numbers = new int[_numbers_size];
+            int _numbers_item;
+            for (int _numbers_i = 0; _numbers_i < _numbers_size; _numbers_i++)
+            {
+                _numbers_item = Convert.ToInt32(Console.ReadLine());
+                _numbers[_numbers_i] = _numbers_item;
+            }
+
+            //res = sum(_numbers);
+            tw.WriteLine(res);
+
+            tw.Flush();
+            tw.Close();
+        }
+
+        static void HackerRankMain(String[] args)
+        {
+            int n = Convert.ToInt32(Console.ReadLine());
+            for (int t = 0; t < n; t++)
+            {
+                String str = Console.ReadLine();
+                String[] strArr = str.Split();
+                int a = Convert.ToInt32(strArr[0]);
+                int b = Convert.ToInt32(strArr[1]);
+                Console.WriteLine(a + b);
+            }
+        }
+
+        static bool isUniqueChars(String str) {
+            int checker = 0;
+            for (int i = 0; i < str.Length; i++) {
+            int val = str[i] - 'a';
+            if ((checker & (1 << val)) > 0) {
+                return false;
+            }
+            checker |= (1 << val);
+            }
+            return true;
+        } 
+
         static void Main(string[] args)
         {
-            LinkedList();
+            //int n=6;
+            //for (int i = 0; i < n; i++)
+            //    Console.WriteLine(new String('#', i + 1).PadLeft(n, ' '));
+
+            //Console.WriteLine(isUniqueChars("Rajesh Sharma"));//
+            //replaceSpaces("Rajesh Sharma   ".ToCharArray(), 13);
+            //OneEditAway("Rajesh", "Rajsh");
+            Rotate();
+            //LinkedList();
+            //Recommendation();
             Console.ReadLine();
+        }
+
+        static bool OneEditAway(string first, string second)
+        {
+            if (Math.Abs(first.Length - second.Length) > 1)
+                return false;
+
+            string s1 = first.Length < second.Length ? first : second;
+            string s2 = first.Length < second.Length ? second : first;
+
+            int index1 = 0, index2 = 0;
+
+            bool foundDifference = false;
+            while (index2 < s2.Length && index1 < s1.Length) {
+                if (s1[index1] != s2[index2])
+                {
+                    if (foundDifference) return false;
+                    foundDifference = true;
+
+                    if (s1.Length == s2.Length)
+                        index1++;
+                }
+                else
+                {
+                    index1++;
+                }
+                index2++;
+            }
+            return true;
+        }
+
+        static string CompressedString(string str)
+        {
+            StringBuilder compressed = new StringBuilder();
+
+            int sameCharacterLength = 0;
+            for (int i = 0; i < str.Length; i++)
+            {
+                sameCharacterLength++;
+
+                if (i + 1 >= str.Length || str[i] != str[i + 1]) {
+                    compressed.Append(str[i]);
+                    compressed.Append(sameCharacterLength);
+                    sameCharacterLength = 0;
+                }
+            }
+            return compressed.Length < str.Length ? compressed.ToString() : str;
+        }
+
+        static void Rotate()
+        {
+            int[][] matrix = new int[][] { 
+                new int[]{11,12,13,14,15,16},
+                new int[]{21,22,23,24,25,26},
+                new int[]{31,32,33,34,35,36},
+                new int[]{41,42,43,44,45,46},
+                new int[]{51,52,53,54,55,56},
+                new int[]{61,62,63,64,65,66},
+            };
+            // matrix length is 0 or not a square matrix, return false
+            if (matrix.Length == 0 || matrix.Length != matrix[0].Length) return;
+            int n = matrix.Length; //4
+
+            Console.WriteLine("Before\n");
+            printMatrix(matrix);
+
+            for (int layer = 0; layer < n/2; layer++)
+            {
+                int first = layer;
+                int last = n - 1 - layer;
+                for (int column = first; column < last; column++) {
+                    int offset = column - first;
+                    int top = matrix[first][column]; // top
+                    matrix[first][column] = matrix[last-offset][first]; // copy left into top
+                    matrix[last-offset][first] = matrix[last][last-offset]; // copy bottom into left
+                    matrix[last][last-offset] = matrix[column][last]; // copy right into bottom
+                    matrix[column][last] = top; // copy top into right
+                }
+            }
+
+            Console.WriteLine("\n\nAfter:\n");
+            printMatrix(matrix);
+        }
+
+        static void printMatrix(int[][] matrix)
+        {
+            for (int i = 0; i < matrix.Length; i++)
+            {
+                Console.WriteLine("{0}", string.Join(",", matrix[i]));
+            }
+        }
+
+        static void replaceSpaces(char[] str, int trueLength) {
+            int spaceCount = 0, index, i = 0;
+            for (i = 0; i < trueLength; i++) {
+                if (str[i] == ' ') {
+                    spaceCount++;
+                }
+            }
+
+            index = trueLength + spaceCount * 2;
+            if (trueLength < str.Length) str[trueLength] = '\0';
+            for (i = trueLength - 1; i >= 0; i--)
+            {
+                if (str[i] == ' ')
+                {
+                    str[index - 1] = '0';
+                    str[index - 2] = '2';
+                    str[index - 3] = '%';
+                    index = index - 3;
+                }
+                else
+                {
+                    str[index - 1] = str[i];
+                    index--;
+                }
+            }
+        } 
+
+        static void Recommendation()
+        {
+            var purchases = GetPurchases();
+            string searchItem = "ABC";
+
+            var buyers = new Dictionary<string, List<string>>();
+            var items = new Dictionary<string, List<string>>();
+
+            foreach (var purchaseItem in purchases)
+            {
+                string[] data = purchaseItem.Split(':');
+
+                if (!buyers.ContainsKey(data[0]))
+                    buyers[data[0]] = new List<string>() { data[1] };
+                else
+                    buyers[data[0]].Add(data[1]);
+
+                foreach (var bItem in buyers[data[0]])
+                {
+                    if (bItem != data[1])
+                    {
+                        if (!items.ContainsKey(bItem))
+                            items[bItem] = new List<string>() { data[1] };
+                        else
+                            items[bItem].Add(data[1]);
+
+                        if (!items.ContainsKey(data[1]))
+                            items[data[1]] = new List<string>() { bItem };
+                        else
+                            items[data[1]].Add(bItem);
+                    }
+                }
+            }
+
+            int strongLinks = 0, weakLinks = 0;
+            if (items.ContainsKey(searchItem))
+            {
+                strongLinks = items[searchItem].Count;
+
+                var alllinks = FindAllConnections(items, searchItem, searchItem);
+
+                weakLinks = alllinks.Except(items[searchItem]).Count();
+            }
+
+            Console.WriteLine("{0}, {1}", strongLinks, weakLinks);
+        }
+
+        static IList<string> FindAllConnections(Dictionary<string, List<string>> items, string key, string searchKey, List<string> allLinks = null)
+        {
+            List<string> connections = (allLinks != null) ? allLinks : new List<string>();
+            
+            foreach (var item in items[key])
+	        {
+                if (item != searchKey && !connections.Contains(item))
+                {
+                    connections.Add(item);
+                    FindAllConnections(items, item, searchKey, connections);
+                }
+	        }
+
+            return connections;
+        }
+
+        static List<string> GetPurchases()
+        { 
+            var purchases = new List<string>() {
+                "first:ABC",
+                "first:HIJ",
+                "sec:HIJ",
+                "sec:KLM",
+                "third:NOP",
+                "fourth:ABC",
+                "fourth:QRS",
+                "first:DEF",
+                "fifth:KLM",
+                "fifth:TUV"
+            };
+            return purchases; 
         }
 
         static void LinkedList()
@@ -30,8 +286,6 @@ namespace ConsoleApp
             //list2 = new ListNode("Noida");
             //list2.Next = new ListNode("Mumbai");
             //list2.Next.Next = new ListNode("Gurgaon");
-
-
 
             //Console.WriteLine("List1");
             //list1.Print();
@@ -61,30 +315,23 @@ namespace ConsoleApp
                 list2 = list2.Next;
             }
 
-            // first node removal
-            while (list1 != null && excludeCities.Contains(list1.Data))
-                list1 = list1.Next;
+            ListNode newHead = new ListNode("");
+            newHead.Next = list1;
+            ListNode current = newHead;
 
-            if (list1 != null)
+            while (current.Next != null)
             {
-                ListNode current = list1.Next;
-                ListNode keep = list1;
-                while (current != null)
+                if (excludeCities.Contains(current.Next.Data))
                 {
-                    if (excludeCities.Contains(current.Data))
-                    {
-                        keep.Next = current.Next; // remove current city
-                    }
-                    else
-                    {
-                        keep = current; // retain current city
-                    }
-
+                    current.Next = current.Next.Next; // remove the node
+                }
+                else
+                {
                     current = current.Next;
                 }
             }
 
-            return list1;
+            return newHead.Next;
         }
 
         private static bool ReverseLinkedList(int[] nodes)
