@@ -11,6 +11,49 @@ namespace ConsoleApp
 {
     class Program
     {
+        static void Main(string[] args)
+        {
+            //int n=6;
+            //for (int i = 0; i < n; i++)
+            //    Console.WriteLine(new String('#', i + 1).PadLeft(n, ' '));
+
+            //Console.WriteLine(isUniqueChars("Rajesh Sharma"));//
+            //replaceSpaces("Rajesh Sharma   ".ToCharArray(), 13);
+            //OneEditAway("Rajesh", "Rajsh");
+            //Rotate();
+            //LinkedList();
+            //Recommendation();
+            //Codec.CodecTinyURL();
+            //TinyURL.TestTinyURL();
+            //SingleNonDuplicate();
+            //SortSubArray();
+            ReverseInt();
+            Console.ReadLine();
+        }
+
+        private static void ReverseInt()
+        {
+            int num = -12345;
+            bool isNegative = num < 0;
+            int t = num;
+            long reverse = 0;
+
+            if (isNegative) num = num * -1;
+
+            while (num != 0) {
+                reverse = (reverse * 10) + (num % 10);
+                num /= 10;
+            }
+
+            if (isNegative) reverse = reverse * -1;
+
+            if (reverse < int.MinValue || reverse > int.MaxValue) reverse = 0;
+
+            
+
+            Console.WriteLine("reverse of {0} is {1},",t, reverse);
+        }
+
         void HackerRank()
         {
 
@@ -51,29 +94,16 @@ namespace ConsoleApp
         static bool isUniqueChars(String str) {
             int checker = 0;
             for (int i = 0; i < str.Length; i++) {
-            int val = str[i] - 'a';
-            if ((checker & (1 << val)) > 0) {
-                return false;
-            }
-            checker |= (1 << val);
+                int val = str[i] - 'a';
+                if ((checker & (1 << val)) > 0) {
+                    return false;
+                }
+                checker |= (1 << val);
             }
             return true;
         } 
 
-        static void Main(string[] args)
-        {
-            //int n=6;
-            //for (int i = 0; i < n; i++)
-            //    Console.WriteLine(new String('#', i + 1).PadLeft(n, ' '));
-
-            //Console.WriteLine(isUniqueChars("Rajesh Sharma"));//
-            //replaceSpaces("Rajesh Sharma   ".ToCharArray(), 13);
-            //OneEditAway("Rajesh", "Rajsh");
-            Rotate();
-            //LinkedList();
-            //Recommendation();
-            Console.ReadLine();
-        }
+        
 
         static bool OneEditAway(string first, string second)
         {
@@ -190,8 +220,24 @@ namespace ConsoleApp
                     index--;
                 }
             }
-        } 
+        }
 
+        public static void SingleNonDuplicate()
+        {
+            int[] nums = new int[] { 1, 1, 2, 2, 3, 3, 4, 4, 5, 8, 8 };
+            // binary search
+            int n = nums.Length, lo = 0, hi = n / 2;
+            while (lo < hi)
+            {
+                int m = (lo + hi) / 2;
+                if (nums[2 * m] != nums[2 * m + 1]) hi = m;
+                else lo = m + 1;
+            }
+
+            Console.WriteLine(nums[2 * lo]);
+        }
+
+        #region Amazon
         static void Recommendation()
         {
             var purchases = GetPurchases();
@@ -242,21 +288,21 @@ namespace ConsoleApp
         static IList<string> FindAllConnections(Dictionary<string, List<string>> items, string key, string searchKey, List<string> allLinks = null)
         {
             List<string> connections = (allLinks != null) ? allLinks : new List<string>();
-            
+
             foreach (var item in items[key])
-	        {
+            {
                 if (item != searchKey && !connections.Contains(item))
                 {
                     connections.Add(item);
                     FindAllConnections(items, item, searchKey, connections);
                 }
-	        }
+            }
 
             return connections;
         }
 
         static List<string> GetPurchases()
-        { 
+        {
             var purchases = new List<string>() {
                 "first:ABC",
                 "first:HIJ",
@@ -269,7 +315,7 @@ namespace ConsoleApp
                 "fifth:KLM",
                 "fifth:TUV"
             };
-            return purchases; 
+            return purchases;
         }
 
         static void LinkedList()
@@ -302,12 +348,12 @@ namespace ConsoleApp
         private static ListNode GetExcept(ListNode list1, ListNode list2)
         {
             // check input parameter.  If either list is empty, return list1
-            if (list1 == null || list2 == null) 
+            if (list1 == null || list2 == null)
                 return list1;
 
             // create a hashset from cities to be excluded
             HashSet<string> excludeCities = new HashSet<string>();
-            while (list2 != null) 
+            while (list2 != null)
             {
                 if (!excludeCities.Contains(list2.Data))
                     excludeCities.Add(list2.Data);
@@ -332,6 +378,145 @@ namespace ConsoleApp
             }
 
             return newHead.Next;
+        }
+
+        // LRU
+
+        // TinyURL
+        public class Codec
+        {
+            Dictionary<string, string> index = new Dictionary<string, string>();
+            Dictionary<string, string> revIndex = new Dictionary<string, string>();
+            static String BASE_HOST = "http://tinyurl.com/";
+
+            public static void CodecTinyURL()
+            {
+                Codec tiny = new Codec();
+                string url = tiny.encode("http://www.google.com");
+                Console.WriteLine(url);
+                Console.WriteLine(tiny.decode(url));
+            }
+
+
+
+            // Encodes a URL to a shortened URL.
+            public String encode(String longUrl)
+            {
+                if (revIndex.ContainsKey(longUrl)) return BASE_HOST + revIndex[longUrl];
+
+                String charSet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                String key = null;
+
+                Random random = new Random();
+                do
+                {
+                    StringBuilder sb = new StringBuilder();
+                    for (int i = 0; i < 6; i++)
+                    {
+                        int r = (int)(random.Next(charSet.Length));
+                        sb.Append(charSet[r]);
+                    }
+                    key = sb.ToString();
+                } while (index.ContainsKey(key));
+                index.Add(key, longUrl);
+                revIndex.Add(longUrl, key);
+                return BASE_HOST + key;
+            }
+
+            // Decodes a shortened URL to its original URL.
+            public String decode(String shortUrl)
+            {
+                return index[shortUrl.Replace(BASE_HOST, "")];
+            }
+        }
+
+        public class TinyURL
+        {
+            private static String ALPHABET_MAP = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789" ;
+	        private static ulong BASE = (ulong)ALPHABET_MAP.Length;
+
+            public static void TestTinyURL()
+            {
+                ulong index = 134;
+                string e = encode(index);
+                var i = decode(e);
+                Console.WriteLine( "Encoding for 123 is " + e) ;
+                Console.WriteLine( "Decoding for b9 is " + i) ;
+            }
+
+            public static String encode(ulong IndexNum)
+            {
+                StringBuilder sb = new StringBuilder();
+
+                while (IndexNum > 0)
+                {
+                    sb.Insert(0,ALPHABET_MAP[(int)(IndexNum % BASE)]);
+                    IndexNum /= BASE;
+                }
+                
+                return sb.ToString();
+            }
+
+            public static ulong decode(String str)
+            {
+                ulong Num = 0;
+
+                for (int i = 0, len = str.Length; i < len; i++)
+                {
+                    Num = Num * BASE + (ulong)ALPHABET_MAP.IndexOf(str[i]);
+                }
+                return Num;
+            }
+        }
+
+        // sort subarray to sort whole array
+        private static void SortSubArray()
+        {
+            int[] array = new int[] {0,2,5,4,6,7,3};
+
+            int head = 0, tail = array.Length - 1;
+
+            if (array[head] > array[tail]) // boundary condition
+            {
+                Console.WriteLine("sort from {0} to {1}", head, tail);
+                return;
+            }
+
+            while (head < tail) {
+                if (array[head] < array[tail] && array[head] < array[head + 1])
+                {
+                    head++;
+                }
+                else
+                    break;
+            }
+
+            Console.WriteLine("sort from {0} to {1}", head, tail);
+        }
+        #endregion
+
+        private static void RemoveNthNode()
+        {
+            var list = LinkedNode.GetLinkedNodes(new int[] {1,2,3,4,5,6});
+            int remove = 2;
+
+            var dummyHead = new LinkedNode();
+            dummyHead.Next = list;
+            var slow = dummyHead.Next;
+            var fast = dummyHead.Next;
+
+            while (fast.Next != null) {
+                if (remove <= 0) 
+                    slow = slow.Next;
+                else
+                    remove--;
+
+                fast = fast.Next;
+            }
+
+            if (slow.Next != null) {
+                slow.Next = slow.Next.Next;
+            }
         }
 
         private static bool ReverseLinkedList(int[] nodes)
@@ -362,7 +547,6 @@ namespace ConsoleApp
             return (slow == null && newHead == null);
 
         }
-
     }
 
     [DebuggerDisplay("value : {Value}, Next : {Next}")]
@@ -389,9 +573,6 @@ namespace ConsoleApp
             return curr.Next;
         }
     }
-
-
-    
 
     [DebuggerDisplay("Node {Data}")]
     class ListNode
@@ -424,8 +605,6 @@ namespace ConsoleApp
             Console.WriteLine("NULL");
         }
     }
-
-
 
     class Program1
     {
@@ -717,6 +896,7 @@ namespace ConsoleApp
         }
         #endregion
     }
+
     class TwoSumClass : Dictionary<int, int> { 
         public void Add(int value) {
             if (!ContainsKey(value))
@@ -752,4 +932,172 @@ namespace ConsoleApp
             Add(1); Add(3); Add(5); Find(4); Find(7);
         }
     }
+
+
+    #region LFU cache
+    //Design and implement a data structure for Least Frequently Used(LFU) cache.It should support the following operations: get and put.
+
+    //get(key) - Get the value(will always be positive) of the key if the key exists in the cache, otherwise return -1.
+    //put(key, value) - Set or insert the value if the key is not already present.When the cache reaches its capacity, it should invalidate the least frequently used item before inserting a new item.For the purpose of this problem, when there is a tie (i.e., two or more keys that have the same frequency), the least recently used key would be evicted.
+
+    //Follow up:
+    //Could you do both operations in O(1) time complexity?
+
+
+    //Two HashMaps are used, one to store<key, value> pair, another store the<key, node>.
+    //I use double linked list to keep the frequent of each key. In each double linked list node, keys with the same count are saved using java built in LinkedHashSet.This can keep the order.
+    //Every time, one key is referenced, first find the current node corresponding to the key, If the following node exist and the frequent is larger by one, add key to the keys of the following node, else create a new node and add it following the current node.
+    //All operations are guaranteed to be O(1).
+
+    public class LFUCache
+    {
+        private Node head = null;
+        private int cap = 0;
+        private Dictionary<int, int> valueHash = null;
+        private Dictionary<int, Node> nodeHash = null;
+
+        public LFUCache(int capacity)
+        {
+            this.cap = capacity;
+            valueHash = new Dictionary<int, int>();
+            nodeHash = new Dictionary<int, Node>();
+        }
+
+        public int get(int key)
+        {
+            if (valueHash.ContainsKey(key))
+            {
+                increaseCount(key);
+                return valueHash[key];
+            }
+            return -1;
+        }
+
+        public void set(int key, int value)
+        {
+            if (cap == 0) return;
+            if (valueHash.ContainsKey(key))
+            {
+                valueHash.Add(key, value);
+            }
+            else
+            {
+                if (valueHash.Count < cap)
+                {
+                    valueHash.Add(key, value);
+                }
+                else
+                {
+                    removeOld();
+                    valueHash.Add(key, value);
+                }
+                addToHead(key);
+            }
+            increaseCount(key);
+        }
+
+        private void addToHead(int key)
+        {
+            if (head == null)
+            {
+                head = new Node(0);
+                head.keys.Add(key);
+            }
+            else if (head.count > 0)
+            {
+                Node node = new Node(0);
+                node.keys.Add(key);
+                node.next = head;
+                head.prev = node;
+                head = node;
+            }
+            else
+            {
+                head.keys.Add(key);
+            }
+            nodeHash.Add(key, head);
+        }
+
+        private void increaseCount(int key)
+        {
+            Node node = nodeHash[key];
+            node.keys.Remove(key);
+
+            if (node.next == null)
+            {
+                node.next = new Node(node.count + 1);
+                node.next.prev = node;
+                node.next.keys.Add(key);
+            }
+            else if (node.next.count == node.count + 1)
+            {
+                node.next.keys.Add(key);
+            }
+            else
+            {
+                Node tmp = new Node(node.count + 1);
+                tmp.keys.Add(key);
+                tmp.prev = node;
+                tmp.next = node.next;
+                node.next.prev = tmp;
+                node.next = tmp;
+            }
+
+            nodeHash.Add(key, node.next);
+            if (node.keys.Count == 0) remove(node);
+        }
+
+        private void removeOld()
+        {
+            if (head == null) return;
+            int old = 0;
+            foreach (int n in head.keys)
+            {
+                old = n;
+                break;
+            }
+            head.keys.Remove(old);
+            if (head.keys.Count == 0) remove(head);
+            nodeHash.Remove(old);
+            valueHash.Remove(old);
+        }
+
+        private void remove(Node node)
+        {
+            if (node.prev == null)
+            {
+                head = node.next;
+            }
+            else
+            {
+                node.prev.next = node.next;
+            }
+            if (node.next != null)
+            {
+                node.next.prev = node.prev;
+            }
+        }
+
+        class Node
+        {
+            public int count = 0;
+            public List<int> keys = null;
+            public Node prev = null, next = null;
+
+            public Node(int count)
+            {
+                this.count = count;
+                keys = new List<int>();
+                prev = next = null;
+            }
+        }
+    }
+
+
+
+    #endregion
+
+
+
+
 }

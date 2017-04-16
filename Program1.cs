@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Rnd
 {
-    class Program
+    class Program1
     {
         private enum AlgoType
         {
