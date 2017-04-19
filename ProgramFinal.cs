@@ -7,10 +7,55 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.IO;
-namespace ConsoleApp
+namespace ConsoleApp.Final
 {
-    class Program
+    class ProgramFinal
     {
+        static void MainFinal(string[] args)
+        {
+            //Stack<int> s = new Stack<int>();
+
+            //int n=6;
+            //for (int i = 0; i < n; i++)
+            //    Console.WriteLine(new String('#', i + 1).PadLeft(n, ' '));
+
+            //Console.WriteLine(isUniqueChars("Rajesh Sharma"));//
+            //replaceSpaces("Rajesh Sharma   ".ToCharArray(), 13);
+            //OneEditAway("Rajesh", "Rajsh");
+            //Rotate();
+            //LadderLength();
+            //TwoSum sum = new TwoSum();
+            //sum.Add(1);
+            //sum.Add(3);
+            //sum.Add(5);
+            //Console.WriteLine(sum.Find(4));
+            //Console.WriteLine(sum.Find(7));
+
+            //FindBeginning();
+            //RemoveFromHeap();
+            //Program1.Add(7, 5);
+            //Program1.sub(7, 5);
+            //Program1.multiply(4, 5);
+            //IsPrimeNumber(6);
+            //ToBinary(5);
+            //int x= GreatestCommonFactor(18, 24);
+            //BinaryNumber(0.72);
+            //BubbleSort();
+            //Console.WriteLine();
+            //SelectionSort();
+            //InsertionSort();
+            //MergeSort();
+            //MergeArray();
+            //CreateMinimalBST();
+            //LinkedList();
+            //lengthoflongest();
+            //findMedianSortedArrays();
+            intToRoman();
+
+            //Recommendation();
+            Console.ReadLine();
+        }
+
         void HackerRank()
         {
 
@@ -60,50 +105,6 @@ namespace ConsoleApp
             return true;
         } 
 
-        static void Main(string[] args)
-        {
-            //Stack<int> s = new Stack<int>();
-
-            //int n=6;
-            //for (int i = 0; i < n; i++)
-            //    Console.WriteLine(new String('#', i + 1).PadLeft(n, ' '));
-
-            //Console.WriteLine(isUniqueChars("Rajesh Sharma"));//
-            //replaceSpaces("Rajesh Sharma   ".ToCharArray(), 13);
-            //OneEditAway("Rajesh", "Rajsh");
-            //Rotate();
-            //LadderLength();
-            //TwoSum sum = new TwoSum();
-            //sum.Add(1);
-            //sum.Add(3);
-            //sum.Add(5);
-            //Console.WriteLine(sum.Find(4));
-            //Console.WriteLine(sum.Find(7));
-
-            //FindBeginning();
-            //RemoveFromHeap();
-            //Program1.Add(7, 5);
-            //Program1.sub(7, 5);
-            //Program1.multiply(4, 5);
-            //IsPrimeNumber(6);
-            //ToBinary(5);
-            //int x= GreatestCommonFactor(18, 24);
-            //BinaryNumber(0.72);
-            //BubbleSort();
-            //Console.WriteLine();
-            //SelectionSort();
-            //InsertionSort();
-            //MergeSort();
-            //MergeArray();
-            //CreateMinimalBST();
-            //LinkedList();
-            //lengthoflongest();
-            //findMedianSortedArrays();
-            intToRoman();
-
-            //Recommendation();
-            Console.ReadLine();
-        }
 
         #region NumbertoRoman
         private static int[] values = {
@@ -1031,7 +1032,7 @@ namespace ConsoleApp
         }
     }
 
-    class Program1
+    class Program2
     {
         static void Main1(string[] args)
         {
@@ -1347,6 +1348,7 @@ namespace ConsoleApp
         }
         #endregion
     }
+
     class TwoSumClass : Dictionary<int, int> { 
         public void Add(int value) {
             if (!ContainsKey(value))

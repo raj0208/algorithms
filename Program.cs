@@ -9,9 +9,9 @@ using System.Diagnostics;
 using System.IO;
 namespace ConsoleApp
 {
-    class Program
+    class ProgramOld
     {
-        static void Main(string[] args)
+        static void MainOld(string[] args)
         {
             //int n=6;
             //for (int i = 0; i < n; i++)
@@ -27,8 +27,16 @@ namespace ConsoleApp
             //TinyURL.TestTinyURL();
             //SingleNonDuplicate();
             //SortSubArray();
-            ReverseInt();
+            //ReverseInt();
+            MinMaxSum();
             Console.ReadLine();
+        }
+
+        private static void MinMaxSum()
+        {
+            var numbers = Array.ConvertAll(Console.ReadLine().Split(' '), Int64.Parse);
+            Console.WriteLine(numbers.OrderBy(x => x).Take(4).Sum());
+            Console.WriteLine(numbers.OrderBy(x => x).Skip(1).Sum());
         }
 
         private static void ReverseInt()

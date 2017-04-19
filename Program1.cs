@@ -9,6 +9,19 @@ namespace Rnd
 {
     class Program1
     {
+        static void Main1(string[] args)
+        {
+            int i = 0;
+            PrintMenu();
+
+            while ((i = int.Parse(Console.ReadLine())) != -1)
+            {
+                Console.WriteLine("\n");
+                Algo(i);
+                Console.WriteLine("\nAlgo# ");
+            }
+        }
+
         private enum AlgoType
         {
             MultiplyByNumber,
@@ -18,19 +31,6 @@ namespace Rnd
             ReverseWords,
             Strstr,
             DSForTwoSum,
-        }
-
-        static void Main(string[] args)
-        {
-            int i = 0;
-            PrintMenu();
-            
-            while ((i = int.Parse(Console.ReadLine())) != -1)
-            {
-                Console.WriteLine("\n");
-                Algo(i);
-                Console.WriteLine("\nAlgo# ");
-            }
         }
 
         private static void PrintMenu()
@@ -213,7 +213,7 @@ namespace Rnd
 
         #endregion
     }
-
+    
     public class TwoSumClass {
         private Dictionary<int, int> table = new Dictionary<int, int>(); 
 
