@@ -10,10 +10,395 @@ namespace ConsoleApp
     {
         public static void Run()
         {
-            LRUCacheTest();
+            //LRUCacheTest();
+            //ReversePolishEvalution();
+            //TinyURL();
+            //TwoSum();
+            //ReverseString();
+            //ReverseString2(); //*********
+            //LengthOfLongestSubString(); //*********
+            //MissingNumbers();  //*********
+            //LongestPalindrome(); //*********
+
+            //SortSubArray();
+            //InsertNode();
+
+            FindNode();
+
         }
 
-        static void LRUCacheTest()
+        private static void FindNode() {
+            //2 1 3 5 6
+            LinkedNode head = new LinkedNode(6);
+            head.Next = new LinkedNode(5);
+            head.Next.Next = new LinkedNode(3);
+            head.Next.Next.Next = new LinkedNode(1);
+
+            var t = head;
+            while (t != null)
+            {
+                Console.WriteLine(t.Value);
+                t = t.Next;
+            }
+
+            var fast = head;
+            var slow = head;
+            int position = 1;
+            int index = 0;
+
+            while (fast != null) {
+                fast = fast.Next;
+
+                if (index++ > position) {
+                    slow = slow.Next;
+                }
+            }
+
+            Console.WriteLine("Value at {0} is {1}", position, slow.Value);
+        }
+
+        private static void InsertNode()
+        {
+            {
+                LinkedNode head1 = new LinkedNode(3);
+                head1.Next = new LinkedNode(5);
+                head1.Next.Next = new LinkedNode(4);
+                int value = 2, position = 3;
+                
+                // This is a "method-only" submission. 
+                // You only need to complete this method.    
+                LinkedNode newHead = head1;
+                int counter = 0;
+                while (counter != position && newHead != null)
+                {
+                    newHead = newHead.Next;
+
+                    if (newHead.Next == null)
+                    {
+                        newHead.Next = new LinkedNode(value);
+                        return;
+                    }
+                    
+
+                    counter++;
+                }
+
+                LinkedNode newNode = new LinkedNode(value);
+                
+                // head
+                if (newHead == null)
+                    newHead = newNode;
+                else
+                {
+                    newNode.Next = newHead.Next;
+                    newHead.Next = newNode;
+                }
+
+                return;
+            }
+
+
+
+            LinkedNode head = new LinkedNode();
+            head = new LinkedNode(2);
+            int data = 5;
+                LinkedNode start = new LinkedNode();
+                start.Next = head;
+
+                while (start.Next!= null)
+                {
+                    Console.Write(start.Next.Value + "-->");
+                    start = start.Next;
+                }
+
+                start.Next = new LinkedNode();
+                start.Next.Value = data;
+            Console.WriteLine(start.Next.Value);
+        }
+
+        private static void SortSubArray()
+        {
+            int[] number = new int[] { 1,2,2,2,3,3,3,4,1,2,3,4,7,8,9};
+
+            printUnsorted(number, number.Length);
+
+            Console.WriteLine();
+
+        }
+
+
+        private static void printUnsorted(int[] arr, int n)
+        {
+            int s = 0, e = n - 1, i, max, min;
+
+            // step 1(a) of above algo
+            for (s = 0; s < n - 1; s++)
+            {
+                if (arr[s] > arr[s + 1])
+                    break;
+            }
+            if (s == n - 1)
+            {
+                Console.WriteLine("The complete array is sorted");
+                return;
+            }
+
+            // step 1(b) of above algo
+            for (e = n - 1; e > 0; e--)
+            {
+                if (arr[e] < arr[e - 1])
+                    break;
+            }
+
+            // step 2(a) of above algo
+            max = arr[s]; min = arr[s];
+            for (i = s + 1; i <= e; i++)
+            {
+                if (arr[i] > max)
+                    max = arr[i];
+                if (arr[i] < min)
+                    min = arr[i];
+            }
+
+            // step 2(b) of above algo
+            for (i = 0; i < s; i++)
+            {
+                if (arr[i] > min)
+                {
+                    s = i;
+                    break;
+                }
+            }
+
+            // step 2(c) of above algo
+            for (i = n - 1; i >= e + 1; i--)
+            {
+                if (arr[i] < max)
+                {
+                    e = i;
+                    break;
+                }
+            }
+
+            // step 3 of above algo
+            Console.WriteLine(" The unsorted subarray which makes the given array sorted lies between the indees {0} and {1}", s, e);
+            return;
+        }
+
+
+
+        private static void LongestPalindrome()
+        {
+            {
+                Func<string, int, int, int> ExpandAroundCenter = (s, left, right) => {
+                    int L = left, R = right;
+                    while (L >= 0 && R < s.Length && s[L] == s[R])
+                    {
+                        L--;
+                        R++;
+                    }
+                    return R - L - 1;
+                };
+
+                string str = "abacdfgdcaba";
+                int start = 0, end = 0;
+                for (int i = 0; i < str.Length; i++)
+                {
+                    int len1 = ExpandAroundCenter(str, i, i);
+                    int len2 = ExpandAroundCenter(str, i, i + 1);
+                    int len = Math.Max(len1, len2);
+                    if (len > end - start)
+                    {
+                        start = i - (len - 1) / 2;
+                        end = i + len / 2;
+                    }
+                }
+                Console.WriteLine(str.Substring(start, end - start + 1));
+            }
+        }
+
+        private static void MissingNumbers()
+        {
+            {
+                int[] numbers = new int[] {3, 50, 75};
+
+                int start = 0;
+                int end = 99;
+                int prev = start-1;
+                
+
+                var ranges = new List<string>();
+
+                Func<int, int, string> AddRange = (s, e) => {
+                    return (s == e) ? s.ToString() : $"{s}->{e}";
+                };
+
+                for (int i = 0; i <= numbers.Length; i++)
+                {
+                    int curr = (i == numbers.Length) ? end: numbers[i];
+                    if (prev == start - 1 && curr != start || curr - prev >= 2)
+                    {
+                        ranges.Add(AddRange(prev + 1, curr-1));
+                    }
+                    prev = curr;
+                }
+
+                Console.WriteLine(string.Join(", ", ranges));
+            }
+        }
+
+        private static void LengthOfLongestSubString()
+        {
+            {
+                string s = "abcabcbb";
+                //string s = "bbbbbbbb";
+                int[] charMap = Enumerable.Repeat(-1, 256).ToArray();
+                //for (int k = 0; k < charMap.Length; k++)
+                //    charMap[k] = -1;
+
+                int i = 0, maxLen = 0;
+                for (int j = 0; j < s.Length; j++)
+                {
+                    if (charMap[s[j] - 'a'] >= i)
+                    {
+                        i = charMap[s[j] - 'a'] + 1;
+                    }
+                    charMap[s[j] - 'a'] = j;
+                    maxLen = Math.Max(j - i + 1, maxLen);
+                }
+                Console.WriteLine(maxLen);
+            }
+
+            {
+                string s = "abaac";
+                int i = 0, j = -1, maxLen = 0;
+                for (int k = 1; k < s.Length; k++)
+                {
+                    if (s[k] == s[k - 1]) continue;
+                    if (j >= 0 && s[j] != s[k])
+                    {
+                        maxLen = Math.Max(k - i, maxLen);
+                        i = j + 1;
+                    }
+                    j = k - 1;
+                }
+                Console.WriteLine(Math.Max(s.Length - i, maxLen)); 
+            }
+
+            {
+                string s = "abaac";
+                int[] count = new int[256];
+                int i = 0, numDistinct = 0, maxLen = 0;
+                for (int j = 0; j < s.Length; j++)
+                {
+                    if (count[s[j]] == 0) numDistinct++;
+                    count[s[j]]++;
+                    while (numDistinct > 2)
+                    {
+                        count[s[i]]--;
+                        if (count[s[i]] == 0) numDistinct--;
+                        i++;
+                    }
+                    maxLen = Math.Max(j - i + 1, maxLen);
+                }
+                Console.WriteLine(maxLen);
+            }
+        }
+
+        private static void ReverseString()
+        {
+            string str = "the sky is blue";
+            int j = str.Length;
+            StringBuilder sb = new StringBuilder();
+            for (int i = str.Length - 1; i >=0; i--)
+            {
+                if (str[i] == ' ')
+                {
+                    j = i;
+                }
+                else if (i == 0 || str[i - 1] == ' ')
+                {
+                    if (sb.Length != 0) sb.Append(' ');
+                    sb.Append(str.Substring(i, j-i));
+                }
+            }
+
+            Console.WriteLine(sb.ToString());
+        }
+
+        private static void ReverseString2()
+        {
+            //var str = "the sky is blue".ToCharArray();
+            var str = "Rajesh Sunisha Pratiksha Pratham".ToCharArray();
+            Console.WriteLine(str);
+            //var str = "0123 456".ToCharArray();
+            Reverse(str, 0, str.Length);
+            Console.WriteLine(str);
+            for (int i = 0, j = 0; j <= str.Length; j++)
+            {
+                if (j == str.Length || str[j] == ' ')
+                {
+                    Reverse(str, i, j);
+                    i = j + 1;
+                }
+            }
+            Console.WriteLine(str);
+        }
+
+        private static void Reverse(char[] s, int start, int end)
+        {
+            for (int i = 0; i < (end - start)/2; i++)
+            {
+                char t = s[start + i];
+                s[start + i] = s[end - i - 1];
+                s[end - i - 1] = t;
+            }
+        }
+
+        private static void ReversePolishEvalution()
+        {
+            String[] tokens = new String[] 
+            //{ "2", "1", "+", "3", "*" }; // ((2 + 1) * 3) -> 9
+            { "4", "13", "5", "/", "+"};  // (4 + (13 / 5)) -> 6
+
+            var stack = new Stack<int>();
+
+            string operators = "/*+-";
+
+            foreach (var token in tokens)
+            {
+                if (Char.IsNumber(token[0]))
+                {
+                    stack.Push(int.Parse(token));
+                    continue;
+                }
+                else
+                {
+                    int a = stack.Pop();
+                    int b = stack.Pop();
+
+                    switch (operators.IndexOf(token))
+                    {
+                        case 0: // division
+                            stack.Push(b / a);
+                            break;
+                        case 1: // multiply
+                            stack.Push(b * a);
+                            break;
+                        case 2: // addition
+                            stack.Push(b + a);
+                            break;
+                        case 3: // subtraction
+                            stack.Push(b - a);
+                            break;
+                    }
+                }
+            }
+
+            Console.WriteLine(stack.Pop());
+        }
+
+        private static void LRUCacheTest()
         {
             LRUCache cache = new LRUCache(2);
             Console.WriteLine(cache.GetData(1));
@@ -30,6 +415,29 @@ namespace ConsoleApp
             cache.SetData(6, 600);
         }
 
+        private static void TinyURL()
+        {
+        }
+
+        //------------------------------------------------------
+        //Given an array of integers, find two numbers 
+        //such that they add up to a specific target number.
+        private static void TwoSum()
+        {
+            int[] numbers = new int[] { 1,2,3,4,5 };
+            int target = 5;
+
+            var map = new Dictionary<int, int>();
+            for (int i = 0; i < numbers.Length; i++)
+            {
+                int x = numbers[i];
+                if (map.ContainsKey(target - x))
+                {
+                    break;
+                }
+                map[x] = i;
+            }
+        }
     }
 
     #region LRUCache
@@ -162,4 +570,6 @@ namespace ConsoleApp
         }
     }
     #endregion
+
+
 }
