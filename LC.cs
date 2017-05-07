@@ -23,9 +23,100 @@ namespace ConsoleApp
             //SortSubArray();
             //InsertNode();
 
-            FindNode();
+            //FindNode();
+            //RotateArray();
+            AlgorithmicCrush();
 
         }
+
+        private static void AlgorithmicCrush()
+        {
+            //5 3
+            //1 2 100
+            //2 5 100
+            //3 4 100
+
+            {
+                /*
+                you are adding sum to a[p] and adding negative sum at a[q + 1]. which make sure that 
+                when you add element from a[p] to a[q] sum is added only once and it should be subtracted 
+                at a[q + 1] as this sum span from p to q only.Rest array element are either 0 or some 
+                other input sum.max of addition will be output. refer to below code for p, q, and sum.
+                */
+  
+                long N = 5, K = 3, p, q, sum, i, j, max = 0, x = 0;
+
+                //cin >> N >> K;
+                long[] a = new long[N + 1];
+
+                for (i = 0; i < K; i++)
+                {
+                    
+                    var input = Array.ConvertAll(Console.ReadLine().Split(' '), Int32.Parse);
+                    p = input[0];
+                    q = input[1];
+                    sum = input[2];
+
+                    a[p] += sum;
+                    if ((q + 1) <= N) a[q + 1] -= sum;
+                }
+
+                for (i = 1; i <= N; i++)
+                {
+                    x = x + a[i];
+                    if (max < x) max = x;
+
+                }
+                Console.WriteLine(max);
+            }
+
+            {
+
+                //int[] input = Array.ConvertAll(Console.ReadLine().Split(' '), Int32.Parse);
+                //int[] array = Enumerable.Repeat(0, input[0]).ToArray();
+
+                //int count = input[1];
+                //int max = 0;
+                //for (int i = 0; i < count; i++)
+                //{
+                //    input = Array.ConvertAll(Console.ReadLine().Split(' '), Int32.Parse);
+                //    for (int j = input[0] - 1; j < input[1]; j++)
+                //    {
+                //        array[j] += input[2];
+                //        if (max < array[j]) max = array[j];
+                //    }
+                //}
+                //Console.WriteLine(max);
+            }
+        }
+
+        private static void RotateArray()
+        {
+            /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution */
+            string[] arr_temp = Console.ReadLine().Split(' ');
+            int rotations = Array.ConvertAll(arr_temp, Int32.Parse)[1];
+            int[] array = Array.ConvertAll(Console.ReadLine().Split(' '), Int32.Parse);
+
+            if (rotations > 0 && array.Length >= rotations)
+            {
+                Rotate(ref array, 0, rotations - 1);
+                Rotate(ref array, rotations, array.Length - 1);
+                Rotate(ref array, 0, array.Length - 1);
+            }
+            Console.WriteLine(string.Join(" ", array));
+        }
+
+        static void Rotate(ref int[] array, int start, int end)
+        {
+            int mid = (end - start) / 2;
+            for (int i = 0; i <= mid; i++)
+            {
+                int temp = array[start + i];
+                array[start + i] = array[end - i];
+                array[end - i] = temp;
+            }
+        }
+    
 
         private static void FindNode() {
             //2 1 3 5 6
