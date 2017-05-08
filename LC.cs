@@ -27,6 +27,52 @@ namespace ConsoleApp
             //FindNode();
             //RotateArray();
             //AlgorithmicCrush();
+
+            FindMergeList();
+        }
+
+        private static void FindMergeList()
+        {
+            LinkedNode headA = LinkedNode.GetLinkedNodes(new int[] { 1 });
+            LinkedNode headB = LinkedNode.GetLinkedNodes(new int[] { 1 });
+
+            var merge = new LinkedNode(3);
+            var currentA = headA;
+            currentA.Next = new LinkedNode(2);
+            currentA.Next.Next = merge;
+
+            var currentB = headB;
+            currentB.Next = merge;
+
+            currentA = headA;
+            currentB = headB;
+
+                //Do till the two nodes are the same
+            while (currentA != currentB)
+            {
+                //If you reached the end of one list start at the beginning of the other one
+                //currentA
+                if (currentA.Next == null)
+                {
+                    currentA = headB;
+                }
+                else
+                {
+                    currentA = currentA.Next;
+                }
+                //currentB
+                if (currentB.Next == null)
+                {
+                    currentB = headA;
+                }
+                else
+                {
+                    currentB = currentB.Next;
+                }
+            }
+
+            Console.WriteLine(currentB.Value);
+            
         }
 
         private static void AlgorithmicCrush()
