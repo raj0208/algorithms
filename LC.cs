@@ -27,20 +27,6 @@ namespace ConsoleApp
             //FindNode();
             //RotateArray();
             //AlgorithmicCrush();
-
-            Regex reg = new Regex("^CASH$");
-            var tests = new List<string>() {
-                "FTP CASH",
-                "CASH FTP",
-                "FTP CASH FTP",
-                "CCASHH",
-                "CASH"
-            };
-
-            foreach (var test in tests)
-            {
-                Console.WriteLine("{0} -> {1}", test, reg.IsMatch(test));
-            }
         }
 
         private static void AlgorithmicCrush()
