@@ -28,7 +28,119 @@ namespace ConsoleApp
             //RotateArray();
             //AlgorithmicCrush();
 
-            FindMergeList();
+            //FindMergeList();
+            SortedInsert();
+
+            PreorderTraversal(Tree.GetTree());
+
+        }
+
+        class Tree
+        {
+            public Tree left;
+            public Tree right;
+            public int data;
+
+            public Tree(int data)
+            {
+                this.data = data;
+            }
+
+            public static Tree GetTree()
+            {
+                Tree root = new Tree(3);
+                root.left = new Tree(5);
+                root.left.left = new Tree(1);
+                root.left.right = new Tree(4);
+
+                root.right = new Tree(2);
+                root.right.left = new Tree(6);
+
+                return root;
+            }
+        }
+
+        private static void PreorderTraversal(Tree root)
+        {
+            Stack<Tree> stack = new Stack<Tree>();
+            stack.Push(root);
+
+            while (stack.Count != 0 && root != null) {
+                root = stack.Peek();
+
+                if (root != null) {
+                    Console.WriteLine(root.data + " ");
+                    if (root.right != null) stack.Push(root.right);
+                    if (root.left != null) stack.Push(root.left);
+                }
+            }
+        }
+
+        public class DNode {
+            public DNode prev;
+            public DNode next;
+            public int data;
+
+            public DNode(int data, DNode last)
+            {
+                this.data = data;
+                prev = last;
+                if (last != null)
+                    last.next = this;
+            }
+
+            public static DNode GetLinkedNodes(int[] data)
+            {
+                DNode head = new DNode(data[0], null);
+                DNode curr = head;
+                for (int i = 1; i < data.Length; i++)
+                {
+                    curr = new DNode(data[i], curr);
+                }
+
+                return head;
+            }
+
+            public void Print() {
+                var curr = this;
+
+                while (curr != null) {
+                    Console.Write(curr.data + " ");
+                }
+                Console.WriteLine();
+            }
+        }
+
+        private static void SortedInsert()
+        {
+            //Node SortedInsert(Node head, int data) 
+            var head = DNode.GetLinkedNodes(new int[] { 1, 2, 3 });
+
+            int data = 3;
+            DNode node = new DNode(data, null);
+
+            if (head == null || head.data >= data) {
+                node.next = head;
+                node.prev = null;
+                head = node;
+                return;
+            }
+
+            DNode curr = head;
+            DNode prev = null;
+            while (curr != null && curr.data < data) {
+                prev = curr;
+                curr = curr.next;
+            }
+
+            node.next = curr;
+            node.prev = prev;
+            prev.next = node;
+            if (curr != null) {
+                curr.prev = node;
+            }
+
+            head.Print();
         }
 
         private static void FindMergeList()
