@@ -29,10 +29,33 @@ namespace ConsoleApp
             //AlgorithmicCrush();
 
             //FindMergeList();
-            SortedInsert();
+            //SortedInsert();
+            Cipher();
 
-            PreorderTraversal(Tree.GetTree());
+            //PreorderTraversal(Tree.GetTree());
 
+        }
+
+        private static void Cipher()
+        {
+            string s = "ZThis is testz -123.";
+            StringBuilder sb = new StringBuilder();
+            int shift = 2;
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (char.IsLetter(s[i]))
+                {
+                    int c = char.IsUpper(s[i]) ? (int)'A' : (int)'a';
+
+                    int o = (int)s[i];
+
+                    int nc = c + (o - c + shift) % 26;
+                    sb.Append((char)nc);
+                }
+                else
+                    sb.Append(s[i]);
+
+            }
         }
 
         class Tree
