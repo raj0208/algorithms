@@ -30,10 +30,45 @@ namespace ConsoleApp
 
             //FindMergeList();
             //SortedInsert();
-            Cipher();
+            //Cipher();
 
             //PreorderTraversal(Tree.GetTree());
 
+            MorrisPreorderTranversal(Tree.GetTree());
+
+        }
+
+        private static void MorrisPreorderTranversal(Tree root)
+        {
+            Tree pre;
+            if (root == null)
+                return;
+            Tree curr = root;
+            while (curr != null)
+            {
+                if (curr.left == null)
+                {
+                    Console.WriteLine(curr.data + " ");
+                    curr = curr.right;
+                }
+                else
+                {
+                    pre = curr.left;
+                    while (pre.right != null && pre.right != curr)
+                        pre = pre.right;
+                    if (pre.right == null)
+                    {
+                        pre.right = curr;
+                        Console.WriteLine(curr.data + " ");
+                        curr = curr.left;
+                    }
+                    else
+                    {
+                        pre.right = null;
+                        curr = curr.right;
+                    }
+                }
+            }
         }
 
         private static void Cipher()
@@ -58,6 +93,7 @@ namespace ConsoleApp
             }
         }
 
+        [System.Diagnostics.DebuggerDisplay("Data:{data}, Left:{left.data}, Right:{right.data}")]
         class Tree
         {
             public Tree left;
@@ -95,6 +131,7 @@ namespace ConsoleApp
                     Console.WriteLine(root.data + " ");
                     if (root.right != null) stack.Push(root.right);
                     if (root.left != null) stack.Push(root.left);
+                    
                 }
             }
         }
