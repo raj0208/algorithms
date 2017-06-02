@@ -33,9 +33,56 @@ namespace ConsoleApp
             //Cipher();
 
             //PreorderTraversal(Tree.GetTree());
+            //MorrisPreorderTranversal(Tree.GetTree());
 
-            MorrisPreorderTranversal(Tree.GetTree());
+            PostOrderTraversal(Tree.GetTree());
+        }
 
+        private static void PostOrderTraversal(Tree root)
+        {
+            if (root == null) return;
+
+            Stack<Tree> stack = new Stack<Tree>();
+            stack.Push(root);
+
+            Tree prev = null;
+            Tree curr = null;
+            while (stack.Count != 0) {
+                curr = stack.Peek();
+
+                if (prev == null || prev.left == curr || prev.right == curr)
+                {
+                    if (curr.left != null)
+                    {
+                        stack.Push(curr.left);
+                    }
+                    else if (curr.right != null)
+                    {
+                        stack.Push(curr.right);
+                    }
+                    else {
+                        Console.Write(curr.data + " ");
+                        stack.Pop();
+                    }
+                    
+                }
+                else if (curr.left == prev) {
+                    if (curr.right != null)
+                        stack.Push(curr.right);
+                    else
+                    {
+                        Console.Write(curr.data + " ");
+                        stack.Pop();
+                    }
+                }
+                else if (curr.right == prev)
+                {
+                    Console.Write(curr.data + " ");
+                    stack.Pop();
+                }
+
+                prev = curr;
+            }
         }
 
         private static void MorrisPreorderTranversal(Tree root)
@@ -122,17 +169,17 @@ namespace ConsoleApp
         private static void PreorderTraversal(Tree root)
         {
             Stack<Tree> stack = new Stack<Tree>();
+
+            if (root == null) return;
+
             stack.Push(root);
 
-            while (stack.Count != 0 && root != null) {
-                root = stack.Peek();
+            while (stack.Count != 0) {
+                root = stack.Pop();
+                Console.WriteLine(root.data + " ");
 
-                if (root != null) {
-                    Console.WriteLine(root.data + " ");
-                    if (root.right != null) stack.Push(root.right);
-                    if (root.left != null) stack.Push(root.left);
-                    
-                }
+                if (root.right != null) stack.Push(root.right);
+                if (root.left != null) stack.Push(root.left);
             }
         }
 
