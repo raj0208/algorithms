@@ -32,14 +32,16 @@ namespace ConsoleApp
             //SortedInsert();
             //Cipher();
 
-            //PreorderTraversal(Tree.GetTree());
-            //MorrisPreorderTranversal(Tree.GetTree());
-
+            PreorderTraversal(Tree.GetTree());
+            MorrisPreorderTranversal(Tree.GetTree());
             PostOrderTraversal(Tree.GetTree());
+            InorderTraversal(Tree.GetTree());
         }
 
         private static void PostOrderTraversal(Tree root)
         {
+            Console.WriteLine("\nPostorderTraversal");
+            long start = DateTime.Now.Ticks;
             if (root == null) return;
 
             Stack<Tree> stack = new Stack<Tree>();
@@ -83,10 +85,13 @@ namespace ConsoleApp
 
                 prev = curr;
             }
+            Console.WriteLine("\n" + TimeSpan.FromTicks(DateTime.Now.Ticks - start).TotalMilliseconds);
         }
 
         private static void MorrisPreorderTranversal(Tree root)
         {
+            Console.WriteLine("\nMorris PreorderTraversal");
+            long start = DateTime.Now.Ticks;
             Tree pre;
             if (root == null)
                 return;
@@ -95,7 +100,7 @@ namespace ConsoleApp
             {
                 if (curr.left == null)
                 {
-                    Console.WriteLine(curr.data + " ");
+                    Console.Write(curr.data + " ");
                     curr = curr.right;
                 }
                 else
@@ -106,7 +111,7 @@ namespace ConsoleApp
                     if (pre.right == null)
                     {
                         pre.right = curr;
-                        Console.WriteLine(curr.data + " ");
+                        Console.Write(curr.data + " ");
                         curr = curr.left;
                     }
                     else
@@ -116,6 +121,8 @@ namespace ConsoleApp
                     }
                 }
             }
+            
+            Console.WriteLine("\n" + TimeSpan.FromTicks(DateTime.Now.Ticks - start).TotalMilliseconds);
         }
 
         private static void Cipher()
@@ -154,33 +161,70 @@ namespace ConsoleApp
 
             public static Tree GetTree()
             {
-                Tree root = new Tree(3);
-                root.left = new Tree(5);
-                root.left.left = new Tree(1);
+                Tree root = new Tree(1);
+                root.left = new Tree(2);
+                root.left.left = new Tree(3);
                 root.left.right = new Tree(4);
 
-                root.right = new Tree(2);
+                root.right = new Tree(5);
                 root.right.left = new Tree(6);
 
                 return root;
             }
         }
 
-        private static void PreorderTraversal(Tree root)
+        private static void InorderTraversal(Tree root)
         {
-            Stack<Tree> stack = new Stack<Tree>();
+            Console.WriteLine("\nInorderTraversal");
 
             if (root == null) return;
 
-            stack.Push(root);
+            long start = DateTime.Now.Ticks;
+            Stack<Tree> stack = new Stack<Tree>();
+            Tree curr = root;
 
-            while (stack.Count != 0) {
-                root = stack.Pop();
-                Console.WriteLine(root.data + " ");
-
-                if (root.right != null) stack.Push(root.right);
-                if (root.left != null) stack.Push(root.left);
+            while (stack.Count != 0 || curr != null)
+            {
+                // if it is not null, push to stack
+                //and go down the tree to left
+                if (curr != null)
+                {
+                    stack.Push(curr);
+                    curr = curr.left;
+                    // if no left child
+                    // pop stack, process the node
+                    // then let p point to the right
+                }
+                else
+                {
+                    curr = stack.Pop();
+                    Console.Write(curr.data + " ");
+                    curr = curr.right;
+                }
             }
+            
+            Console.WriteLine("\n" + TimeSpan.FromTicks(DateTime.Now.Ticks - start).TotalMilliseconds);
+            
+        }
+
+        private static void PreorderTraversal(Tree root)
+        {
+            Console.WriteLine("\nPreorderTraversal");
+            if (root == null) return;
+
+            long start = DateTime.Now.Ticks;
+            Stack<Tree> stack = new Stack<Tree>();
+
+            stack.Push(root);
+            Tree curr = root;
+            while (stack.Count != 0) {
+                curr = stack.Pop();
+                Console.Write(curr.data + " ");
+
+                if (curr.right != null) stack.Push(curr.right);
+                if (curr.left != null) stack.Push(curr.left);
+            }
+            Console.WriteLine("\n" + TimeSpan.FromTicks(DateTime.Now.Ticks - start).TotalMilliseconds);
         }
 
         public class DNode {
