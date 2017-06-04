@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp
 {
-    class LC
+    public static class LC
     {
         public static void Run()
         {
@@ -32,10 +32,12 @@ namespace ConsoleApp
             //SortedInsert();
             //Cipher();
 
-            PreorderTraversal(Tree.GetTree());
-            MorrisPreorderTranversal(Tree.GetTree());
-            PostOrderTraversal(Tree.GetTree());
-            InorderTraversal(Tree.GetTree());
+            //PreorderTraversal(Tree.GetTree());
+            //MorrisPreorderTranversal(Tree.GetTree());
+            //PostOrderTraversal(Tree.GetTree());
+            //InorderTraversal(Tree.GetTree());
+
+            DSA.Run();
         }
 
         private static void PostOrderTraversal(Tree root)
@@ -148,7 +150,7 @@ namespace ConsoleApp
         }
 
         [System.Diagnostics.DebuggerDisplay("Data:{data}, Left:{left.data}, Right:{right.data}")]
-        class Tree
+        public class Tree
         {
             public Tree left;
             public Tree right;
