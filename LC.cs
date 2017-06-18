@@ -40,6 +40,23 @@ namespace ConsoleApp
             DSA.Run();
         }
 
+        private static void CamelCase()
+        {
+            string s = "";
+
+            int count = 1;
+            //int A = (int)'A';
+            //int Z = (int)'Z';
+            //int c;
+            //for (int i = 0; i < s.Length; i++)
+            //{
+            //    c = (int)s[i];
+            //    if (c >= A && c <= Z) count++;
+            //}
+            
+            Console.WriteLine(s.Count(char.IsUpper) + 1);
+        }
+
         private static void PostOrderTraversal(Tree root)
         {
             Console.WriteLine("\nPostorderTraversal");

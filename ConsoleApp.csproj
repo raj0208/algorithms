@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppLauncher.cs" />
+    <Compile Include="CTCI.cs" />
     <Compile Include="DSA.cs" />
     <Compile Include="LC.cs" />
     <Compile Include="NQueen.cs" />

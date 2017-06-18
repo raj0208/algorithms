@@ -10,7 +10,8 @@ namespace ConsoleApp
     {
         static void Main(string[] args)
         {
-            LC.Run();
+            //LC.Run();
+            CTCI.Run();
             Console.ReadLine();
         }
     }

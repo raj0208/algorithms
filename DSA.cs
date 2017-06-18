@@ -12,11 +12,11 @@ namespace ConsoleApp
     {
         public static void Run()
         {
-            PreorderTraversal(Tree.GetTree());
-            MorrisPreorderTraversal(Tree.GetTree());
-            InorderTraversal(Tree.GetTree());
-            PostorderTraversal(Tree.GetTree());
-            
+            //PreorderTraversal(Tree.GetTree());
+            //MorrisPreorderTraversal(Tree.GetTree());
+            //InorderTraversal(Tree.GetTree());
+            //PostorderTraversal(Tree.GetTree());
+            Program1.Add(5, 7);
         }
 
         private static void PostorderTraversal(Tree root)

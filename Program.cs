@@ -639,7 +639,7 @@ namespace ConsoleApp
             Console.ReadLine();
         }
 
-        static int Add(int x, int y)
+        public static int Add(int x, int y)
         {
             int carry;
             // Iterate till there is no carry  
@@ -658,7 +658,7 @@ namespace ConsoleApp
             return x;
         }
 
-        static int sub(int x, int y)
+        public static int sub(int x, int y)
         {
             int carry = 0;
             do
@@ -670,7 +670,7 @@ namespace ConsoleApp
             return x;
         }
 
-        static int multiply(int a, int b)
+        public static int multiply(int a, int b)
         {
             int result = 0;
             while (b != 0)               // Iterate the loop till b==0
