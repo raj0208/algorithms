@@ -39,16 +39,15 @@ namespace ConsoleApp
 
         private void PermutationOfPalindrome()
         {
-            string phrase = "god dog";
+            string phrase = "race car";
 
-            int[] table = new int['z' - 'a'];
+            int[] table = new int['z' - 'a' + 1 ];
             int count = 0;
             for (int i = 0; i < phrase.Length; i++)
             {
-                int x = phrase[i];
-
                 if (Char.IsLetter(phrase[i]))
                 {
+                    int x = Char.ToLower(phrase[i]) - 'a';
                     table[x]++;
 
                     if (table[x] % 2 == 1)
