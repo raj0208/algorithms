@@ -582,6 +582,53 @@ namespace ConsoleApp
         }
     }
 
+    static class ExtensionClass {
+        public static void Append(this LinkedNode root, LinkedNode node) {
+            var t = root;
+
+            if (t == null)
+                root = node;
+            else
+            {
+                while (t.Next != null)
+                {
+                    t = t.Next;
+                }
+                t.Next = node;
+            }
+        }
+
+        public static void Print(this LinkedNode root)
+        {
+            var t = root;
+            var list = new List<int>();
+            while (t != null)
+            {
+                list.Add(t.Value);
+                t = t.Next;
+            }
+            Console.WriteLine("List {0}", string.Join(",", list));
+        }
+
+        public static LinkedNode NthNode(this LinkedNode root, int nthNode) {
+            var t = root;
+            while (t != null && --nthNode > 0) {
+                t = t.Next;
+            }
+
+            return t;
+        }
+
+        public static LinkedNode LastNode(this LinkedNode root) {
+            var t = root;
+
+            while (t != null && t.Next != null)
+                t = t.Next;
+
+            return t;
+        }
+    }
+
     [DebuggerDisplay("Node {Data}")]
     class ListNode
     {

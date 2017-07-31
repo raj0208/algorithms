@@ -57,6 +57,7 @@ namespace ConsoleApp
             Console.WriteLine(s.Count(char.IsUpper) + 1);
         }
 
+        #region Traversals
         private static void PostOrderTraversal(Tree root)
         {
             Console.WriteLine("\nPostorderTraversal");
@@ -68,7 +69,8 @@ namespace ConsoleApp
 
             Tree prev = null;
             Tree curr = null;
-            while (stack.Count != 0) {
+            while (stack.Count != 0)
+            {
                 curr = stack.Peek();
 
                 if (prev == null || prev.left == curr || prev.right == curr)
@@ -81,13 +83,15 @@ namespace ConsoleApp
                     {
                         stack.Push(curr.right);
                     }
-                    else {
+                    else
+                    {
                         Console.Write(curr.data + " ");
                         stack.Pop();
                     }
-                    
+
                 }
-                else if (curr.left == prev) {
+                else if (curr.left == prev)
+                {
                     if (curr.right != null)
                         stack.Push(curr.right);
                     else
@@ -103,6 +107,60 @@ namespace ConsoleApp
                 }
 
                 prev = curr;
+            }
+            Console.WriteLine("\n" + TimeSpan.FromTicks(DateTime.Now.Ticks - start).TotalMilliseconds);
+        }
+
+        private static void InorderTraversal(Tree root)
+        {
+            Console.WriteLine("\nInorderTraversal");
+
+            if (root == null) return;
+
+            long start = DateTime.Now.Ticks;
+            Stack<Tree> stack = new Stack<Tree>();
+            Tree curr = root;
+
+            while (stack.Count != 0 || curr != null)
+            {
+                // if it is not null, push to stack
+                //and go down the tree to left
+                if (curr != null)
+                {
+                    stack.Push(curr);
+                    curr = curr.left;
+                    // if no left child
+                    // pop stack, process the node
+                    // then let p point to the right
+                }
+                else
+                {
+                    curr = stack.Pop();
+                    Console.Write(curr.data + " ");
+                    curr = curr.right;
+                }
+            }
+
+            Console.WriteLine("\n" + TimeSpan.FromTicks(DateTime.Now.Ticks - start).TotalMilliseconds);
+
+        }
+
+        private static void PreorderTraversal(Tree root)
+        {
+            Console.WriteLine("\nPreorderTraversal");
+            if (root == null) return;
+
+            long start = DateTime.Now.Ticks;
+            Stack<Tree> stack = new Stack<Tree>();
+            stack.Push(root);
+            Tree curr = null;
+            while (stack.Count != 0)
+            {
+                curr = stack.Pop();
+                Console.Write(curr.data + " ");
+
+                if (curr.right != null) stack.Push(curr.right);
+                if (curr.left != null) stack.Push(curr.left);
             }
             Console.WriteLine("\n" + TimeSpan.FromTicks(DateTime.Now.Ticks - start).TotalMilliseconds);
         }
@@ -140,9 +198,10 @@ namespace ConsoleApp
                     }
                 }
             }
-            
+
             Console.WriteLine("\n" + TimeSpan.FromTicks(DateTime.Now.Ticks - start).TotalMilliseconds);
-        }
+        } 
+        #endregion
 
         private static void Cipher()
         {
@@ -192,59 +251,7 @@ namespace ConsoleApp
             }
         }
 
-        private static void InorderTraversal(Tree root)
-        {
-            Console.WriteLine("\nInorderTraversal");
 
-            if (root == null) return;
-
-            long start = DateTime.Now.Ticks;
-            Stack<Tree> stack = new Stack<Tree>();
-            Tree curr = root;
-
-            while (stack.Count != 0 || curr != null)
-            {
-                // if it is not null, push to stack
-                //and go down the tree to left
-                if (curr != null)
-                {
-                    stack.Push(curr);
-                    curr = curr.left;
-                    // if no left child
-                    // pop stack, process the node
-                    // then let p point to the right
-                }
-                else
-                {
-                    curr = stack.Pop();
-                    Console.Write(curr.data + " ");
-                    curr = curr.right;
-                }
-            }
-            
-            Console.WriteLine("\n" + TimeSpan.FromTicks(DateTime.Now.Ticks - start).TotalMilliseconds);
-            
-        }
-
-        private static void PreorderTraversal(Tree root)
-        {
-            Console.WriteLine("\nPreorderTraversal");
-            if (root == null) return;
-
-            long start = DateTime.Now.Ticks;
-            Stack<Tree> stack = new Stack<Tree>();
-
-            stack.Push(root);
-            Tree curr = root;
-            while (stack.Count != 0) {
-                curr = stack.Pop();
-                Console.Write(curr.data + " ");
-
-                if (curr.right != null) stack.Push(curr.right);
-                if (curr.left != null) stack.Push(curr.left);
-            }
-            Console.WriteLine("\n" + TimeSpan.FromTicks(DateTime.Now.Ticks - start).TotalMilliseconds);
-        }
 
         public class DNode {
             public DNode prev;
