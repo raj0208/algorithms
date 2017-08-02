@@ -11,6 +11,7 @@ namespace ConsoleApp
         internal static void Run()
         {
             var ctci = new CTCI();
+
             #region String/Array
             //ctci.IsUniqueChars();
             //ctci.PermutationOfPalindrome();
@@ -29,9 +30,57 @@ namespace ConsoleApp
             #region Stack & Queue
             //ctci.ThreeInOneStack();
             //ctci.MinStack();
-            ctci.QueueviaStack();
-            
+            //ctci.QueueviaStack();
+            //ctci.SortStack();
+            ctci.AnimalShelter();
             #endregion
+        }
+
+        #region Stack & Queue
+        private void AnimalShelter()
+        {
+            AnimalShelter ani = new ConsoleApp.AnimalShelter();
+            ani.Enqueue(new Dog("Dog1"));
+            ani.Enqueue(new Cat("Cat1"));
+            ani.Enqueue(new Dog("Dog2"));
+            ani.Enqueue(new Cat("Cat2"));
+            ani.Enqueue(new Dog("Dog3"));
+            ani.Enqueue(new Cat("Cat3"));
+            ani.Enqueue(new Cat("Cat4"));
+            ani.Enqueue(new Dog("Dog4"));
+
+            Console.WriteLine(ani.Size());
+            Console.WriteLine(ani.DequeueAny().Name);
+            Console.WriteLine(ani.DequeueDog().Name);
+            Console.WriteLine(ani.DequeueCat().Name);
+            Console.WriteLine(ani.DequeueDog().Name);
+            Console.WriteLine(ani.DequeueCat().Name);
+            Console.WriteLine(ani.DequeueAny().Name);
+            Console.WriteLine(ani.DequeueAny().Name);
+            Console.WriteLine(ani.DequeueAny().Name);
+            Console.WriteLine(ani.Size());
+        }
+
+        private void SortStack()
+        {
+            Stack<int> stack = new Stack<int>();
+
+            new List<int> { 5,7,10,2,4,1 }.ForEach(x => stack.Push(x));
+
+            Stack<int> temp = new Stack<int>();
+            while (stack.Count > 0)
+            {
+                int value = stack.Pop();
+
+                while (temp.Count > 0 && value < temp.Peek()) {
+                    stack.Push(temp.Pop());
+                }
+                temp.Push(value);
+            }
+
+            while (temp.Count > 0) stack.Push(temp.Pop());
+
+            Console.WriteLine("{0}", string.Join(",", stack.ToList()));
         }
 
         private void QueueviaStack()
@@ -65,7 +114,6 @@ namespace ConsoleApp
             Console.WriteLine(stack.Min());
         }
 
-        #region Stack & Queue
         private void ThreeInOneStack()
         {
             ThreeInOneStack tios = new ThreeInOneStack(3);
@@ -443,7 +491,9 @@ namespace ConsoleApp
         #endregion
     }
 
-    class ThreeInOneStack {
+    #region Classes
+    class ThreeInOneStack
+    {
         private int stackCount = 3;
         private int stackCapacity;
         private int[] stackValues;
@@ -509,7 +559,8 @@ namespace ConsoleApp
         }
     }
 
-    class MinStack : Stack<int> {
+    class MinStack : Stack<int>
+    {
         private Stack<int> _minStack = new Stack<int>();
 
         public void Push(int value)
@@ -540,7 +591,8 @@ namespace ConsoleApp
         }
     }
 
-    class QueueviaStack<T> {
+    class QueueviaStack<T>
+    {
         private Stack<T> _newest;
         private Stack<T> _oldest;
 
@@ -583,4 +635,74 @@ namespace ConsoleApp
             }
         }
     }
+
+    abstract class Animal
+    {
+        public int Order { get; set; }
+        public string Name { get; set; }
+
+        public bool IsOlder(Animal animal)
+        {
+            return this.Order < animal.Order;
+        }
+    }
+
+    class Dog : Animal
+    {
+        public Dog(string name)
+        {
+            this.Name = name;
+        }
+    }
+
+    class Cat : Animal
+    {
+        public Cat(string name)
+        {
+            this.Name = name;
+        }
+    }
+
+    class AnimalShelter {
+        Queue<Dog> dogs = new Queue<Dog>();
+        Queue<Cat> cats = new Queue<Cat>();
+        int _order = 1;
+
+        public void Enqueue(Animal animal)
+        {
+            animal.Order = _order++;
+
+            if (animal is Dog) dogs.Enqueue(animal as Dog);
+            else if (animal is Cat) cats.Enqueue(animal as Cat);
+        }
+
+        public int Size()
+        {
+            return dogs.Count + cats.Count;
+        }
+
+        public Animal DequeueAny()
+        {
+            if (dogs.Count == 0) return this.DequeueCat();
+
+            if (cats.Count == 0) return this.DequeueDog();
+
+            var dog = dogs.Peek();
+            var cat = cats.Peek();
+
+            if (dog.IsOlder(cat)) return DequeueDog();
+            else return DequeueCat();
+        }
+
+        public Dog DequeueDog()
+        {
+            return (dogs.Count > 0) ? dogs.Dequeue() : null;
+        }
+
+        public Cat DequeueCat()
+        {
+            return (cats.Count > 0) ? cats.Dequeue() : null;
+        }
+    }
+    #endregion
 }
