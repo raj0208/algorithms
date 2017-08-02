@@ -29,6 +29,7 @@ namespace ConsoleApp
             #region Stack & Queue
             //ctci.ThreeInOneStack();
             ctci.MinStack();
+
             #endregion
         }
 
