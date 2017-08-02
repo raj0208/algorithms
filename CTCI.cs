@@ -23,33 +23,125 @@ namespace ConsoleApp
             //ctci.ReturnKthToLast();
             //ctci.DeleteNode();
             //ctci.LoopDetection();
-            ctci.LinkIntersection();
+            //ctci.LinkIntersection();
+            #endregion
+
+            #region Stack & Queue
+            //ctci.ThreeInOneStack();
+            ctci.MinStack();
             #endregion
         }
+
+        private void MinStack()
+        {
+            MinStack stack = new MinStack();
+
+            stack.Push(5);
+            stack.Push(3);
+            stack.Push(2);
+            stack.Push(6);
+            stack.Push(1);
+            Console.WriteLine(stack.Min());
+            stack.Pop();
+            stack.Pop();
+            
+            Console.WriteLine(stack.Min());
+            Console.WriteLine(stack.Min());
+        }
+
+        #region Stack & Queue
+        private void ThreeInOneStack()
+        {
+            ThreeInOneStack tios = new ThreeInOneStack(3);
+
+            tios.Push(0, 11);
+            tios.Push(0, 12);
+            tios.Push(0, 13);
+            tios.Push(1, 21);
+            tios.Push(1, 22);
+            tios.Push(2, 31);
+            tios.Push(2, 32);
+            tios.Push(2, 33);
+            try
+            {
+                tios.Push(0, 14);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            Console.WriteLine(tios.Pop(0));
+            Console.WriteLine(tios.Pop(0));
+            Console.WriteLine(tios.Pop(0));
+            Console.WriteLine(tios.Pop(1));
+            Console.WriteLine(tios.Pop(1));
+            Console.WriteLine(tios.Pop(2));
+            try
+            {
+                Console.WriteLine(tios.Pop(1));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+        } 
+        #endregion
 
         #region LinkedList
         private void LinkIntersection()
         {
             var list1 = LinkedNode.GetLinkedNodes(new int[] { 1, 2, 3, 4});
             var list2 = LinkedNode.GetLinkedNodes(new int[] { 11, 12 });
-
+            bool flag = true;
             for (int i = 5; i < 9; i++)
             {
                 var node = new LinkedNode(i);
                 list1.Append(node);
-                list2.Append(node);
+                if (flag)
+                {
+                    flag = false;
+                    list2.Append(node);
+                }
             }
-
             list1.Print();
             list2.Print();
+            int size1, size2;
+            var tail1 = GetTailAndSize(list1, out size1);
+            var tail2 = GetTailAndSize(list2, out size2);
+
+            if (tail1 != tail2 && tail1 != null) {
+                Console.WriteLine("No intersection");
+                return;
+            }
+
+            int diff = Math.Abs(size1 - size2);
+
+            tail1 = (size1 > size2) ? list1 : list2;
+            tail2 = (size1 > size2) ? list2 : list1;
+
+            while (diff-- > 0) {
+                tail1 = tail1.Next;
+            }
+
+            while (tail1 != tail2) {
+                tail1 = tail1.Next;
+                tail2 = tail2.Next;
+            }
+
+            Console.WriteLine("Intersection point : {0}", tail1.Value);
         }
 
-        private LinkedNode GetTailAndSize(LinkedNode one, LinkedNode two, out int size) {
+        private LinkedNode GetTailAndSize(LinkedNode one, out int size) {
             size = 0;
-            LinkedNode node = null;
-
-
-
+            LinkedNode node = one;
+            if (node == null) return node;
+            size = 1;
+            while (node.Next != null) {
+                size++;
+                node = node.Next;
+            }
 
             return node;
         }
@@ -333,5 +425,102 @@ namespace ConsoleApp
             Console.WriteLine("Result : {0}", (count <= 1));
         } 
         #endregion
+    }
+
+    class ThreeInOneStack {
+        private int stackCount = 3;
+        private int stackCapacity;
+        private int[] stackValues;
+        private int[] size;
+
+        public ThreeInOneStack(int stackCapacity)
+        {
+            this.stackCapacity = stackCapacity;
+            size = new int[stackCount];
+            stackValues = new int[stackCapacity * stackCount];
+        }
+
+        public void Push(int stackIndex, int value)
+        {
+            if (IsFull(stackIndex)) throw new Exception("Stack is full");
+
+            stackValues[GetTop(stackIndex)] = value;
+            size[stackIndex]++;
+        }
+
+        public int Pop(int stackIndex)
+        {
+            if (IsEmpty(stackIndex))
+                throw new Exception("Stack is empty");
+
+            int top = GetTop(stackIndex) - 1;
+            int value = stackValues[top];
+            stackValues[top] = 0;
+            size[stackIndex]--;
+            return value;
+        }
+
+        public int Peek(int stackIndex)
+        {
+            if (IsEmpty(stackIndex))
+                throw new Exception("Stack is empty");
+            int top = GetTop(stackIndex);
+            return stackValues[top];
+
+        }
+
+        public bool IsEmpty(int stackIndex)
+        {
+            if (!IsValidStackIndex(stackIndex)) throw new Exception("Stack Index out of range");
+            return size[stackIndex] == 0;
+        }
+
+        public bool IsFull(int stackIndex)
+        {
+            if (!IsValidStackIndex(stackIndex)) throw new Exception("Stack Index out of range");
+            return size[stackIndex] == stackCapacity;
+        }
+
+        private bool IsValidStackIndex(int stackIndex)
+        {
+            return (stackIndex >= 0 || stackIndex < stackCount);
+        }
+
+        private int GetTop(int stackIndex)
+        {
+            int offset = stackCapacity * stackIndex;
+            return size[stackIndex] + offset;
+        }
+    }
+
+    class MinStack : Stack<int> {
+        private Stack<int> _minStack = new Stack<int>();
+
+        public void Push(int value)
+        {
+            if (value <= this.Min())
+                _minStack.Push(value);
+
+            base.Push(value);
+        }
+
+        public int Pop()
+        {
+            int value = base.Pop();
+            if (value == this.Min())
+                _minStack.Pop();
+
+            return value;
+        }
+
+        public int Peek()
+        {
+            return base.Peek();
+        }
+
+        public int Min()
+        {
+            return (_minStack.Count == 0) ? int.MaxValue : _minStack.Peek();
+        }
     }
 }
