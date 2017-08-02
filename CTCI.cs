@@ -28,9 +28,24 @@ namespace ConsoleApp
 
             #region Stack & Queue
             //ctci.ThreeInOneStack();
-            ctci.MinStack();
-
+            //ctci.MinStack();
+            ctci.QueueviaStack();
+            
             #endregion
+        }
+
+        private void QueueviaStack()
+        {
+            QueueviaStack<int> queue = new QueueviaStack<int>();
+            queue.Add(1);
+            queue.Add(2);
+            queue.Add(3);
+            Console.WriteLine(queue.Remove());
+            Console.WriteLine(queue.Remove());
+            queue.Add(3);
+            queue.Add(4);
+            queue.Add(5);
+            Console.WriteLine(queue.Size());
         }
 
         private void MinStack()
@@ -522,6 +537,50 @@ namespace ConsoleApp
         public int Min()
         {
             return (_minStack.Count == 0) ? int.MaxValue : _minStack.Peek();
+        }
+    }
+
+    class QueueviaStack<T> {
+        private Stack<T> _newest;
+        private Stack<T> _oldest;
+
+        public QueueviaStack()
+        {
+            _newest = new Stack<T>();
+            _oldest = new Stack<T>();
+        }
+
+        public void Add(T value)
+        {
+            _newest.Push(value);
+        }
+
+        public T Remove()
+        {
+            UpdateOldestStack();
+            return _oldest.Pop();
+        }
+
+        public T Peek()
+        {
+            UpdateOldestStack();
+            return _oldest.Peek();
+        }
+
+        public int Size()
+        {
+            return _newest.Count + _oldest.Count;
+        }
+
+        private void UpdateOldestStack()
+        {
+            if (_oldest.Count == 0)
+            {
+                while (_newest.Count > 0)
+                {
+                    _oldest.Push(_newest.Pop());
+                }
+            }
         }
     }
 }
