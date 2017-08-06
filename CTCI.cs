@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static ConsoleApp.LC;
 
 namespace ConsoleApp
 {
@@ -32,9 +33,102 @@ namespace ConsoleApp
             //ctci.MinStack();
             //ctci.QueueviaStack();
             //ctci.SortStack();
-            ctci.AnimalShelter();
+            //ctci.AnimalShelter();
+            #endregion
+
+            #region Tree & Graph
+            // ctci.MinimalTreeWithSortedArray();
+            //ctci.ListOfNodes();
             #endregion
         }
+
+        #region Tree & Graph
+
+        private void ListOfNodes()
+        {
+            Tree root = CreateTreeFromArray(new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 }, 0, 14);
+            ListOfNodes(root, true);
+            ListOfNodes(root, false);
+        }
+
+        private void ListOfNodes(Tree root, bool isDepthFirstSearch)
+        {
+            Console.WriteLine("{0} First Search", isDepthFirstSearch ? "Depth" : "Breadth");
+            
+            List<LinkedList<Tree>> nodelist = new List<LinkedList<Tree>>();
+
+            if (isDepthFirstSearch)
+                CreateDFSLinkedListNodes(root, nodelist, 0);
+            else
+                CreateBFSLinkedListNodes(root, nodelist);
+
+            int level = 1;
+            foreach (var list in nodelist)
+            {
+                Console.WriteLine("Level : {0}", level++);
+                Console.WriteLine(string.Join(",", list.Select(x => x.data)));
+            }
+        }
+
+        private void CreateDFSLinkedListNodes(Tree root, List<LinkedList<Tree>> allNodeList, int level)
+        {
+            if (root == null) return;
+
+            LinkedList<Tree> levelList;
+            if (allNodeList.Count == level)
+            {
+                levelList = new LinkedList<Tree>();
+                allNodeList.Add(levelList);
+            }
+            else
+            {
+                levelList = allNodeList[level];
+            }
+            levelList.AddLast(root);
+
+            CreateDFSLinkedListNodes(root.left, allNodeList, level + 1);
+            CreateDFSLinkedListNodes(root.right, allNodeList, level + 1);
+        }
+
+        private void CreateBFSLinkedListNodes(Tree root, List<LinkedList<Tree>> nodelist)
+        {
+            LinkedList<Tree> child = new LinkedList<Tree>();
+            child.AddLast(root);
+
+            while (child.Count > 0)
+            {
+                nodelist.Add(child);
+                LinkedList<Tree> parent = child;
+                child = new LinkedList<Tree>();
+
+                foreach (var node in parent)
+                {
+                    if (node.left != null) child.AddLast(node.left);
+                    if (node.right != null) child.AddLast(node.right);
+                }
+            }
+        }
+
+        private void MinimalTreeWithSortedArray()
+        {
+            int[] array = new int[] { 1,2,3,4,5,6,7,8,9,10} ;
+
+            Tree tree = CreateTreeFromArray(array, 0, array.Length - 1);
+        }
+
+        private Tree CreateTreeFromArray(int[] array, int start, int end)
+        {
+            if (end < start) return null;
+
+            int mid = (start + end) / 2;
+
+            Tree node = new Tree(array[mid]);
+            node.left = CreateTreeFromArray(array, start, mid - 1);
+            node.right = CreateTreeFromArray(array, mid + 1, end);
+
+            return node;
+        }
+        #endregion
 
         #region Stack & Queue
         private void AnimalShelter()
@@ -704,5 +798,32 @@ namespace ConsoleApp
             return (cats.Count > 0) ? cats.Dequeue() : null;
         }
     }
+
+    class Graph {
+        public GraphNode[] Nodes ;
+
+        public static Graph GetGraph() {
+            Graph graph = new Graph();
+
+            var start = new GraphNode[1];
+            start[0] = new GraphNode();
+            start[0].Name = "Start";
+            start[0].Childrens = new GraphNode[3];
+            
+
+            graph.Nodes = start;
+            return graph;
+        }
+
+    }
+
+    class GraphNode
+    {
+        public string Name { get; set; }
+        public bool IsVisited { get; set; }
+        public GraphNode[] Childrens { get; set; }
+    }
+
+
     #endregion
 }

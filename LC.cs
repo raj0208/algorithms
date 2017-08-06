@@ -243,9 +243,12 @@ namespace ConsoleApp
                 root.left = new Tree(2);
                 root.left.left = new Tree(3);
                 root.left.right = new Tree(4);
+                root.left.left.left = new Tree(8);
+                root.left.left.right = new Tree(9);
 
                 root.right = new Tree(5);
                 root.right.left = new Tree(6);
+                root.right.right = new Tree(7);
 
                 return root;
             }
