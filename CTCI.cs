@@ -39,11 +39,91 @@ namespace ConsoleApp
             #region Tree & Graph
             // ctci.MinimalTreeWithSortedArray();
             //ctci.ListOfNodes();
+            //ctci.IsBalancedTree();
+            //ctci.BinarySearchTree();
+            ctci.SuccessorNode();
             #endregion
         }
 
-        #region Tree & Graph
+        private void SuccessorNode()
+        {
+            var root = Tree.GetTree();
 
+            if (root == null) Console.WriteLine("SUccessor found");
+
+            if (root.right != null)
+            {
+                var temp = root.right;
+
+                while (temp.left != null)
+                {
+                    temp = temp.left;
+                }
+
+                Console.WriteLine("Successor found {0}", temp.data);
+            }
+            else
+            {
+                // not complete
+            } 
+        }
+
+        #region Tree & Graph
+        private void BinarySearchTree()
+        {
+            var root = Tree.GetTree();
+
+            Console.WriteLine(CheckBST(root, null, null));
+            var array = new int[] { 1, 2, 3, 4, 5, 6 };
+            root = CreateTreeFromArray(array, 0, array.Length - 1);
+            Console.WriteLine(CheckBST(root, null, null));
+        }
+
+        private bool CheckBST(Tree root, int? min, int? max)
+        {
+            if (root == null) return true;
+
+            if ((min != null && root.data <= min.Value) || (max != null && root.data > max.Value)) 
+            {
+                return false;
+            }
+
+            if (!CheckBST(root.left, min, root.data) || !CheckBST(root.right, root.data, max)) {
+                return false;
+            }
+
+            return true;
+        }
+
+        private void IsBalancedTree()
+        {
+            var array = new int[] {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20 };
+            var root = CreateTreeFromArray(array, 0, array.Length - 1);
+
+            if (CheckHeight(root) != int.MinValue)
+            {
+                Console.WriteLine("Tree is balanced");
+            }
+        }
+
+        private int CheckHeight(Tree root)
+        {
+            if (root == null) return -1;
+
+            int leftTree = CheckHeight(root.left);
+            if (leftTree == int.MinValue) return int.MinValue;
+
+            int rightTree = CheckHeight(root.right);
+            if (rightTree == int.MinValue) return int.MinValue;
+
+            int diff = Math.Abs(leftTree - rightTree);
+
+            int value = (diff > 1) ? int.MinValue :
+                                Math.Max(leftTree, rightTree) + 1;
+            Console.WriteLine($"Node {root.data}: height {value}");
+            return value;
+        }
+        
         private void ListOfNodes()
         {
             Tree root = CreateTreeFromArray(new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 }, 0, 14);
