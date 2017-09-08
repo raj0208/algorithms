@@ -47,25 +47,44 @@ namespace ConsoleApp
 
         private void SuccessorNode()
         {
-            var root = Tree.GetTree();
+            var array = new int[] { 1,2,3,4,5,6,7 };
 
-            if (root == null) Console.WriteLine("SUccessor found");
+            var tree = TreeNode.CreateTreeFromArray(array, 0, array.Length - 1);
 
-            if (root.right != null)
+            foreach (var item in array)
             {
-                var temp = root.right;
+                Console.WriteLine("============================");
+                Console.WriteLine($"Node {item}");
 
-                while (temp.left != null)
+                var root = TreeNode.GetNode(tree, item);
+
+                if (root == null) Console.WriteLine("Successor found - Root");
+
+                // Right node is not empty, traverse to get last left node from right node
+                if (root.Right != null) 
                 {
-                    temp = temp.left;
-                }
+                    var temp = root.Right;
+                    while (temp.Left != null)
+                        temp = temp.Left;
 
-                Console.WriteLine("Successor found {0}", temp.data);
+                    Console.WriteLine("Successor found {0}", temp.Data);
+                }
+                else // Right node is empty, get parent
+                {
+                    var current = root;
+                    var parent = current.Parent;
+
+                    while (parent != null && current != parent.Left) {
+                        current = parent;
+                        parent = parent.Parent;
+                    }
+
+                    if (parent != null)
+                        Console.WriteLine($"Successor found {parent.Data}");
+                    else
+                        Console.WriteLine("Successor found NULL");
+                }
             }
-            else
-            {
-                // not complete
-            } 
         }
 
         #region Tree & Graph
@@ -904,6 +923,42 @@ namespace ConsoleApp
         public GraphNode[] Childrens { get; set; }
     }
 
+    class TreeNode {
+        public TreeNode Parent;
+        public int Data;
+        public TreeNode Left;
+        public TreeNode Right;
 
+        public TreeNode(int data)
+        {
+            this.Data = data;
+        }
+
+        public static TreeNode CreateTreeFromArray(int[] array, int start, int end)
+        {
+            if (end < start) return null;
+
+            int mid = (start + end) / 2;
+
+            TreeNode node = new TreeNode(array[mid]);
+
+            node.Left = CreateTreeFromArray(array, start, mid - 1);
+            if (node.Left != null) node.Left.Parent = node;
+
+            node.Right = CreateTreeFromArray(array, mid + 1, end);
+            if (node.Right != null) node.Right.Parent = node;
+
+            return node;
+        }
+
+        public static TreeNode GetNode(TreeNode root, int data)
+        {
+            if (root != null && root.Data == data)  return root;
+
+            if (root == null) return null;
+
+            return (root.Data > data) ? GetNode(root.Left, data) : GetNode(root.Right, data);
+        }
+    }
     #endregion
 }
