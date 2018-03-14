@@ -680,7 +680,36 @@ namespace ConsoleApp
             }
 
             Console.WriteLine("Result : {0}", (count <= 1));
-        } 
+        }
+        #endregion
+
+        #region Maths
+        static void Add(int x, int y)
+        {
+            int carry = 0;
+            while (y != 0)
+            {
+                carry = x & y;
+                x = x ^ y;
+                y = carry << 1;
+            }
+
+            Console.WriteLine($"Sum is {x}");
+        }
+
+        static void Subtract(int x, int y)
+        {
+            int carry = 0;
+            do
+            {
+                carry = ~x & y;
+                x = x ^ y;
+                y = carry << 1;
+
+            } while (carry != 0);
+
+            Console.WriteLine($"Result is {x}");
+        }
         #endregion
     }
 
