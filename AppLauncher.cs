@@ -23,7 +23,7 @@ namespace ConsoleApp
 
         static void Test()
         {
-            
+             
         }
     }
 }
