@@ -18,30 +18,12 @@ namespace ConsoleApp
 
         static void Main(string[] args)
         {
-            IsUnique();
+            Test();
         }
 
-        static void IsUnique()
+        static void Test()
         {
-            string str = "quick brown fx jmps ve the lazy dog";
-
-            int checker = 0;
-
-            foreach (var c in str.ToCharArray())
-            {
-                int value = c - 'a';
-                if ((checker & (1 << value)) > 0)
-                {
-                    Console.WriteLine("Not unique");
-                    return;
-                }
-
-                checker |= (1 << value);
-            }
-
-            Console.WriteLine("Unique");
+            
         }
-
-       
     }
 }
