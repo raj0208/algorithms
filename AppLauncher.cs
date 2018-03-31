@@ -18,8 +18,9 @@ namespace ConsoleApp
 
         static void Main(string[] args)
         {
-
-            Console.WriteLine(FibonacciSeries());
+            LongestSubSequence();
+            //==============================
+            //Console.WriteLine(FibonacciSeries());
             //==============================
             //SearchMatrix();
             //==============================
@@ -48,6 +49,35 @@ namespace ConsoleApp
             //ReverseLinkedList();
             //TreeTraversal();
             Console.ReadLine();
+        }
+
+        private static void LongestSubSequence()
+        {
+            int[] array = new int[] { 2, 1, 6, 4, 7,5, 9, 3 };
+
+            HashSet<int> map = new HashSet<int>();
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (!map.Contains(array[i]))
+                    map.Add(array[i]);
+            }
+            int longest = 0;
+            foreach (var item in map)
+            {
+                if (!map.Contains(item - 1)) {
+                    int curr = item;
+                    int count = 1;
+
+                    while (map.Contains(curr + 1)) {
+                        curr++;
+                        count++;
+                    }
+                    
+                    longest = Math.Max(longest, count);
+                }
+            }
+
+            Console.WriteLine(longest);
         }
 
         private static int FibonacciSeries() // constant space, linear o(n)
