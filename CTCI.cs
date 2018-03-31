@@ -41,8 +41,44 @@ namespace ConsoleApp
             //ctci.ListOfNodes();
             //ctci.IsBalancedTree();
             //ctci.BinarySearchTree();
-            ctci.SuccessorNode();
+            //ctci.SuccessorNode();
+            ctci.SuccesorTreeNode();
             #endregion
+        }
+
+        private void SuccesorTreeNode()
+        {
+            var array = new int[] { 1, 2, 3, 4, 5, 6, 7 };
+
+            var tree = TreeNode.CreateTreeFromArray(array, 0, array.Length - 1);
+            var root = TreeNode.GetNode(tree, 1);
+
+            if (root == null) return;
+
+            if (root.Right != null)
+            {
+                var node = root.Right;
+                while (node.Left != null)
+                    node = node.Left;
+                Console.WriteLine(node.Data);
+            }
+            else
+            {
+                var current = root;
+                var parent = current.Parent;
+
+                while (parent != null && parent.Left != current) {
+                    current = parent;
+                    parent = parent.Parent;
+                }
+
+                if (parent != null)
+                    Console.WriteLine(parent.Data);
+                else
+                    Console.WriteLine("no successor");
+            }
+
+
         }
 
         private void SuccessorNode()
