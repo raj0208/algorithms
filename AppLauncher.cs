@@ -15,11 +15,21 @@ namespace ConsoleApp
             Console.ReadLine();
         }
 
+        struct Point {
+            public int X;
+            public int Y;
+            public Point(int x, int y)
+            {
+                this.X = x;
+                this.Y = y;
+            }
+        }
 
         static void Main(string[] args)
         {
+            KingThreatenedByQueen();
             //==============================
-            LevelPrintTree(TreeNode.CreateTreeFromArray(new int[] { 1,2,3,4,5,6,7,8,9 }, 0, 8));
+            //LevelPrintTree(TreeNode.CreateTreeFromArray(new int[] { 1,2,3,4,5,6,7,8,9 }, 0, 6));
             //==============================
             //FindOddNumber(new int[] { 1, 2, 3, 4, 2, 1, 4 });
             //==============================
@@ -56,6 +66,40 @@ namespace ConsoleApp
             //ReverseLinkedList();
             //TreeTraversal();
             Console.ReadLine();
+        }
+
+        private static void KingThreatenedByQueen()
+        {
+            Point king = new Point(3,1);
+            Point queen = new Point(3,4);
+
+            Func<Point, bool> validate = (p) =>
+            {
+                if ((p.X >= 1 && p.X <= 8) &&
+                    (p.Y >= 1 && p.Y <= 8)) {
+                    Console.WriteLine("valid coordinate");
+                    return true;   
+                }
+
+                Console.WriteLine("Invalid coordinate");
+
+                return false;
+            };
+
+            if (!validate(king) || !validate(queen)) {
+                return;
+            }
+
+            // king and queen x is same
+            if ( (king.X == queen.X) 
+                 || (king.Y == queen.Y) 
+                 || Math.Abs(king.X - queen.X) == Math.Abs(king.Y - queen.Y))
+                Console.WriteLine("threatened");
+            else
+                Console.WriteLine("Not threatened");
+            // king and queen y is same
+
+            // abs(kx-qx)=abs(ky-qy)
         }
 
         private static void LevelPrintTree(TreeNode root)
