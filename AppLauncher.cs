@@ -18,7 +18,14 @@ namespace ConsoleApp
 
         static void Main(string[] args)
         {
-            LongestSubSequence();
+            //==============================
+            LevelPrintTree(TreeNode.CreateTreeFromArray(new int[] { 1,2,3,4,5,6,7,8,9 }, 0, 8));
+            //==============================
+            //FindOddNumber(new int[] { 1, 2, 3, 4, 2, 1, 4 });
+            //==============================
+            //MinSubArrayLen(7, new int[] { 2, 3, 1, 2, 4, 3 });
+            //==============================
+            //LongestSubSequence();
             //==============================
             //Console.WriteLine(FibonacciSeries());
             //==============================
@@ -51,9 +58,81 @@ namespace ConsoleApp
             Console.ReadLine();
         }
 
+        private static void LevelPrintTree(TreeNode root)
+        {
+            Queue<TreeNode> queue = new Queue<TreeNode>();
+            root.Level = 1;
+            queue.Enqueue(root);
+            int level = 0;
+            while (queue.Any()) {
+                var node = queue.Dequeue();
+                if (level != node.Level) {
+                    Console.Write(Environment.NewLine);
+                    level = node.Level;
+                }
+
+                if (node.Left != null) {
+                    node.Left.Level = node.Level + 1;
+                    queue.Enqueue(node.Left);
+                }
+                if (node.Right != null) {
+                    node.Right.Level = node.Level + 1;
+                    queue.Enqueue(node.Right);
+                }
+                Console.Write(node.Data + " ");
+            }
+        }
+
+        private static void FindOddNumber(int[] array)
+        {
+            int odd = 0;
+            for (int i = 0; i < array.Length; i++)
+            {
+                odd = odd ^ array[i];
+            }
+
+            Console.WriteLine(odd);
+        }
+
+        static int MinSubArrayLen(int s, int[] nums)
+        {
+            if (nums == null || nums.Length == 1)
+                return 0;
+            int result = nums.Length;
+            int start = 0;
+            int sum = 0;
+            int i = 0;
+            bool exists = false;
+            while (i <= nums.Length)
+            {
+                if (sum >= s)
+                {
+                    exists = true; //mark if there exists such a subarray
+                    if (start == i - 1)
+                    {
+                        return 1;
+                    }
+                    result = Math.Min(result, i - start);
+                    sum = sum - nums[start];
+                    start++;
+                }
+                else
+                {
+                    if (i == nums.Length)
+                        break;
+                    sum = sum + nums[i];
+                    i++;
+                }
+            }
+            if (exists)
+                return result;
+            else
+                return 0;
+        }
+
         private static void LongestSubSequence()
         {
-            int[] array = new int[] { 2, 1, 6, 4, 7,5, 9, 3 };
+            int[] array = new int[] { 2, 1, 6, 4, 7, 5, 9, 3 };
 
             HashSet<int> map = new HashSet<int>();
             for (int i = 0; i < array.Length; i++)

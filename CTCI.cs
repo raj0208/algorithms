@@ -993,6 +993,7 @@ namespace ConsoleApp
         public int Data;
         public TreeNode Left;
         public TreeNode Right;
+        public int Level;
 
         public TreeNode(int data)
         {
