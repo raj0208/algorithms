@@ -27,7 +27,9 @@ namespace ConsoleApp
 
         static void Main(string[] args)
         {
-            KingThreatenedByQueen();
+            MostContainerWater();
+            //RandonArray();
+            //KingThreatenedByQueen();
             //==============================
             //LevelPrintTree(TreeNode.CreateTreeFromArray(new int[] { 1,2,3,4,5,6,7,8,9 }, 0, 6));
             //==============================
@@ -41,7 +43,7 @@ namespace ConsoleApp
             //==============================
             //SearchMatrix();
             //==============================
-            //Console.WriteLine(MaxHistogramArea());
+            Console.WriteLine(MaxHistogramArea());
             //==============================
             //string S = "abcdefghijklmnopqrstuvwxyz";
             //int[] w = new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
@@ -66,6 +68,45 @@ namespace ConsoleApp
             //ReverseLinkedList();
             //TreeTraversal();
             Console.ReadLine();
+        }
+
+        private static void MostContainerWater()
+        {
+            int[] height = new int[] { 1, 2, 3, 2, 3, 2, 4, 2 };
+
+            if (height == null || height.Length < 2) return;
+
+            int left = 0, right = height.Length - 1, max = 0;
+
+            while (left < right) {
+                max = Math.Max(max, (right - left) * Math.Min(height[right], height[left]));
+
+                if (height[left] < height[right])
+                    left++;
+                else
+                    right--;
+            }
+
+            Console.WriteLine("Max is {0}", max);
+        }
+
+        private static void RandonArray()
+        {
+            var arr = new int[] { 1, 2, 3, 4, 5 };
+            var random = new Random();
+            Console.WriteLine(string.Join(" ", arr));
+
+
+
+            for (int i = 0; i < arr.Length; i++)
+            {
+                int temp = random.Next(i, arr.Length - 1);
+                int val = arr[temp];
+                arr[temp] = arr[i];
+                arr[i] = val; 
+            }
+
+            Console.WriteLine(string.Join(" ", arr));
         }
 
         private static void KingThreatenedByQueen()
@@ -285,7 +326,7 @@ namespace ConsoleApp
         {
             int currentIndex = stack.Pop();
             int height = hist[currentIndex];
-            int width = stack.Any() ? (index - 1 - stack.Peek()) : index;
+            int width = stack.Any() ? (index - 1 - stack.Peek()) : index - 1;
             max = Math.Max(max, height * width);
             return max;
         }
