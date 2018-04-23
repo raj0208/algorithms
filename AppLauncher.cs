@@ -27,7 +27,9 @@ namespace ConsoleApp
 
         static void Main(string[] args)
         {
-            MostContainerWater();
+            MaxCandies();
+
+            //MostContainerWater();
             //RandonArray();
             //KingThreatenedByQueen();
             //==============================
@@ -43,7 +45,7 @@ namespace ConsoleApp
             //==============================
             //SearchMatrix();
             //==============================
-            Console.WriteLine(MaxHistogramArea());
+            //Console.WriteLine(MaxHistogramArea());
             //==============================
             //string S = "abcdefghijklmnopqrstuvwxyz";
             //int[] w = new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
@@ -68,6 +70,37 @@ namespace ConsoleApp
             //ReverseLinkedList();
             //TreeTraversal();
             Console.ReadLine();
+        }
+
+        private static void MaxCandies()
+        {
+            var ratings = new int[] { 1,2,1,2,3, 2, 5 };
+
+            var candies = new int[ratings.Length];
+            candies[0] = 1;
+            // left to right
+            for (int i = 1; i < ratings.Length; i++)
+            {
+                candies[i] = (ratings[i] > ratings[i - 1])
+                             ? candies[i - 1] + 1
+                             : 1;
+            }
+
+            //right to left
+            int maxCandies = candies[ratings.Length - 1];
+            for (int i = candies.Length - 2; i >= 0; i--)
+            {
+                int candy = 1;
+                if (ratings[i] < ratings[i + 1])
+                {
+                    candy = candies[i + 1] + 1;
+                }
+
+                maxCandies += Math.Max(candy, candies[i]);
+                candies[i] = candy;
+            }
+
+            Console.WriteLine(maxCandies);
         }
 
         private static void MostContainerWater()
