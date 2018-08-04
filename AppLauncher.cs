@@ -27,8 +27,9 @@ namespace ConsoleApp
 
         static void Main(string[] args)
         {
+            // First code from mac
             MaxCandies();
-
+            
             //MostContainerWater();
             //RandonArray();
             //KingThreatenedByQueen();
