@@ -29,7 +29,7 @@ namespace ConsoleApp
         {
             // First code from mac
             MaxCandies();
-            
+            // Testing
             //MostContainerWater();
             //RandonArray();
             //KingThreatenedByQueen();
