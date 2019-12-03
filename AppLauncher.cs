@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using ConsoleApp;
 namespace ConsoleApp
 {
     class AppLauncher
@@ -27,6 +27,14 @@ namespace ConsoleApp
 
         static void Main(string[] args)
         {
+            var array = new int[] { 3, 6, 8, 12, 14, 17, 25, 29, 31, 36, 42, 47, 53, 55, 62 };
+            int key = 65;
+            Console.WriteLine(IterativeBinarySearch(array, key));
+            Console.WriteLine(RecursiveBinarySearch(array, 0, array.Length - 1, key));
+
+            Console.ReadLine();
+            return;
+            DeleteNode(2);
             // First code from mac
             MaxCandies();
             // Testing
@@ -70,6 +78,75 @@ namespace ConsoleApp
             //IsUniqueChars();
             //ReverseLinkedList();
             //TreeTraversal();
+            Console.ReadLine();
+        }
+
+        private static int RecursiveBinarySearch(int[] array, int low, int high, int key)
+        {
+            if (low == high)
+            {
+                return array[low] == key ? low : -1;
+            }
+            else
+            {
+                int mid = (low + high) / 2;
+
+                if (array[mid] == key)
+                    return mid;
+
+                if (array[mid] < key)
+                    return RecursiveBinarySearch(array, low + 1, high, key);
+                else
+                    return RecursiveBinarySearch(array, low, high - 1, key);
+            }
+        }
+
+
+
+        private static int IterativeBinarySearch(int[] array, int keyToSearch)
+        {
+            int low = 0, high = array.Length - 1, mid = 0;
+
+            while (low <= high)
+            {
+                mid = (low + high) / 2;
+
+                if (array[mid] == keyToSearch)
+                    return mid;
+
+                if (array[mid] < keyToSearch)
+                    low = mid + 1;
+                else
+                    high = mid - 1;
+            }
+
+            return -1;
+        }
+
+        private static void DeleteNode(int nthlast)
+        {
+            int[] data = { 1, 2, 3, 4, 5 };
+            Node head = Node.GetNodeList(data);
+            head.PrintNodes();
+
+            Node nHead = head;
+            Node runner = nHead;
+
+            for (int i = 0; i < nthlast; i++)
+            {
+                runner = runner.Next;
+            }
+
+            while (runner != null)
+            {
+                nHead = nHead.Next;
+                runner = runner.Next;
+            }
+
+            nHead.Next = nHead.Next.Next;
+            
+            head.PrintNodes();
+
             Console.ReadLine();
         }
 
@@ -708,4 +785,40 @@ namespace ConsoleApp
 
 //The length of A will be in the range[1, 30].
 //A[i] will be in the range of[0, 10000].
- 
+
+
+public class Node
+{
+    public int Data { get; set; }
+    public Node Next { get; set; }
+
+    public Node(int data)
+    {
+        this.Data = data;
+    }
+
+    public static Node GetNodeList(int[] data)
+    {
+        Node head = new Node(0);
+        Node current = head;
+        foreach (int i in data)
+        {
+            current.Next = new Node(i);
+            current = current.Next;
+        }
+
+        return head.Next;
+    }
+
+    public void PrintNodes()
+    {
+        Node temp = this;
+
+        while (temp != null)
+        {
+            Console.WriteLine(temp.Data + "->");
+            temp = temp.Next;
+        }
+        Console.WriteLine("NULL");
+    }
+}
