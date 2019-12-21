@@ -26,6 +26,7 @@ namespace ConsoleApp
             //ctci.DeleteNode();
             //ctci.LoopDetection();
             //ctci.LinkIntersection();
+            ctci.PartitionLinkedList();
             #endregion
 
             #region Stack & Queue
@@ -379,10 +380,16 @@ namespace ConsoleApp
                 Console.WriteLine(ex.Message);
             }
 
-        } 
+        }
         #endregion
 
         #region LinkedList
+        private void PartitionLinkedList()
+        {
+            
+
+        }
+
         private void LinkIntersection()
         {
             var list1 = LinkedNode.GetLinkedNodes(new int[] { 1, 2, 3, 4});
@@ -749,7 +756,145 @@ namespace ConsoleApp
         #endregion
     }
 
-    #region Classes
+    //class MinimumHeap
+    //{
+    //    int size = 0;
+    //    List<int> Heap = new List<int>();
+
+    //    public MinimumHeap()
+    //    {
+    //    }
+
+    //    public int Peek()
+    //    {
+    //        return (size == 0) ? -1 : size;
+    //    }
+
+    //    public void Add(int item)
+    //    {
+    //        this.Heap.Add(item);
+    //        size++;
+    //        HeapifyUp();
+    //    }
+
+    //    private int Extract()
+    //    {
+    //        int value = this.Heap[0];
+    //        this.Heap[0] = this.Heap[size - 1];
+    //        size--;
+    //        HeapfiyDown();
+    //        return value;
+    //    }
+
+    //    private void HeapfiyDown()
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+
+    //    private void HeapifyUp()
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+
+    //    private int LeftChildIndex(int parent) => (2 * parent) + 1;
+
+    //    private int RightChildIndex(int parent) => (2 * parent) + 1;
+
+    //    private int ParentIndex(int child) => (child - 1) / 2;
+
+    //    private void Swap(int index1, int index2)
+    //    {
+    //        this.Heap[index1] ^= this.Heap[index2];
+    //        this.Heap[index2] ^= this.Heap[index1];
+    //        this.Heap[index1] ^= this.Heap[index2];
+    //    }
+
+    //}
+
+
+
+
+
+
+
+
+
+    //class MinHeap {
+    //    private int capacity = 10;
+    //    private int size;
+
+    //    private int[] heap;
+
+    //    public MinHeap()
+    //    {
+    //        heap = new int[capacity];
+    //    }
+
+    //    private int LeftChildIndex(int parentIndex) => (2 * parentIndex) + 1;
+    //    private int RightChildIndex(int parentIndex) => (2 * parentIndex) + 2;
+    //    private int ParentIndex(int childIndex) => (childIndex - 1)/ 2;
+
+    //    private bool HasLeftChild(int parentIndex) => (LeftChildIndex(parentIndex) < size);
+    //    private bool HasRightChild(int parentIndex) => (RightChildIndex(parentIndex) < size);
+    //    private bool HasParent(int childIndex) => ParentIndex(childIndex) >= 0;
+
+    //    private void swap(int index1, int index2)
+    //    {
+    //        heap[index1] ^= heap[index2];
+    //        heap[index2] ^= heap[index1];
+    //        heap[index1] ^= heap[index2];
+    //    }
+
+    //    private int Peek()
+    //    {
+    //        return heap[0];
+    //    }
+
+    //    private int Extract()
+    //    {
+    //        int value = heap[0];
+    //        heap[0] = heap[size];
+    //        size--;
+    //        HeapifyDown();
+    //        return value;
+    //    }
+
+    //    private void HeapifyDown()
+    //    {
+    //        int index = 0;
+
+    //        while (HasLeftChild(index))
+    //        {
+    //            int left = LeftChildIndex(index);
+    //            int right = RightChildIndex(index);
+
+                
+
+    //        }
+    //    }
+
+    //    private void Add(int value)
+    //    {
+    //        heap[size] = value;
+    //        size++;
+    //        HeapifyUp();
+    //    }
+
+    //    private void HeapifyUp()
+    //    {
+    //        int currIndex = size - 1;
+
+    //        while (HasParent(currIndex) && heap[currIndex] < heap[ParentIndex(currIndex)])
+    //        {
+    //            swap(currIndex, ParentIndex(currIndex));
+    //            currIndex = ParentIndex(currIndex);
+    //        }
+    //    }
+    //}
+
+
+
+
     class ThreeInOneStack
     {
         private int stackCount = 3;
@@ -1026,5 +1171,4 @@ namespace ConsoleApp
             return (root.Data > data) ? GetNode(root.Left, data) : GetNode(root.Right, data);
         }
     }
-    #endregion
 }

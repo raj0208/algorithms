@@ -6,12 +6,100 @@ using System.Threading.Tasks;
 using ConsoleApp;
 namespace ConsoleApp
 {
+    public class MinHeap
+    {
+        public int[] items = new int[3];
+        int size = 0;
+        int capacity = 3;
+
+        public int Peek()
+        {
+            return (size == 0) ? -1 : items[0];
+        }
+
+        public void Add(int item)
+        {
+            if (size == capacity)
+                if (item < Peek())
+                    Extract();
+                else
+                {
+                    return;
+                }
+            
+            items[size] = item;
+            size++;
+            HeapifyUp();
+        }
+
+        public int Extract()
+        {
+            if (size == 0) return -1;
+
+            int item = items[0];
+            items[0] = items[size - 1];
+            size--;
+            HeapifyDown();
+            return item;
+        }
+
+        private void HeapifyUp()
+        {
+            int index = size - 1;
+            while (index > 0)
+            {
+                int parent = ParentIndex(index);
+                if (items[index] > items[parent])
+                {
+                    Swap(index, parent);
+                }
+                else
+                    break;
+                index = parent;
+            }
+        }
+
+        private void HeapifyDown()
+        {
+            int index = 0;
+
+            while (LeftChildIndex(index) < size)
+            {
+                int smaller = index;
+                int left = LeftChildIndex(index);
+                int right = RightChildIndex(index);
+
+                if (left < size && items[left] > items[smaller]) smaller = left;
+                if (right < size && items[right] > items[smaller]) smaller = right;
+
+                if (smaller != index)
+                {
+                    Swap(smaller, index);
+                }
+                else
+                    break;
+                index = smaller;
+            }
+
+        }
+
+        private int LeftChildIndex(int parent) { return (2 * parent) + 1; }
+        private int RightChildIndex(int parent) { return (2 * parent) + 2; }
+        private int ParentIndex(int child) { return (child - 1) / 2; }
+        private void Swap(int index1, int index2)
+        {
+            items[index1] ^= items[index2];
+            items[index2] ^= items[index1];
+            items[index1] ^= items[index2];
+        }
+    }
+
     class AppLauncher
     {
         static void Main1(string[] args)
         {
-            //LC.Run();
-            CTCI.Run();
+            LC.Run();
+            //CTCI.Run();
             Console.ReadLine();
         }
 
@@ -25,13 +113,57 @@ namespace ConsoleApp
             }
         }
 
+        public class Item
+        {
+            public int weight { get; set; }
+            public int value { get; set; }
+
+            public Item(int weight, int value)
+            {
+                this.weight = weight;
+                this.value = value;
+            }
+        }
+
         static void Main(string[] args)
         {
-            var array = new int[] { 3, 6, 8, 12, 14, 17, 25, 29, 31, 36, 42, 47, 53, 55, 62 };
-            int key = 65;
-            Console.WriteLine(IterativeBinarySearch(array, key));
-            Console.WriteLine(RecursiveBinarySearch(array, 0, array.Length - 1, key));
+            //CTCI.Run();
+            AppLauncherMain(args);
+            Console.ReadLine();
+        }
 
+        private static void HeapTest()
+
+        {
+            MinHeap heap = new MinHeap();
+            heap.Add(10);
+            heap.Add(5);
+            heap.Add(7);
+            Console.WriteLine(string.Join(",", heap.items));
+
+            Console.WriteLine(heap.Extract());
+            Console.WriteLine(string.Join(",", heap.items));
+
+            heap.Add(4);
+            heap.Add(1);
+            Console.WriteLine(string.Join(",", heap.items));
+            heap.Add(15);
+            //Console.WriteLine(heap.Extract());
+            heap.Add(2);
+            Console.WriteLine(string.Join(",", heap.items));
+        }
+
+        static void AppLauncherMain(string[] args)
+        {
+            HeapTest();
+            //KLargestElement();
+            //Knapsack01();
+            //Heapify();
+            MissingNumber();
+            Add();
+            Subtract();
+            //BinarySearch();
+            //TreeTraversal();
             Console.ReadLine();
             return;
             DeleteNode(2);
@@ -79,6 +211,158 @@ namespace ConsoleApp
             //ReverseLinkedList();
             //TreeTraversal();
             Console.ReadLine();
+        }
+
+        private static void KLargestElement()
+        {
+            int[] arr = { 2,5,4,6,7,8 };
+
+
+
+
+
+
+
+
+        }
+
+        private static void MissingNumber()
+        {
+            int[] a = { 1, 2, 4 };
+
+            int n = 3;
+
+            {
+                int i;
+                int x1 = a[0]; /* For xor of all the elemets in arary */
+                int x2 = 1; /* For xor of all the elemets from 1 to n+1 */
+                for (i = 1; i < n; i++)
+                    x1 = x1 ^ a[i];
+                for (i = 2; i <= n + 1; i++)
+                    x2 = x2 ^ i;
+                Console.WriteLine(x1 ^ x2);
+            }
+        }
+
+        private static void Subtract()
+        {
+            int x = 15, y = 7;
+            int carry = 0;
+
+            do
+            {
+                carry = ~x & y;
+                x = x ^ y;
+                y = carry << 1;
+            } while (carry != 0);
+            Console.WriteLine($"{x}, {y}");
+        }
+
+        private static void Add()
+        {
+            int x = 5, y = 7;
+            int carry = 0;
+            while (y != 0)
+            {
+                carry = x & y;
+                x = x ^ y;
+                y = carry << 1;
+            }
+
+            Console.WriteLine($"{x}, {y}");
+
+        }
+
+
+
+        private static void Heapify()
+        {
+            int[] arr = { 1,3,5,4,6,13,10,9,8,15,17 };
+
+
+            int n = arr.Length;
+            PrintHeap(arr, n);
+
+            BuildMaxHeap(arr, n, true);
+            PrintHeap(arr, n);
+
+            BuildMaxHeap(arr, n, false);
+            PrintHeap(arr, n);
+        }
+
+        private static void PrintHeap(int[] arr, int n)
+        {
+            Console.WriteLine("Array representation of Heap is:");
+
+            for (int i = 0; i < n; ++i)
+                Console.Write(arr[i] + " ");
+
+            Console.WriteLine();
+        }
+
+        private static void BuildMaxHeap(int[] arr, int n, bool isMaxHeap)
+        {
+            int lastNonLeafNode = (n / 2) - 1; // last non leaf node
+
+            for (int i = lastNonLeafNode; i >= 0; i--)
+            {
+                MinMaxHeapify(arr, n, i, isMaxHeap);
+            }
+        }
+
+        private static void MinMaxHeapify(int[] arr, int n, int i, bool max)
+        {
+            int largest = i;         // parent
+            int left = (2 * i) + 1 ; // left child
+            int right = (2 * i) + 2; // right child
+
+            if (left < n && (
+                    (max && arr[largest] < arr[left]) ||
+                    (!max && arr[largest] > arr[left])))
+                largest = left;
+            if (right < n && (
+                    (max && arr[largest] < arr[right]) ||
+                    (!max && arr[largest] > arr[right])))
+                largest = right;
+
+            if (largest != i)
+            {
+                int swap = arr[i];
+                arr[i] = arr[largest];
+                arr[largest] = swap;
+                MinMaxHeapify(arr, n, largest, max);
+            }
+        }
+
+        private static void Knapsack01()
+        {
+            var items = new List<Item>() 
+                { new Item(1, 6),  new Item(2,10), new Item(3, 12)};
+            int W = 5;
+
+
+            var cache = new int[items.Count + 1, W + 1];
+            for (int i = 1; i <= items.Count; i++)
+            {
+                for (int j = 0; j <= W; j++)
+                {
+                    // If including item[i-1] would exceed max weight j, don't 
+                    // include the item. Otherwise take the max value of including
+                    // or excluding the item
+                    if (items[i - 1].weight > j) cache[i, j] = cache[i - 1,j];
+                    else cache[i,j] = Math.Max(cache[i - 1,j], cache[i - 1,j - items[i - 1].weight] + items[i - 1].value);
+                }
+            }
+
+            Console.WriteLine(cache[items.Count,W]);
+        }
+
+        private static void BinarySearch()
+        {
+            var array = new int[] { 3, 6, 8, 12, 14, 17, 25, 29, 31, 36, 42, 47, 53, 55, 62 };
+            int key = 65;
+            Console.WriteLine(IterativeBinarySearch(array, key));
+            Console.WriteLine(RecursiveBinarySearch(array, 0, array.Length - 1, key));
         }
 
         private static int RecursiveBinarySearch(int[] array, int low, int high, int key)
@@ -603,8 +887,14 @@ namespace ConsoleApp
         private static void TreeTraversal()
         {
             TreeNode root = TreeNode.CreateTreeFromArray(new int[] { 1, 2, 3, 4, 5, 6 }, 0, 5);
-            Preorder(root);
-            Inorder(root);
+
+            /*        3
+                 1        5
+               n    2  4     6
+            */ 
+            
+            Preorder(root); //3 1 2 5 4 6
+            Inorder(root); // 1 2 3 4 5 6
             Postorder(root);
         }
 
