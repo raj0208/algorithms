@@ -13,9 +13,88 @@ namespace JustDoIt
             //InorderTranversal();
             //PostorderTraversal();
             //DFSTraversal();
-            BFSTraversal();
+            //BFSTraversal();
             //MinHeap();
+            //SingleNonDuplicate();
+            //OneMissingNumber();
+            //TwoMissingNumber();
+            RectangleOverlap();
         }
+
+        private static void RectangleOverlap()
+        {
+            int left1 =4, top1 = 3, right1 = 4, bottom1 = 1;
+            int left2 = 2, top2 = 4, right2 = 5, bottom2 = 2;
+
+            int left = Math.Max(left1, left2);
+            int right = Math.Min(right1, right2);
+            int top = Math.Min(top1, top2);
+            int bottom = Math.Max(bottom1, bottom2);
+
+            if (left >= right || top <= bottom) Console.WriteLine("No overlap");
+            else
+                Console.WriteLine($"left:{left}, top:{top}, right:{right}, bottom:{bottom}");
+            Console.ReadLine();
+
+        }
+
+        private static void TwoMissingNumber()
+        {
+            int[] nums = { 1, 2, 3, 5, 7 };
+            int size = nums.Length + 2;
+            int totalSum = (size * (size + 1)) / 2;
+            int arrSum = 0;
+            for (int i = 0; i < nums.Length; i++)
+            {
+                arrSum += nums[i];
+            }
+
+            int pivot = (totalSum - arrSum) / 2;
+            int tl = 0, tr = 0, al = 0, ar = 0;
+            for (int i = 1; i <= pivot; i++) tl ^= i;
+            for (int i = pivot + 1; i <= size; i++) tr ^= i;
+
+            for (int i = 0; i < nums.Length; i++)
+            {
+                if (nums[i] <= pivot) al ^= nums[i];
+                else ar ^= nums[i];
+            }
+
+            Console.WriteLine($"{tl^al}, {tr^ar}");
+        }
+
+        private static void OneMissingNumber()
+        {
+            int[] nums = { 1,2,3,5 };
+            int totalXOR = 0;
+            int arrXOR = 0;
+
+            for (int i = 0; i < nums.Length + 1; i++)
+            {
+                totalXOR ^= (i + 1);
+
+                if (nums.Length > i)
+                    arrXOR ^= nums[i];
+            }
+
+            Console.WriteLine(totalXOR ^ arrXOR);
+
+        }
+
+        private static void SingleNonDuplicate()
+        {
+            int[] nums = { 1, 1, 2, 2, 3, 3, 4, 4, 5, 8, 8 };
+
+            int single = 0;
+
+            for (int i = 0; i < nums.Length; i++)
+            {
+                single ^= nums[i];
+            }
+            Console.WriteLine(single);
+            Console.ReadLine();
+        }
+
 
         private static void PreorderTraversal()
         {
@@ -188,21 +267,23 @@ namespace JustDoIt
 
         private static void MinHeap()
         {
-            MinHeap minHeap = new MinHeap(3);
+
+            Heap minHeap = new Heap(3, false);
+            for (int i = 0; i < 10; i++)
+            {
+                minHeap.AddItem(i);
+            }
+            minHeap.PrintHeap();
 
             minHeap.AddItem(6);
             minHeap.AddItem(2);
             minHeap.AddItem(4);
-            Console.WriteLine(string.Join("->", minHeap._heap));
-            Console.WriteLine(minHeap.Extract());
             minHeap.AddItem(3);
             minHeap.AddItem(5);
-            Console.WriteLine(string.Join("->", minHeap._heap));
-            Console.WriteLine(minHeap.Extract());
+            minHeap.PrintHeap();
             minHeap.AddItem(1);
-            Console.WriteLine(string.Join("->", minHeap._heap));
-            Console.WriteLine(minHeap.Extract());
-            Console.WriteLine(string.Join("->", minHeap._heap));
+            minHeap.ExtractItem();
+            minHeap.PrintHeap();
         }
     }
 }
@@ -242,6 +323,123 @@ public class Graph
 {
     public int Value { get; set; }
     public List<Graph> AdjacentNodes = new List<Graph>();
+}
+
+public class Heap
+{
+    private int _size;
+    private int _capacity = 3;
+    private bool _isMinHeap;
+
+    private int[] _items;
+
+    public Heap(int capacity = 3, bool isMinHeap = false)
+    {
+        _capacity = capacity;
+        _isMinHeap = isMinHeap;
+        _items = new int[_capacity];
+    }
+
+    public void PrintHeap()
+    {
+        Console.WriteLine(string.Join("->", this._items));
+    }
+
+    public int HeapTop()
+    {
+        if (_size == 0) return int.MinValue;
+        return _items[0];
+    }
+
+    public void AddItem(int item)
+    {
+        if (_size == _capacity && !IsExtracted(item)) return;
+
+        _items[_size] = item;
+        _size++;
+        HeapifyUp();
+    }
+
+    public int ExtractItem()
+    {
+        if (_size == 0) return int.MinValue;
+
+        int item = _items[0];
+        _items[0] = _items[_size - 1];
+        _items[_size - 1] = -1;
+        _size--;
+        HeapifyDown();
+        return item;
+    }
+
+    private void HeapifyDown()
+    {
+        int currIndex = 0; // root
+
+        while (currIndex < _size)
+        {
+            int parent = currIndex;
+            int left = (2 * parent) + 1;
+            int right = (2 * parent) + 2;
+
+            if (left < _size &&
+                ((_isMinHeap && _items[left] < _items[parent]) ||
+                 (!_isMinHeap && _items[left] > _items[parent])))
+                parent = left;
+
+            if (right < _size &&
+                ((_isMinHeap && _items[right] < _items[parent]) ||
+                 (!_isMinHeap && _items[right] > _items[parent])))
+                parent = right;
+
+            if (parent != currIndex)
+            {
+                SwapItems(parent, currIndex);
+            }
+            else
+                break;
+
+            currIndex = parent;
+        }
+    }
+
+    private void HeapifyUp()
+    {
+        int currIndex = _size - 1;  // last item
+
+        while (currIndex > 0)
+        {
+            int parentIndex = (currIndex - 1) / 2;
+            if ((_isMinHeap && _items[parentIndex] > _items[currIndex]) ||
+                (!_isMinHeap && _items[parentIndex] < _items[currIndex]))
+            {
+                SwapItems(parentIndex, currIndex);
+            }
+            else
+                break;
+
+            currIndex = parentIndex;
+        }
+    }
+
+    private void SwapItems(int parentIndex, int currIndex)
+    {
+        _items[parentIndex] ^= _items[currIndex];
+        _items[currIndex] ^= _items[parentIndex];
+        _items[parentIndex] ^= _items[currIndex];
+    }
+
+    private bool IsExtracted(int item)
+    {
+        if ((_isMinHeap && HeapTop() < item) || 
+            (!_isMinHeap && HeapTop() > item))
+        {
+            ExtractItem();
+            return true;
+        }
+        
+        return false;
+    }
 }
 
 public class MinHeap

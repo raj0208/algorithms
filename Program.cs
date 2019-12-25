@@ -232,7 +232,7 @@ namespace ConsoleApp
 
         public static void SingleNonDuplicate()
         {
-            int[] nums = new int[] { 1, 1, 2, 2, 3, 3, 4, 4, 5, 8, 8 };
+            int[] nums = { 1, 1, 2, 2, 3, 3, 4, 4, 5, 8, 8 };
             // binary search
             int n = nums.Length, lo = 0, hi = n / 2;
             while (lo < hi)
