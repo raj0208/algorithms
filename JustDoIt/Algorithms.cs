@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-//using System.Linq;
+using System.Linq;
 
 namespace JustDoIt
 {
@@ -18,8 +18,290 @@ namespace JustDoIt
             //SingleNonDuplicate();
             //OneMissingNumber();
             //TwoMissingNumber();
-            RectangleOverlap();
+            //RectangleOverlap();
+
+            //LongestSequence();
+            //MajorityElement();
+            //QuickSort();
+
+            //ContainerWater();
+            //MinCandies();
+            //RangeSummary();
+            //LargestRectangle();
+
+            CloneLinkedList();
         }
+
+        private static void CloneLinkedList()
+        {
+            LinkedList list = LinkedList.GetList(new int[] { 1,2,3,4 });
+
+            var newList = list.CloneList();
+
+            Console.WriteLine(newList.Data);
+        }
+
+
+
+
+        //1. Implement a method that takes a list of strings as input and returns list of strings that are anagrams of other strings in the input.
+
+        //e.g.input - [book, kobo, rats, mart, tars, cart, arts]
+        //output- [book, kobo, rats, tars, arts]
+        private static void Anagrams()
+        {
+            string[] input = { "book", "kobo", "rats", "mart", "tars", "cart", "arts" };
+
+            var result = new Dictionary<string, List<string>>();
+
+            for (int i = 0; i < input.Length; i++)
+            {
+                var s = new string(input[i]).ToCharArray();
+                Array.Sort(s);
+                string key = new string(s);
+                if (result.ContainsKey(key))
+                {
+                    result[key].Add(input[i]);
+                }
+                else
+                {
+                    result[key] = new List<string>() { input[i] };
+                }
+            }
+
+            var list = result.Values.Where(x => x.Count > 1).SelectMany(x => x);
+            Console.WriteLine(string.Join(",", list));
+        }
+
+
+
+        private static void LargestRectangle()
+        {
+            int[] heights = { 2, 1, 5, 6, 2, 3 };
+            int max = 0;
+            int i = 0;
+            Stack<int> stack = new Stack<int>();
+
+            while (i < heights.Length)
+            {
+                if (stack.Count == 0 || heights[i] >= heights[stack.Peek()])
+                {
+                    stack.Push(i);
+                    i++;
+                }
+                else
+                {
+                    int index = stack.Pop();
+                    int ht = heights[index];
+                    int wd = stack.Count == 0 ? i : i - stack.Peek() - 1;
+                    max = Math.Max(max, ht * wd);
+                }
+            }
+
+            while (stack.Count > 0)
+            {
+                int index = stack.Pop();
+                int ht = heights[index];
+                int wd = stack.Count == 0 ? i : i - stack.Peek() - 1;
+                max = Math.Max(max, ht * wd);
+            }
+
+            Console.WriteLine(max);
+        }
+
+        private static void RangeSummary()
+        {
+            int[] arr = { 0, 1, 2, 4, 5, 6, 7 };
+
+            int pre = arr[0];
+            int first = pre;
+            List<string> result = new List<string>();
+
+
+
+            for (int i = 1; i < arr.Length; i++)
+            {
+                if (arr[i] == pre + 1)
+                {
+                    if (i == arr.Length - 1)
+                    {
+                        result.Add($"{first}->{arr[i]}");  
+                    }
+                }
+                else
+                {
+                    if (first == pre)
+                    {
+                        result.Add(first + "");
+                    }
+                    else
+                    {
+                        result.Add($"{first}->{pre}");
+                    }
+
+                    if (i == arr.Length - 1)
+                        result.Add(arr[i] + "");
+
+                    first = arr[i];
+                }
+                pre = arr[i];
+            }
+
+            Console.WriteLine(string.Join(",", result));
+        }
+
+        private static void MinCandies()
+        {
+            int[] ratings = { 1, 2, 1, 3, 4, 5, 1 };
+
+            int[] candies = new int[ratings.Length];
+            candies[0] = 1;
+            for (int i = 1; i < ratings.Length; i++)
+            {
+                if (ratings[i] > ratings[i - 1])
+                    candies[i] = candies[i - 1] + 1;
+                else
+                    candies[i] = 1;
+            }
+
+            int result = candies[ratings.Length - 1];
+
+            for (int i = ratings.Length - 2; i >= 0; i--)
+            {
+                int curr = 1;
+                if (ratings[i] > ratings[i + 1])
+                {
+                    curr = candies[i + 1] + 1;
+                }
+                result += Math.Max(curr, candies[i]);
+                candies[i] = curr;
+            }
+
+            Console.WriteLine(result);
+        }
+
+        private static void ContainerWater()
+        {
+            int[] container = { 1, 2, 5, 4, 5, 2, 6 };
+
+            int left = 0;
+            int right = container.Length - 1;
+            int volume = int.MinValue;
+            while (left < right)
+            {
+                volume = Math.Max(volume,
+                    (right - left) * (Math.Min(container[left], container[right])));
+
+                if (container[left] > container[right]) right--;
+                else left++;
+            }
+            Console.WriteLine(volume);
+        }
+
+        private static void MajorityElement()
+        {
+            int[] arr = { 1, 3, 3, 2, 4 };
+
+            Array.Sort(arr);
+            Console.WriteLine(arr[arr.Length / 2]);
+
+            arr = new int[] { 1, 2, 3, 3, 4 };
+
+            int count = 0;
+            int result = 0;
+
+            for (int i = 0; i < arr.Length; i++)
+            {
+                if (count == 0)
+                {
+                    result = arr[i];
+                    count = 1;
+                }
+                else if (result == arr[i]) count++;
+                else
+                {
+                    count--;
+                    result = arr[i];
+                }
+            }
+            Console.WriteLine(result);
+        }
+
+        private static void LongestSequence()
+        {
+            int[] arr = { 2, 1, 6, 7, 9, 3, 4 };
+            int longest = 0;
+            HashSet<int> set = new HashSet<int>();
+
+            foreach (var num in arr)
+            {
+                set.Add(num);
+            }
+
+            foreach (var num in set)
+            {
+                if (!set.Contains(num - 1))
+                {
+                    int curr = num, count = 1;
+                    while (set.Contains(curr + 1))
+                    {
+                        curr++;
+                        count++;
+                    }
+                    longest = Math.Max(longest, count);
+                }
+            }
+
+            Console.WriteLine(longest);
+        }
+
+        private static void QuickSort()
+        {
+            int[] arr = { 6,3,4,9,2,7,5,1,8 };
+            Console.WriteLine(string.Join(",", arr));
+            
+            SortElements(arr, 0, arr.Length);
+            Console.WriteLine(string.Join(",", arr));
+        }
+
+        private static void SortElements(int[] arr, int low, int high)
+        {
+            if (low >= high) return;
+            int pivot = Partition(arr, low, high);
+            SortElements(arr, low, pivot);
+            SortElements(arr, pivot + 1, high);
+        }
+
+        private static int Partition(int[] arr, int low, int high)
+        {
+            int i = low, j = high;
+            int pivot = arr[low];
+
+            Action<int[], int, int> swap = (arr, i, j) => {
+                arr[i] ^= arr[j];
+                arr[j] ^= arr[i];
+                arr[i] ^= arr[j];
+            };
+                
+            while (i < j)
+            {
+                do { i++; } while (arr[i] <= pivot);
+                do { j--; } while (arr[j] > pivot);
+                if (i < j)
+                {
+                    swap(arr, i, j);
+                }
+            }
+
+            swap(arr, low, j);
+
+
+
+            
+            return j;
+        }
+
+        
 
         private static void RectangleOverlap()
         {
@@ -551,6 +833,102 @@ public class MinHeap
     }
 
     #endregion
+}
+
+public class LinkedList
+{
+    public int Data { get; set; }
+    public LinkedList Next;
+    public LinkedList Random;
+
+    public LinkedList(int data)
+    {
+        this.Data = data;
+    }
+
+    public LinkedList CloneList()
+    {
+        LinkedList root = new LinkedList(0);
+
+        LinkedList curr = this;
+
+        LinkedList head = root;
+
+        Dictionary<int, LinkedList> newList = new Dictionary<int, LinkedList>();
+
+
+        while (curr != null)
+        {
+            var temp = new LinkedList(curr.Data);
+            newList.Add(curr.Data, temp);
+            head.Next = temp;
+            curr = curr.Next;
+            head = head.Next;
+        }
+
+        curr = this;
+
+        while (curr != null)
+        {
+            newList[curr.Data].Random = curr.Random;
+            curr = curr.Next;
+        }
+
+        return root.Next;
+    }
+
+    public LinkedList CloneList(LinkedList old)
+    {
+        var curr = old;
+
+        while (curr != null)
+        {
+            var temp = new LinkedList(curr.Data);
+            temp.Next = curr.Next;
+            curr.Next = temp;
+            curr = curr.Next.Next;
+        }
+
+        curr = old;
+        while (curr != null)
+        {
+            curr.Next.Random = curr.Random.Next;
+            curr = curr.Next.Next;
+        }
+
+        var copy = old.Next;
+        curr = old;
+        while (curr.Next != null)
+        {
+            var temp = curr.Next;
+            curr.Next = curr.Next.Next;
+            curr = temp;
+        }
+
+        return copy;
+
+    }
+
+    public static LinkedList GetList(int[] arr)
+    {
+        LinkedList root = new LinkedList(0);
+        Dictionary<int, LinkedList> dict = new Dictionary<int, LinkedList>();
+        var head = root;
+        for (int i = 0; i < arr.Length; i++)
+        {
+            LinkedList node = new LinkedList(arr[i]);
+            head.Next = node;
+            head = head.Next;
+            dict.Add(node.Data, node);
+        }
+
+        dict[1].Random = dict[3];
+        dict[2].Random = dict[1];
+        dict[3].Random = dict[3];
+        dict[4].Random = dict[2];
+
+        return root.Next;
+    }
 }
 #endregion
 
