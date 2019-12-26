@@ -28,8 +28,39 @@ namespace JustDoIt
             //MinCandies();
             //RangeSummary();
             //LargestRectangle();
+            LargestOneMatrix();
 
-            CloneLinkedList();
+            //CloneLinkedList();
+        }
+
+        private static void LargestOneMatrix()
+        {
+            int[][] matrix = {
+                new int[]{ 1,1,0,1,0 },
+                new int[]{ 0,1,1,1,0 },
+                new int[]{ 1,1,1,1,0 },
+                new int[]{ 0,1,1,1,1 },
+            };
+
+            var clone = (int[][]) matrix.Clone();
+
+            int result = 0;
+            for (int row = 0; row < matrix.Length; row++)
+            {
+                for (int col = 0; col < matrix[0].Length; col++)
+                {
+                    if (row == 0 || col == 0) continue;
+
+                    if (clone[row][col] > 0) {
+                        clone[row][col] = 1 + Math.Min(clone[row - 1][col],
+                                                Math.Min(clone[row][col - 1], clone[row -1][col-1]));
+                    }
+                    if (clone[row][col] > result) result = clone[row][col];
+                }
+            }
+            Console.WriteLine(result);
+            
+            Console.ReadLine();
         }
 
         private static void CloneLinkedList()
@@ -84,6 +115,7 @@ namespace JustDoIt
 
             while (i < heights.Length)
             {
+                // push index to stack, if the current height is >= previous height
                 if (stack.Count == 0 || heights[i] >= heights[stack.Peek()])
                 {
                     stack.Push(i);
