@@ -22,16 +22,176 @@ namespace JustDoIt
 
             //LongestSequence();
             //MajorityElement();
-            //QuickSort();
+
 
             //ContainerWater();
             //MinCandies();
             //RangeSummary();
             //LargestRectangle();
-            LargestOneMatrix();
+            //LargestOneMatrix();
 
             //CloneLinkedList();
+
+            QuickSort();
+            //BinarySearch();
+            //MergeSort();
+
+
+
         }
+
+        #region QuickSort
+        private static void QuickSort()
+        {
+            int[] arr = { 16, 3, 14, 9, 12, 7, 5, 1, 8 };
+            Console.WriteLine(string.Join(",", arr));
+
+            QuickSort(arr, 0, arr.Length - 1);
+            Console.WriteLine(string.Join(",", arr));
+        }
+
+        private static void QuickSort(int[] arr, int low, int high)
+        {
+            if (low >= high) return;
+
+            int pivot = Partition(arr, low, high);
+            QuickSort(arr, low, pivot - 1);
+            QuickSort(arr, pivot, high);
+        }
+
+        private static int Partition(int[] arr, int left, int right)
+        {
+            int pivot = arr[(left + right) / 2];
+
+            Action<int[], int, int> swap = (arr, i, j) => {
+                arr[i] ^= arr[j];
+                arr[j] ^= arr[i];
+                arr[i] ^= arr[j];
+            };
+
+            while (left <= right)
+            {
+                while (arr[left] < pivot) left++;
+
+                while (arr[right] > pivot) right--;
+
+                if (left <= right)
+                {
+                    swap(arr, left, right);
+                    left++;
+                    right--;
+                }
+            }
+            return left;
+        }
+        #endregion
+
+        #region MergeSort
+        private static void MergeSort()
+        {
+            int[] arr = { 8, 3, 17, 7, 14, 12, 29, 36, 25, 15, 37, 23, 13, 27, 62 };
+            int[] temp = new int[arr.Length];
+            MergeSort(arr, temp, 0, arr.Length - 1);
+            Console.WriteLine(string.Join(",", arr));
+        }
+
+        private static void MergeSort(int[] arr, int[] temp, int low, int high)
+        {
+            if (low < high)
+            {
+                int mid = (low + high) / 2;
+                MergeSort(arr, temp, low, mid);
+                MergeSort(arr, temp, mid + 1, high);
+                Merge(arr, temp , low, high);
+            }
+        }
+
+        private static void Merge(int[] arr, int[] temp, int low, int high)
+        {
+            int lowEnd = (low + high) / 2;
+            int lowStart = low;
+            int highStart = lowEnd + 1;
+            int index = low;
+            while (lowStart <= lowEnd && highStart <= high)
+            {
+                if (arr[lowStart] <= arr[highStart])
+                    temp[index++] = arr[lowStart++];
+                else
+                    temp[index++] = arr[highStart++];                
+            }
+
+            while (lowStart <= lowEnd)
+                temp[index++] = arr[lowStart++];
+
+            while (highStart <= high)
+                temp[index++] = arr[highStart++];
+
+            for (int i = low; i <= high; i++)
+                arr[i] = temp[i];
+        }    
+        #endregion
+
+        #region Binary Search
+
+        private static void BinarySearch()
+        {
+            int[] arr = { 3, 6, 8, 12, 14, 17, 25, 29, 31, 36, 42, 47, 53, 55, 62 };
+
+            //BinarySearchIterative(arr, 0, arr.Length - 1, 53);
+            BinarySearchRecursive(arr, 0, arr.Length - 1, 53);
+        }
+
+        private static void BinarySearchRecursive(int[] arr, int low, int high, int target)
+        {
+            if (low == high)
+            {
+                if (arr[low] == target)
+                {
+                    Console.WriteLine("found " + low);
+                }
+                else
+                {
+                    Console.WriteLine("Not found");
+                }
+                return;
+            }
+            else
+            {
+                int mid = (low + high) / 2;
+                if (arr[mid] > target)
+                {
+                    BinarySearchRecursive(arr, low, mid - 1, target);
+                }
+                else if (arr[mid] < target)
+                {
+                    BinarySearchRecursive(arr, mid + 1, high, target);
+                }
+                else
+                {
+                    Console.WriteLine($"found {mid}");
+                }
+            }
+        }
+
+        private static void BinarySearchIterative(int[] arr, int low, int high, int target)
+        {
+            if (low > high) return;
+            while (low <= high)
+            {
+                int mid = (low + high) / 2;
+                if (arr[mid] == target)
+                {
+                    Console.WriteLine("found index " + mid);
+                    return;
+                }
+                if (arr[mid] > target)
+                    high = mid - 1;
+                else
+                    low = mid + 1;
+            }
+            Console.WriteLine("Not found");
+        }
+        #endregion
 
         private static void LargestOneMatrix()
         {
@@ -287,51 +447,7 @@ namespace JustDoIt
             Console.WriteLine(longest);
         }
 
-        private static void QuickSort()
-        {
-            int[] arr = { 6,3,4,9,2,7,5,1,8 };
-            Console.WriteLine(string.Join(",", arr));
-            
-            SortElements(arr, 0, arr.Length);
-            Console.WriteLine(string.Join(",", arr));
-        }
-
-        private static void SortElements(int[] arr, int low, int high)
-        {
-            if (low >= high) return;
-            int pivot = Partition(arr, low, high);
-            SortElements(arr, low, pivot);
-            SortElements(arr, pivot + 1, high);
-        }
-
-        private static int Partition(int[] arr, int low, int high)
-        {
-            int i = low, j = high;
-            int pivot = arr[low];
-
-            Action<int[], int, int> swap = (arr, i, j) => {
-                arr[i] ^= arr[j];
-                arr[j] ^= arr[i];
-                arr[i] ^= arr[j];
-            };
-                
-            while (i < j)
-            {
-                do { i++; } while (arr[i] <= pivot);
-                do { j--; } while (arr[j] > pivot);
-                if (i < j)
-                {
-                    swap(arr, i, j);
-                }
-            }
-
-            swap(arr, low, j);
-
-
-
-            
-            return j;
-        }
+        
 
         
 
