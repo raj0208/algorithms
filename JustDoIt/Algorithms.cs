@@ -30,14 +30,15 @@ namespace JustDoIt
             //LargestRectangle();
             //LargestOneMatrix();
 
-            //CloneLinkedList();
+            CloneLinkedList();
 
-            QuickSort();
+            //QuickSort();
             //BinarySearch();
             //MergeSort();
 
-
-
+            //ClosestPoints cp = new ClosestPoints();
+            //cp.Run();
+            Console.ReadLine();
         }
 
         #region QuickSort
@@ -232,6 +233,16 @@ namespace JustDoIt
             Console.WriteLine(newList.Data);
         }
 
+        private static void ClosestPoints()
+        {
+
+
+
+
+
+
+
+        }
 
 
 
@@ -996,30 +1007,26 @@ public class LinkedList
 
     public LinkedList CloneList()
     {
-        LinkedList root = new LinkedList(0);
-
         LinkedList curr = this;
-
+        LinkedList root = new LinkedList(0);
         LinkedList head = root;
 
-        Dictionary<int, LinkedList> newList = new Dictionary<int, LinkedList>();
-
+        var nodeMap = new Dictionary<int, LinkedList>();
 
         while (curr != null)
         {
-            var temp = new LinkedList(curr.Data);
-            newList.Add(curr.Data, temp);
-            head.Next = temp;
+            if (!nodeMap.ContainsKey(curr.Data))
+                nodeMap.Add(curr.Data, new LinkedList(curr.Data));
+            
+            head.Next = nodeMap[curr.Data];
+
+            if (!nodeMap.ContainsKey(curr.Random.Data))
+                nodeMap.Add(curr.Random.Data, new LinkedList(curr.Random.Data));
+
+            head.Next.Random = nodeMap[curr.Random.Data];
+
             curr = curr.Next;
             head = head.Next;
-        }
-
-        curr = this;
-
-        while (curr != null)
-        {
-            newList[curr.Data].Random = curr.Random;
-            curr = curr.Next;
         }
 
         return root.Next;
