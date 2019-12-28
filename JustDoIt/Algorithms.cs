@@ -39,9 +39,87 @@ namespace JustDoIt
             //ClosestPoints cp = new ClosestPoints();
             //cp.Run();
 
-            MoviesInFlight();
+            //MoviesInFlight();
+            ZombieMatrix();
 
             Console.ReadLine();
+        }
+
+        private static void ZombieMatrix()
+        {
+            //Given a 2D grid, each cell is either a zombie 1 or a human 0.Zombies can turn adjacent(up / down / left / right) human beings into zombies every hour.
+            //Find out how many hours does it take to infect all humans?
+            //Input:
+            //[[0, 1, 1, 0, 1],
+            // [0, 1, 0, 1, 0],
+            // [0, 0, 0, 0, 1],
+            // [0, 1, 0, 0, 0]]
+
+            int[][] matrix = {
+                new int[] { 0, 1, 1, 0, 1 },
+                new int[] { 0, 1, 0, 1, 0 },
+                new int[] { 0, 0, 0, 0, 1 },
+                new int[] { 0, 1, 0, 0, 0 },
+            };
+            
+
+            int[][] directions = {
+                new int[]{ 0, 1 }, // down
+                new int[]{ 0, -1 }, // update
+                new int[]{ 1, 0 }, // right
+                new int[]{ -1, 0 } // left
+            };
+
+            Queue<int[]> zombieQ = new Queue<int[]>(); // Get all zombies
+            for (int i = 0; i < matrix.Length; i++)
+            {
+                for (int j = 0; j < matrix[0].Length; j++)
+                {
+                    if (matrix[i][j] == 1)
+                        zombieQ.Enqueue(new int[] { i, j });
+                }
+            }
+
+            int totalCells = matrix.Length * matrix[0].Length;
+            int zombieCount = zombieQ.Count;
+            // if zombie count is zero or all are zombie, return zero
+            if (zombieCount == 0 || zombieCount == totalCells) {
+                Console.WriteLine(0);
+                return;
+            }
+            
+
+            int hour = 0;
+            while (zombieQ.Any())
+            {
+                if (zombieCount == totalCells) break;
+
+                int count = zombieQ.Count; // new zombies
+
+                for (int i = 0; i < count; i++)
+                {
+                    var zb = zombieQ.Dequeue();
+                    foreach (var dir in directions)
+                    {
+                        int ni = zb[0] + dir[0];
+                        int nj = zb[1] + dir[1];
+
+                        if (ni >= 0 && ni < matrix.Length &&
+                            nj >= 0 && nj < matrix[0].Length &&
+                            matrix[ni][nj] == 0)
+                        {
+                            zombieCount++; // increment zombiecount
+                            matrix[ni][nj] = 1;
+                            zombieQ.Enqueue(new int[] { ni, nj });
+                        }
+                    }
+                }
+
+                hour++; // increment hour
+            }
+
+            Console.WriteLine(hour);
+
         }
 
         private static void MoviesInFlight()
