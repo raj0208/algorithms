@@ -30,8 +30,6 @@ namespace JustDoIt
             //LargestRectangle();
             //LargestOneMatrix();
 
-            //CloneLinkedList();
-
             //QuickSort();
             //BinarySearch();
             //MergeSort();
@@ -39,10 +37,141 @@ namespace JustDoIt
             //ClosestPoints cp = new ClosestPoints();
             //cp.Run();
 
+            //CloneLinkedList();
             //MoviesInFlight();
-            ZombieMatrix();
+            //ZombieMatrix();
+            //OrangesRotting();
+            FindPairWithSum();
+
 
             Console.ReadLine();
+        }
+
+        private static void FindPairWithSum()
+        {
+            //Given a list of positive integers nums and an int target, return indices of the two numbers such that they add up to a target -30.
+
+            //Conditions:
+
+            //You will pick exactly 2 numbers.
+            //You cannot pick the same element twice.
+            //If you have muliple pairs, select the pair with the largest number.
+            //Example 1:
+
+            //Input: nums = [1, 10, 25, 35, 60], target = 90
+            //Output: [2, 3]
+            //Explanation:
+            //nums[2] + nums[3] = 25 + 35 = 60 = 90 - 30
+            //Example 2:
+
+            //Input: nums = [20, 50, 40, 25, 30, 10], target = 90
+            //Output: [1, 5]
+            //Explanation:
+            //nums[0] + nums[2] = 20 + 40 = 60 = 90 - 30
+            //nums[1] + nums[5] = 50 + 10 = 60 = 90 - 30
+            //You should return the pair with the largest number.
+
+            int[] nums = { 20, 50, 40, 25, 30, 10 };
+            int target = 90;
+            target = target - 30;
+
+            var map = new Dictionary<int, int>();
+            int[] result = { -1, -1 };
+            int max = 0;
+
+            for (int i = 0; i < nums.Length; i++)
+            {
+                int diff = target - nums[i];
+
+                if (map.ContainsKey(diff) && (nums[i] > max || diff > max))
+                {
+                    result[0] = map[diff];
+                    result[1] = i;
+                    max = Math.Max(diff, nums[i]);
+                }
+                else
+                    map[nums[i]] = i;
+            }
+
+            Console.WriteLine($"{result[0]}, {result[1]}");
+        }
+
+        private static void OrangesRotting()
+        {
+            //In a given grid, each cell can have one of three values:
+
+            //the value 0 representing an empty cell;
+            //the value 1 representing a fresh orange;
+            //the value 2 representing a rotten orange.
+            //Every minute, any fresh orange that is adjacent(4 - directionally) to a rotten orange becomes rotten.
+
+            //Return the minimum number of minutes that must elapse until no cell has a fresh orange.  If this is impossible, return -1 instead.
+            //Input: [[2, 1, 1],[1,1,0],[0,1,1]]
+            //Output: 4
+            //Input: [[2, 1, 1],[0,1,1],[1,0,1]]
+            //Output: -1
+            //Explanation:  The orange in the bottom left corner(row 2, column 0) is never rotten, because rotting only happens 4-directionally.
+            //Input: [[0,2]]
+            //Output: 0
+            //Explanation:  Since there are already no fresh oranges at minute 0, the answer is just 0.
+            int[][] grid = {
+                new int[] { 2, 1, 1},
+                new int[] { 1,1,0 },
+                new int[] { 0,1,1 }
+            };
+
+            Queue<int[]> rotten = new Queue<int[]>();
+
+            int totalOranges = grid.Length * grid[0].Length;
+            for (int i = 0; i < grid.Length; i++)
+            {
+                for (int j = 0; j < grid[0].Length; j++)
+                {
+                    if (grid[i][j] == 0) totalOranges--;
+                    else if (grid[i][j] == 2)
+                    {
+                        rotten.Enqueue(new int[] { i, j });
+                    }
+                }
+            }
+
+            int totalRotten = rotten.Count;
+            int minutes = 0;
+            int[][] directions = {
+                new int[] {0,1}, //down
+                new int[] {0,-1}, // up
+                new int[] {1,0}, // right
+                new int[] {-1,0}, // left
+            };
+
+            while (rotten.Any())
+            {
+                if (totalRotten == totalOranges)
+                    break;
+                int count = rotten.Count;
+                for (int i = 0; i < count; i++)
+                {
+                    int[] curRotten = rotten.Dequeue();
+                    foreach (var dir in directions)
+                    {
+                        int ni = curRotten[0] + dir[0];
+                        int nj = curRotten[1] + dir[1];
+
+                        if (ni >= 0 && ni < grid.Length &&
+                            nj >= 0 && nj < grid[0].Length &&
+                            grid[ni][nj] == 1)
+                        {
+                            totalRotten++;
+                            grid[ni][nj] = 2;
+                            rotten.Enqueue(new int[] { ni, nj });
+                        }
+                    }
+                }
+
+                minutes++;
+            }
+
+            Console.WriteLine(totalRotten == totalOranges ? minutes : -1);
         }
 
         private static void ZombieMatrix()
@@ -183,6 +312,15 @@ namespace JustDoIt
             
             
             Console.WriteLine($"[{movies[0]}, {movies[1]}]");            
+        }
+
+        private static void CloneLinkedList()
+        {
+            LinkedList list = LinkedList.GetList(new int[] { 1, 2, 3, 4 });
+
+            var newList = list.CloneList();
+
+            Console.WriteLine(newList.Data);
         }
 
         #region QuickSort
@@ -368,27 +506,7 @@ namespace JustDoIt
             Console.ReadLine();
         }
 
-        private static void CloneLinkedList()
-        {
-            LinkedList list = LinkedList.GetList(new int[] { 1,2,3,4 });
-
-            var newList = list.CloneList();
-
-            Console.WriteLine(newList.Data);
-        }
-
-        private static void ClosestPoints()
-        {
-
-
-
-
-
-
-
-        }
-
-
+        
 
         //1. Implement a method that takes a list of strings as input and returns list of strings that are anagrams of other strings in the input.
 
@@ -1205,7 +1323,6 @@ public class LinkedList
         }
 
         return copy;
-
     }
 
     public static LinkedList GetList(int[] arr)
