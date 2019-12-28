@@ -41,10 +41,104 @@ namespace JustDoIt
             //MoviesInFlight();
             //ZombieMatrix();
             //OrangesRotting();
-            FindPairWithSum();
+            //FindPairWithSum();
+            TopNCompetitors();
 
 
-            Console.ReadLine();
+            //Console.ReadLine();
+        }
+
+        private static void TopNCompetitors()
+        {
+
+            //If the frequency is the same, then we need to sort based on the occurrences of each toy in different quotes.
+            //Ex: If both "Elmo" and "Elsa" are occurring 2 times, then we need to sort like this:
+            //If Elmo appears in more quotes than Elsa does, then Elma gets the highest priority.
+            //If both occur the same number of times in different quotes given, then we need to sort them alphabetically.
+
+            //Still didn't get it? no problem, read this:
+            //Ex:
+            //quotes = [
+            //"Elmo is the hottest of the season! Elmo will be on every kid's wishlist!",
+            //"The new Elmo dolls are super high quality",
+            //"Expect the Elsa dolls to be very popular this year, Elsa!",
+            //"Elsa and Elmo are the toys I'll be buying for my kids, Elsa is good",
+            //"For parents of older kids, look into buying them a drone",
+            //"Warcraft is slowly rising in popularity ahead of the holiday season"];
+
+            //Elmo - 4
+            //Elsa - 4
+            //Elmo should be placed before Elsa in the result because Elmo appears in 3 different quotes and Elsa appears in 2 different quotes.
+
+
+
+
+            int numToys = 6;
+            int topToys = 2;
+            String[] toys = { "elmo", "elsa", "legos", "drone", "tablet", "warcraft" };
+            int numQuotes = 6;
+            String[] quotes = {
+            "Emo is the hottest of the season! Elmo will be on every kid's wishlist!",
+            "The new Elmo dolls are super high quality",
+            "Expect the Elsa dolls to be very popular this year",
+            "Elsa and Elmo are the toys I'll be buying for my kids",
+            "For parents of older kids, look into buying them a drone",
+            "Warcraft is slowly rising in popularity ahead of the holiday season"};
+
+            List<string> result = ReturnTopToys(numToys, topToys, toys, numQuotes, quotes);
+            Console.WriteLine(string.Join(",", result));
+        }
+
+        private class WordFrequency
+        {
+            public int TotalCount = 0;
+            public int QuoteCount = 0;
+        }
+
+        private static List<string> ReturnTopToys(int numToys, int topToys, string[] toys, int numQuotes, string[] quotes)
+        {
+            List<string> result = new List<string>();
+            var toyFrequency = new Dictionary<string, WordFrequency>();
+
+            foreach (var toy in toys)
+                toyFrequency[toy.ToLower()] = new WordFrequency();
+
+            WordFrequency wordFreq;
+            foreach (var quote in quotes)
+            {
+                var quoteWords = quote.ToLower().Split(" ", StringSplitOptions.RemoveEmptyEntries);
+                bool isNewQuote = true;
+                foreach (var word in quoteWords)
+                {
+                    if (toyFrequency.TryGetValue(word, out wordFreq))
+                    {
+                        wordFreq.TotalCount += 1;
+
+                        if (isNewQuote)
+                        {
+                            wordFreq.QuoteCount += 1;
+                            isNewQuote = false;
+                        }
+                    }
+                }
+            }
+
+
+            //If the value of topToys is more than the number of toys, return the names of only the toys mentioned in the quotes.
+            //If toys are mentioned an equal number of times in quotes, sort alphabetically.
+            if (topToys > toys.Length)
+            {
+                result.AddRange(
+                     toyFrequency.Where(x => x.Value.QuoteCount > 0).OrderByDescending(x => x.Value.TotalCount).ThenByDescending(x => x.Value.QuoteCount).OrderBy(x => x.Key).Select(x => x.Key)
+                );
+            }
+            else
+            {
+                result.AddRange(
+                    toyFrequency.OrderByDescending(x => x.Value.TotalCount).Take(topToys).OrderByDescending(x => x.Value.QuoteCount).OrderBy(x => x.Key).Select(x => x.Key)
+                );
+            }
+            return result;
         }
 
         private static void FindPairWithSum()
@@ -190,7 +284,7 @@ namespace JustDoIt
                 new int[] { 0, 0, 0, 0, 1 },
                 new int[] { 0, 1, 0, 0, 0 },
             };
-            
+
 
             int[][] directions = {
                 new int[]{ 0, 1 }, // down
@@ -212,11 +306,12 @@ namespace JustDoIt
             int totalCells = matrix.Length * matrix[0].Length;
             int zombieCount = zombieQ.Count;
             // if zombie count is zero or all are zombie, return zero
-            if (zombieCount == 0 || zombieCount == totalCells) {
+            if (zombieCount == 0 || zombieCount == totalCells)
+            {
                 Console.WriteLine(0);
                 return;
             }
-            
+
 
             int hour = 0;
             while (zombieQ.Any())
@@ -309,9 +404,9 @@ namespace JustDoIt
 
             movies[1] = originalIndex[movies[1]][movies[0] == movies[1] ? 1 : 0];
             movies[0] = originalIndex[movies[0]][0];
-            
-            
-            Console.WriteLine($"[{movies[0]}, {movies[1]}]");            
+
+
+            Console.WriteLine($"[{movies[0]}, {movies[1]}]");
         }
 
         private static void CloneLinkedList()
@@ -346,7 +441,8 @@ namespace JustDoIt
         {
             int pivot = arr[(left + right) / 2];
 
-            Action<int[], int, int> swap = (arr, i, j) => {
+            Action<int[], int, int> swap = (arr, i, j) =>
+            {
                 arr[i] ^= arr[j];
                 arr[j] ^= arr[i];
                 arr[i] ^= arr[j];
@@ -385,7 +481,7 @@ namespace JustDoIt
                 int mid = (low + high) / 2;
                 MergeSort(arr, temp, low, mid);
                 MergeSort(arr, temp, mid + 1, high);
-                Merge(arr, temp , low, high);
+                Merge(arr, temp, low, high);
             }
         }
 
@@ -400,7 +496,7 @@ namespace JustDoIt
                 if (arr[lowStart] <= arr[highStart])
                     temp[index++] = arr[lowStart++];
                 else
-                    temp[index++] = arr[highStart++];                
+                    temp[index++] = arr[highStart++];
             }
 
             while (lowStart <= lowEnd)
@@ -411,7 +507,7 @@ namespace JustDoIt
 
             for (int i = low; i <= high; i++)
                 arr[i] = temp[i];
-        }    
+        }
         #endregion
 
         #region Binary Search
@@ -485,7 +581,7 @@ namespace JustDoIt
                 new int[]{ 0,1,1,1,1 },
             };
 
-            var clone = (int[][]) matrix.Clone();
+            var clone = (int[][])matrix.Clone();
 
             int result = 0;
             for (int row = 0; row < matrix.Length; row++)
@@ -494,19 +590,20 @@ namespace JustDoIt
                 {
                     if (row == 0 || col == 0) continue;
 
-                    if (clone[row][col] > 0) {
+                    if (clone[row][col] > 0)
+                    {
                         clone[row][col] = 1 + Math.Min(clone[row - 1][col],
-                                                Math.Min(clone[row][col - 1], clone[row -1][col-1]));
+                                                Math.Min(clone[row][col - 1], clone[row - 1][col - 1]));
                     }
                     if (clone[row][col] > result) result = clone[row][col];
                 }
             }
             Console.WriteLine(result);
-            
+
             Console.ReadLine();
         }
 
-        
+
 
         //1. Implement a method that takes a list of strings as input and returns list of strings that are anagrams of other strings in the input.
 
@@ -590,7 +687,7 @@ namespace JustDoIt
                 {
                     if (i == arr.Length - 1)
                     {
-                        result.Add($"{first}->{arr[i]}");  
+                        result.Add($"{first}->{arr[i]}");
                     }
                 }
                 else
@@ -720,13 +817,13 @@ namespace JustDoIt
             Console.WriteLine(longest);
         }
 
-        
 
-        
+
+
 
         private static void RectangleOverlap()
         {
-            int left1 =4, top1 = 3, right1 = 4, bottom1 = 1;
+            int left1 = 4, top1 = 3, right1 = 4, bottom1 = 1;
             int left2 = 2, top2 = 4, right2 = 5, bottom2 = 2;
 
             int left = Math.Max(left1, left2);
@@ -763,12 +860,12 @@ namespace JustDoIt
                 else ar ^= nums[i];
             }
 
-            Console.WriteLine($"{tl^al}, {tr^ar}");
+            Console.WriteLine($"{tl ^ al}, {tr ^ ar}");
         }
 
         private static void OneMissingNumber()
         {
-            int[] nums = { 1,2,3,5 };
+            int[] nums = { 1, 2, 3, 5 };
             int totalXOR = 0;
             int arrXOR = 0;
 
@@ -924,7 +1021,7 @@ namespace JustDoIt
 
         private static void DFSTraversal()
         {
-            Tree root = Tree.GetTree(new int[]{1,2,3,4,5,6,7,8,9});
+            Tree root = Tree.GetTree(new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 });
 
             Stack<Tree> stack = new Stack<Tree>();
             stack.Push(root);
@@ -952,11 +1049,11 @@ namespace JustDoIt
             int level = 0;
             int total = 0;
             int levelcount = 0;
-            while(queue.Count > 0)
+            while (queue.Count > 0)
             {
                 levelcount = queue.Count;
                 level++;
-                while(levelcount-- > 0)
+                while (levelcount-- > 0)
                 {
                     curr = queue.Dequeue();
                     //Console.Write($"{curr.Value} ");
@@ -1134,13 +1231,13 @@ public class Heap
 
     private bool IsExtracted(int item)
     {
-        if ((_isMinHeap && HeapTop() < item) || 
+        if ((_isMinHeap && HeapTop() < item) ||
             (!_isMinHeap && HeapTop() > item))
         {
             ExtractItem();
             return true;
         }
-        
+
         return false;
     }
 }
@@ -1279,7 +1376,7 @@ public class LinkedList
         {
             if (!nodeMap.ContainsKey(curr.Data))
                 nodeMap.Add(curr.Data, new LinkedList(curr.Data));
-            
+
             head.Next = nodeMap[curr.Data];
 
             if (!nodeMap.ContainsKey(curr.Random.Data))
