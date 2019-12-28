@@ -30,7 +30,7 @@ namespace JustDoIt
             //LargestRectangle();
             //LargestOneMatrix();
 
-            CloneLinkedList();
+            //CloneLinkedList();
 
             //QuickSort();
             //BinarySearch();
@@ -38,7 +38,73 @@ namespace JustDoIt
 
             //ClosestPoints cp = new ClosestPoints();
             //cp.Run();
+
+            MoviesInFlight();
+
             Console.ReadLine();
+        }
+
+        private static void MoviesInFlight()
+        {
+            //Question:
+            //You are on a flight and wanna watch two movies during this flight.
+            //You are given List<Integer> movieDurations which includes all the movie durations.
+            //You are also given the duration of the flight which is d in minutes.
+            //Now, you need to pick two movies and the total duration of the two movies is less than or equal to(d - 30min).
+
+            //Find the pair of movies with the longest total duration and return they indexes.If multiple found, return the pair with the longest movie.
+
+            //Example 1:
+
+            //Input: movieDurations = [90, 85, 75, 60, 120, 150, 125], d = 250
+            //Output: [0, 6]
+            //Explanation: movieDurations[0] + movieDurations[6] = 90 + 125 = 215 is the maximum number within 220(250min -30min)
+
+            //int[] movieDurations = { 90, 85, 75, 60, 120, 150, 125 }; //[0, 6]
+            //int[] movieDurations = { 90, 85, 75, 60, 155, 150, 125 }; //[3, 4]
+            int[] movieDurations = { 90, 85, 75, 60, 120, 110, 110, 150, 125 }; //[5, 6] 
+            int d = 250;
+            int flightTotal = d - 30;
+
+            if (movieDurations.Length < 2 || flightTotal < 0) return;
+
+            var originalIndex = new Dictionary<int, List<int>>();
+            for (int i = 0; i < movieDurations.Length; i++)
+            {
+                if (!originalIndex.ContainsKey(movieDurations[i]))
+                    originalIndex[movieDurations[i]] = new List<int> { i };
+                else
+                    originalIndex[movieDurations[i]].Add(i); // handle duplicate movie length
+            }
+
+            int[] movies = { -1, -1 };
+            int max = -1;
+            Array.Sort<int>(movieDurations);
+
+            int low = 0, high = movieDurations.Length - 1;
+            while (low < high)
+            {
+                int movieTotal = movieDurations[low] + movieDurations[high];
+                if (movieTotal <= flightTotal)
+                {
+                    if (movieTotal > max)
+                    {
+                        movies[0] = movieDurations[low];
+                        movies[1] = movieDurations[high];
+                        max = movieTotal;
+                    }
+
+                    low++;
+                }
+                else
+                    high--;
+            }
+
+            movies[1] = originalIndex[movies[1]][movies[0] == movies[1] ? 1 : 0];
+            movies[0] = originalIndex[movies[0]][0];
+            
+            
+            Console.WriteLine($"[{movies[0]}, {movies[1]}]");            
         }
 
         #region QuickSort
