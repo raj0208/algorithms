@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Text;
 
 namespace JustDoIt
 {
@@ -46,8 +47,101 @@ namespace JustDoIt
             //TopNCompetitors();
             //ReorderLogFiles();
             //ReorderLogFiles2();
-            ReorderLogFilesWorking();
+            //ReorderLogFilesWorking();
+
+            SubTree();
+
             //Console.ReadLine();
+        }
+
+        public class TreeNode
+        {
+            public int val;
+            public TreeNode left;
+            public TreeNode right;
+            public TreeNode(int x) { val = x; }
+
+            public static TreeNode GetTree(int[] arr)
+            {
+                return CreateTreeFromArray(arr, 0, arr.Length - 1);
+            }
+
+            private static TreeNode CreateTreeFromArray(int[] array, int start, int end)
+            {
+                if (end < start) return null;
+
+                int mid = (start + end) / 2;
+
+                TreeNode node = new TreeNode(array[mid]);
+                node.left = CreateTreeFromArray(array, start, mid - 1);
+                node.right = CreateTreeFromArray(array, mid + 1, end);
+
+                return node;
+            }
+        }
+
+
+        public bool IsSubtree(TreeNode s, TreeNode t)
+        {
+            if (s == null || t == null)
+                return s == t;
+
+            return IsSame(s, t) || (IsSubtree(s.left, t) || IsSubtree(s.right, t));
+
+        }
+
+        public bool IsSame(TreeNode s, TreeNode t)
+        {
+            if (s == null || t == null)
+                return s == t;
+
+            return (s.val != t.val) && (IsSame(s.left, t.left) && IsSame(s.right, t.right));
+
+        }
+
+
+
+        private static void SubTree()
+        {
+            TreeNode s = TreeNode.GetTree(new int[] { 1,2 });
+            TreeNode t = TreeNode.GetTree(new int[] { 2 });
+
+            StringBuilder ss = new StringBuilder();
+            StringBuilder st = new StringBuilder();
+
+            FlattenTree(s, ss);
+            FlattenTree(t, st);
+
+            string main = ss.ToString();
+            string sub = st.ToString();
+
+            Console.WriteLine(main.IndexOf(sub, StringComparison.InvariantCultureIgnoreCase) != -1);
+        }
+
+        private static void FlattenTree(TreeNode root, StringBuilder sb)
+        {
+            if (root == null)
+            {
+                sb.Append("{X}");
+                return;
+            }
+
+            sb.Append($"{{{root.val}}}");
+            FlattenTree(root.left, sb);
+            FlattenTree(root.right, sb);
+
+        }
+
+        private static void SuggestedProducts(string[] products, string searchWord)
+        {
+            var result = new List<List<string>>();
+
+
+
+
+
+
+            //return result;
         }
 
         class LogData
