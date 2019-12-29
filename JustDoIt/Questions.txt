@@ -6,11 +6,11 @@ Copy List with Random Pointer ⭐⭐ [New Grad]
 Top N Competitors/Buzzwords ⭐⭐ [Experienced]
 Reorder Data in Log Files ⭐⭐⭐ [Experienced]
 Subtree of Another Tree ⭐⭐ [New Grad]
+Product Suggestions ⭐⭐ [New Grad | Experienced]
+Number of Clusters ⭐⭐ [Experienced]
 
 
 Critical Routers ⭐⭐ [New Grad | Experienced]
-Product Suggestions ⭐⭐ [New Grad | Experienced]
-Number of Clusters ⭐⭐ [Experienced]
 Optimal Utilization ⭐⭐⭐ [Experienced]
 Min Cost to Connect Ropes / Min Time to Merge Files ⭐⭐⭐[Experienced]
 Treasure Island / Min Distance to Remove the Obstacle (BFS) ⭐⭐⭐ [Experienced]

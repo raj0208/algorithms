@@ -49,35 +49,75 @@ namespace JustDoIt
             //ReorderLogFiles2();
             //ReorderLogFilesWorking();
 
-            SubTree();
+            //SubTree();
+            //SuggestedProducts();
 
             //Console.ReadLine();
         }
 
-        public class TreeNode
+        private static void SuggestedProducts()
         {
-            public int val;
-            public TreeNode left;
-            public TreeNode right;
-            public TreeNode(int x) { val = x; }
+            string[] products = { }; 
+            string searchWord = string.Empty;
 
-            public static TreeNode GetTree(int[] arr)
+            Trie trie = new Trie();
+
+            Array.Sort(products);
+            products.Max(x => x.Length);
+
+            foreach (var product in products)
             {
-                return CreateTreeFromArray(arr, 0, arr.Length - 1);
+                trie.Insert(product);
+                
             }
 
-            private static TreeNode CreateTreeFromArray(int[] array, int start, int end)
+            IList<IList<string>> result = new List<IList<string>>();
+
+            for (int i = 0; i < searchWord.Length; i++)
             {
-                if (end < start) return null;
-
-                int mid = (start + end) / 2;
-
-                TreeNode node = new TreeNode(array[mid]);
-                node.left = CreateTreeFromArray(array, start, mid - 1);
-                node.right = CreateTreeFromArray(array, mid + 1, end);
-
-                return node;
+                result.Add(trie.Search(searchWord.Substring(0, i + 1)));
             }
+
+            //return result;
+        }
+
+        public IList<IList<string>> SuggestedProducts(string[] products, string searchWord)
+        {
+            if (products == null || searchWord == null) return null;
+
+            IList<IList<string>> result = new List<IList<string>>();
+
+            Array.Sort(products);
+            int maxProductLength = 0;
+            foreach (var product in products)
+                if (product.Length > maxProductLength)
+                    maxProductLength = product.Length;
+
+            bool flag = true;
+            for (int i = 0; i < searchWord.Length; i++)
+            {
+                List<string> temp = new List<string>();
+                string prefix = searchWord.Substring(0, i + 1);
+                int prefixLength = prefix.Length;
+                int count = 0;
+
+                foreach (var product in products)
+                {
+                    if (product.Length >= prefixLength)
+                    {
+                        if (product.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+                        {
+                            temp.Add(product);
+                            count++;
+                        }
+                        if (count == 3) break;
+                    }
+                }
+
+                result.Add(temp);
+            }
+
+            return result;
         }
 
 
@@ -132,17 +172,7 @@ namespace JustDoIt
 
         }
 
-        private static void SuggestedProducts(string[] products, string searchWord)
-        {
-            var result = new List<List<string>>();
-
-
-
-
-
-
-            //return result;
-        }
+        
 
         class LogData
         { 
@@ -1463,6 +1493,95 @@ namespace JustDoIt
 }
 
 #region Helper Classes
+
+
+public class Trie
+{
+    private class TrieNode
+    {
+        public Dictionary<char, TrieNode> Childrens { get; set; }
+        public bool IsEndOfWord { get; set; }
+        public List<string> Words;
+
+        public TrieNode()
+        {
+            this.Childrens = new Dictionary<char, TrieNode>();
+            this.IsEndOfWord = false;
+            this.Words = new List<string>();
+        }
+    }
+
+    private TrieNode Root { get; set; }
+
+    public Trie()
+    {
+        this.Root = new TrieNode();
+    }
+
+    public void Insert(string word)
+    {
+        TrieNode curr = Root;
+
+        for (int i = 0; i < word.Length; i++)
+        {
+            char ch = word[i];
+
+            if (!curr.Childrens.TryGetValue(ch, out TrieNode child))
+            {
+                child = new TrieNode();
+                curr.Childrens[ch] = child; 
+            }
+
+            curr = child;
+            curr.Words.Add(word);
+        }
+        curr.IsEndOfWord = true;
+    }
+
+    public IList<string> Search(string word)
+    {
+        TrieNode curr = this.Root;
+
+        for (int i = 0; i < word.Length; i++)
+        {
+            char ch = word[i];
+            if (!curr.Childrens.TryGetValue(ch, out TrieNode child))
+            {
+                return new List<string>();
+            }
+            curr = child;
+        }
+
+        return curr.Words;
+    }
+}
+
+public class TreeNode
+{
+    public int val;
+    public TreeNode left;
+    public TreeNode right;
+    public TreeNode(int x) { val = x; }
+
+    public static TreeNode GetTree(int[] arr)
+    {
+        return CreateTreeFromArray(arr, 0, arr.Length - 1);
+    }
+
+    private static TreeNode CreateTreeFromArray(int[] array, int start, int end)
+    {
+        if (end < start) return null;
+
+        int mid = (start + end) / 2;
+
+        TreeNode node = new TreeNode(array[mid]);
+        node.left = CreateTreeFromArray(array, start, mid - 1);
+        node.right = CreateTreeFromArray(array, mid + 1, end);
+
+        return node;
+    }
+}
+
 public class Tree
 {
     public int Value { get; set; }
