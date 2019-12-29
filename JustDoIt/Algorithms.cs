@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace JustDoIt
@@ -42,10 +43,288 @@ namespace JustDoIt
             //ZombieMatrix();
             //OrangesRotting();
             //FindPairWithSum();
-            TopNCompetitors();
-
-
+            //TopNCompetitors();
+            //ReorderLogFiles();
+            //ReorderLogFiles2();
+            ReorderLogFilesWorking();
             //Console.ReadLine();
+        }
+
+        class LogData
+        { 
+            public string Identifier;
+            public string Data;
+            public bool IsDigitLog;
+
+            public LogData(string logData)
+            {
+                int idx = logData.IndexOf(' ');
+                Identifier = logData.Substring(0, idx);
+                Data = logData.Substring(idx + 1);
+                IsDigitLog = char.IsDigit(Data[0]);
+            }
+
+            public string GetLogData()
+            {
+                return Identifier + " " + Data;
+            }
+        }
+
+        private static string[] ReorderLogFiles()
+        {
+            string[] logs = {
+                "l5sh 6 3869 08 1295", "16o 94884717383724 9", "43 490972281212 3 51",
+                "9 ehyjki ngcoobi mi", "2epy 85881033085988", "7z fqkbxxqfks f y dg",
+                "9h4p 5 791738 954209", "p i hz uubk id s m l", "wd lfqgmu pvklkdp u",
+                "m4jl 225084707500464", "6np2 bqrrqt q vtap h", "e mpgfn bfkylg zewmg",
+                "ttzoz 035658365825 9", "k5pkn 88312912782538", "ry9 8231674347096 00",
+                "w 831 74626 07 353 9", "bxao armngjllmvqwn q", "0uoj 9 8896814034171",
+                "0 81650258784962331", "t3df gjjn nxbrryos b"
+            };
+
+            int logLength = logs.Length;
+            
+            LogData[] allLogs = new LogData[logLength];
+            for (int i = 0; i < logLength; i++)
+            {                
+                allLogs[i] = new LogData(logs[i]);
+            }
+
+            Array.Sort(allLogs, (l1, l2) => {
+
+                if (l1.IsDigitLog ^ l2.IsDigitLog)
+                {
+                    int res = 1;
+                    if (l1.IsDigitLog && !l2.IsDigitLog) res = 1;
+                    else if (!l1.IsDigitLog && l2.IsDigitLog) res = -1;
+                    else
+                    {
+                        var d1 = long.Parse(l1.Data.Split(' ')[1]);
+                        var d2 = long.Parse(l2.Data.Split(' ')[1]);
+
+                        res = (int)(d1 - d2);
+                    }
+                    return res;
+                    //return l1.IsDigitLog ? 1 : -1;
+                }
+                else
+                {
+                    if (l1.IsDigitLog)
+                    {
+                        return 0;
+                    }
+                    else
+                    {
+                        int result = string.Compare(l1.Data, l2.Data);
+                        if (result == 0)
+                        {
+                            result = string.Compare(l1.Identifier, l2.Identifier);
+                        }
+
+                        return result;
+                    }
+                }            
+            });
+
+            string[] res = new string[logLength];
+            for (int i = 0; i<logLength; i++) {
+                res[i] = allLogs[i].GetLogData();
+            }
+
+            Console.WriteLine(string.Join("\",\"", res));
+            return res;
+        }
+
+        private static void ReorderLogFilesWorking()
+        {
+            //string[] logs = { "dig1 8 1 5 1", "let1 art can", "dig2 3 6", "let2 own kit dig", "let3 art zero" };
+            //string[] logs = {
+            //    "l5sh 6 3869 08 1295", "16o 94884717383724 9", "43 490972281212 3 51",
+            //    "9 ehyjki ngcoobi mi", "2epy 85881033085988", "7z fqkbxxqfks f y dg",
+            //    "9h4p 5 791738 954209", "p i hz uubk id s m l", "wd lfqgmu pvklkdp u",
+            //    "m4jl 225084707500464", "6np2 bqrrqt q vtap h", "e mpgfn bfkylg zewmg",
+            //    "ttzoz 035658365825 9", "k5pkn 88312912782538", "ry9 8231674347096 00",
+            //    "w 831 74626 07 353 9", "bxao armngjllmvqwn q", "0uoj 9 8896814034171",
+            //    "0 81650258784962331", "t3df gjjn nxbrryos b"
+            //};
+
+            //string[] logs = { "1 n u", "r 527", "j 893", "6 14", "6 82" };
+            string[] logs = { "a1 9 2 3 1", "g1 act car", "zo4 4 7", "ab1 off key dog", "a8 act zoo", "a2 act car" };
+            
+            List<string> letterLogs = new List<string>();
+            List<string> digitLogs = new List<string>();
+
+            foreach (var log in logs)
+            {
+                var s = log.Split(' ');
+                if (double.TryParse(s[1], out double a))
+                {
+                    digitLogs.Add(log);
+                }
+                else
+                    letterLogs.Add(log);
+            }
+
+            var arr = letterLogs.ToArray();
+            Array.Sort(arr, (x, y) =>
+            {
+
+                int idxX = x.IndexOf(' ');
+                string first = x.Substring(idxX + 1);
+
+                int idxY = y.IndexOf(' ');
+                string second = y.Substring(idxY + 1);
+
+                int result = string.Compare(first, second);
+
+                if (result == 0)
+                {
+                    string identifier1 = x.Substring(0, idxX);
+                    string identifier2 = y.Substring(0, idxY);
+                    result = string.Compare(identifier1, identifier2);
+                }
+
+                return result;
+            });
+
+
+            string[] reorderLogs = new string[logs.Length];
+            for (int i = 0; i < arr.Length; i++)
+                reorderLogs[i] = arr[i];
+
+            for (int i = 0; i < digitLogs.Count; i++)
+                reorderLogs[arr.Length + i] = digitLogs[i];
+
+            Console.WriteLine(string.Join(",",reorderLogs));
+        }
+
+
+        private static void ReorderLogFiles2()
+        {
+            //You have an array of logs.  Each log is a space delimited string of words.
+
+            //For each log, the first word in each log is an alphanumeric identifier.Then, either:
+
+            //Each word after the identifier will consist only of lowercase letters, or;
+            //Each word after the identifier will consist only of digits.
+            //We will call these two varieties of logs letter - logs and digit-logs.It is guaranteed that each log has at least one word after its identifier.
+
+            //Reorder the logs so that all of the letter - logs come before any digit-log.
+            //The letter - logs are ordered lexicographically ignoring identifier, with the identifier used in case of ties.
+            //The digit-logs should be put in their original order.
+
+            //Return the final order of the logs.
+
+            //Example 1:
+
+            //Input: logs = ["dig1 8 1 5 1", "let1 art can", "dig2 3 6", "let2 own kit dig", "let3 art zero"]
+            //Output: ["let1 art can", "let3 art zero", "let2 own kit dig", "dig1 8 1 5 1", "dig2 3 6"]
+
+            //string[] logs = { "dig1 8 1 5 1", "let1 art can", "dig2 3 6", "let2 own kit dig", "let3 art zero" };
+            //string[] logs = {
+            //    "l5sh 6 3869 08 1295", "16o 94884717383724 9", "43 490972281212 3 51",
+            //    "9 ehyjki ngcoobi mi", "2epy 85881033085988", "7z fqkbxxqfks f y dg",
+            //    "9h4p 5 791738 954209", "p i hz uubk id s m l", "wd lfqgmu pvklkdp u",
+            //    "m4jl 225084707500464", "6np2 bqrrqt q vtap h", "e mpgfn bfkylg zewmg",
+            //    "ttzoz 035658365825 9", "k5pkn 88312912782538", "ry9 8231674347096 00",
+            //    "w 831 74626 07 353 9", "bxao armngjllmvqwn q", "0uoj 9 8896814034171",
+            //    "0 81650258784962331", "t3df gjjn nxbrryos b"
+            //};
+
+            //string[] logs = { "1 n u", "r 527", "j 893", "6 14", "6 82" };
+            string[] logs = {"a1 9 2 3 1","g1 act car","zo4 4 7","ab1 off key dog","a8 act zoo","a2 act car"};
+
+            List<string> letterLogs = new List<string>();
+            List<string> digitLogs = new List<string>();
+            Func<string, bool> isNumber = (data) =>
+            {
+                bool flag = false;
+
+                for (int i = 0; i < data.Length; i++)
+                {
+                    if (!(flag = char.IsDigit(data[i])))
+                        break;
+                }
+
+                return flag;
+            };
+
+            foreach (var log in logs)
+            {
+                var s = log.Split(' ');
+                if (isNumber(s[1]))
+                {
+                    digitLogs.Add(log);
+                }
+                else
+                    letterLogs.Add(log);
+            }
+
+            //letterLogs.OrderBy(x => x.Substring(x.IndexOf(' ') + 1)).ThenBy(x => x.Substring(0, x.IndexOf(' '))).Concat(digitLogs);
+            //Console.WriteLine(string.Join(",", letterLogs.OrderBy(x => x.Substring(x.IndexOf(' ') + 1)).ThenBy(x => x.Substring(0, x.IndexOf(' '))).Concat(digitLogs)));
+
+            var array = letterLogs.ToArray();
+            //Array.Sort(array, new StringComparer());
+            Array.Sort(array, (x, y) =>
+            {
+                int idxX = x.IndexOf(' ');
+                string first = x.Substring(idxX + 1);
+
+                int idxY = y.IndexOf(' ');
+                string second = y.Substring(idxY + 1);
+
+                int result = string.Compare(first, second);
+
+                if (result == 0)
+                {
+                    string identifier1 = x.Substring(0, idxX);
+                    string identifier2 = y.Substring(0, idxY);
+                    result = string.Compare(identifier1, identifier2);
+                }
+
+                return result;
+            });
+
+            letterLogs = new List<string>(array);
+            letterLogs.AddRange(digitLogs);
+
+            string[] redorderLogs = new string[array.Length + digitLogs.Count];
+            for (int i = 0; i < array.Length; i++)
+            {
+                redorderLogs[i] = array[i];
+            }
+
+            for (int i = 0; i < digitLogs.Count; i++)
+                redorderLogs[array.Length + i] = digitLogs[i];
+
+            Console.WriteLine(string.Join("\",\"", redorderLogs));
+            //return letterLogs.AddRange(digitLogs);
+
+        }
+
+        private class StringComparer : IComparer<string>
+        {
+            public int Compare([AllowNull] string x, [AllowNull]
+
+            string y)
+            {
+                int idxX = x.IndexOf(' ');
+                string first = x.Substring(idxX + 1);
+
+                int idxY = y.IndexOf(' ');
+                string second = y.Substring(idxY + 1);
+
+                int result = string.Compare(first, second);
+
+                if (result == 0)
+                {
+                    string identifier1 = x.Substring(0, idxX);
+                    string identifier2 = y.Substring(1, idxY);
+                    result = string.Compare(identifier1, identifier2);
+                }
+
+                return result;
+            }
         }
 
         private static void TopNCompetitors()
@@ -129,7 +408,8 @@ namespace JustDoIt
             if (topToys > toys.Length)
             {
                 result.AddRange(
-                     toyFrequency.Where(x => x.Value.QuoteCount > 0).OrderByDescending(x => x.Value.TotalCount).ThenByDescending(x => x.Value.QuoteCount).OrderBy(x => x.Key).Select(x => x.Key)
+                     //toyFrequency.Where(x => x.Value.QuoteCount > 0).OrderByDescending(x => x.Value.TotalCount).ThenByDescending(x => x.Value.QuoteCount).OrderBy(x => x.Key).Select(x => x.Key)
+                     toyFrequency.Where(x => x.Value.QuoteCount > 0).Select(x => x.Key)
                 );
             }
             else
