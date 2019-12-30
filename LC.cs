@@ -15,7 +15,7 @@ namespace ConsoleApp
             //LRUCacheTest();
             //ReversePolishEvalution();
             //TinyURL();
-            //TwoSum();
+            TwoSum();
             //ReverseString();
             //ReverseString2(); //*********
             //LengthOfLongestSubString(); //*********

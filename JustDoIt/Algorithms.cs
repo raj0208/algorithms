@@ -52,7 +52,58 @@ namespace JustDoIt
             //SubTree();
             //SuggestedProducts();
 
+            RotateMatrix();
+
             //Console.ReadLine();
+        }
+
+        private static void RotateMatrix()
+        {
+            int[][] matrix = {
+                new int[] { 11,12,13,14,15 },
+                new int[] { 21,22,23,24,25 },
+                new int[] { 31,32,33,34,35 },
+                new int[] { 41,42,43,44,45 },
+                new int[] { 51,52,53,54,55 },
+            };
+
+            int size = matrix.Length;
+
+            if (matrix.Length != matrix[0].Length)
+            {
+                Console.WriteLine("Not a square matrix");
+                return;
+            }
+
+            for (int layer = 0; layer < size / 2; layer++)
+            {
+                int first = layer;
+                int last = size - 1 - layer; 
+
+                for (int i = first; i < last; i++)
+                {
+                    int offset = i - first;
+
+                    // clockwise
+                    //int temp = matrix[first][i];
+                    //matrix[first][i] = matrix[last - offset][first];
+                    //matrix[last - offset][first] = matrix[last][last - offset];
+                    //matrix[last][last - offset] = matrix[i][last];
+                    //matrix[i][last] = temp;
+
+                    // anti clockwise
+                    int temp = matrix[first][i];
+                    matrix[first][i] = matrix[i][last];
+                    matrix[i][last] = matrix[last][last - offset];
+                    matrix[last][last - offset] = matrix[last - offset][first];
+                    matrix[last - offset][first] = temp;
+                }                
+            }
+
+            foreach (var item in matrix)
+            {
+                Console.WriteLine(string.Join(",", item));
+            }
         }
 
         private static void SuggestedProducts()

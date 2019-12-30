@@ -40,7 +40,7 @@ namespace ConsoleApp
             #region Tree & Graph
             // ctci.MinimalTreeWithSortedArray();
             //ctci.ListOfNodes();
-            //ctci.IsBalancedTree();
+            ctci.IsBalancedTree();
             //ctci.BinarySearchTree();
             //ctci.SuccessorNode();
             ctci.SuccesorTreeNode();
