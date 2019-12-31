@@ -43,7 +43,7 @@ namespace JustDoIt
             //MoviesInFlight();
             //ZombieMatrix();
             //OrangesRotting();
-            //FindPairWithSum();
+            FindPairWithSum();
             //TopNCompetitors();
             //ReorderLogFiles();
             //ReorderLogFiles2();
@@ -52,9 +52,178 @@ namespace JustDoIt
             //SubTree();
             //SuggestedProducts();
 
-            RotateMatrix();
+            //RotateMatrix();
+            //MatrixProduct();
+            //LongestSubstring();
+
+            //TreasureIsland();
 
             //Console.ReadLine();
+        }
+
+        private static void TreasureIsland()
+        {
+            char[][] island = {
+                new char[] { '0', '0', '0', '0' },
+                new char[] { 'D', '0', 'D', '0' },
+                new char[] { '0', 'D', '0', '0' },
+                new char[] { 'X', '0', '0', '0' }
+            };
+
+            if (island == null || island.Length == 0 || island[0][0] == 'D')
+            {
+                Console.WriteLine("No treasure");
+                return;
+            }
+
+            if (island[0][0] == 'X')
+            {
+                Console.WriteLine("Treasure found 0 steps");
+                return;
+            }
+
+            Queue<int[]> queue = new Queue<int[]>();          
+            queue.Enqueue(new int[] { 0, 0 });
+
+            List<int[]> directions = new List<int[]>() {
+                new int[] { 0, 1 }, // up
+                new int[] { 0, -1 }, // down
+                new int[] { 1, 0 },
+                new int[] { -1, 0 },
+            };
+
+            int minSteps = 0;
+            while (queue.Count > 0)
+            {
+                int size = queue.Count;
+
+                for (int i = 0; i < size; i++)
+                {
+                    var cur = queue.Dequeue();
+                    if (island[cur[0]][cur[1]] == 'D')
+                        continue;
+
+                    foreach (var dir in directions)
+                    {
+                        int nx = cur[0] + dir[0];
+                        int ny = cur[1] + dir[1];
+
+                        if (nx >= 0 && nx < island.Length &&
+                            ny >= 0 && ny < island[0].Length)
+                        {
+                            if (island[nx][ny] == 'X')
+                            { 
+                                Console.WriteLine("steps : {0}", minSteps  + 1);
+                                return;
+                            }
+                            else if (island[nx][ny] == '0')
+                            {
+                                island[cur[0]][cur[1]] = 'V';
+                                queue.Enqueue(new int[] { nx, ny });
+                            }
+                        }
+                    }
+                }
+                minSteps++;
+            }
+
+            Console.WriteLine("No treasure found");
+        }
+
+        private static void LongestSubstring()
+        {
+            string a = "abdababc";
+            string b = "abc";
+
+            int m = a.Length;
+            int n = b.Length;
+            int maxLength = 0;
+            int[][] cache = new int[m][];
+
+            for (int i = 0; i < m; i++)
+            {
+                cache[i] = new int[n];
+                for (int j = 0; j < n; j++)
+                {
+                    if (a[i] == b[j])
+                    {
+                        if (i == 0 || j == 0)
+                        {
+                            cache[i][j] = 1;
+                        }
+                        else
+                            cache[i][j] = cache[i - 1][j - 1] + 1;
+
+                        if (maxLength < cache[i][j])
+                            maxLength = cache[i][j];
+                    }
+                }
+            }
+
+            Console.WriteLine(maxLength);
+        }
+
+        private static void MatrixProduct()
+        {
+            int[][] matrix = {
+                new int[] {1,2,3},
+                new int[] {4,5,6},
+                new int[] {7,8,9}
+            };
+
+            int[][] minCache = new int[matrix.Length][];
+            int[][] maxCache = new int[matrix.Length][];
+
+            for (int i = 0; i < matrix.Length; i++)
+            {
+                minCache[i] = new int[matrix[i].Length];
+                maxCache[i] = new int[matrix[i].Length];
+
+                for (int j = 0; j < matrix[i].Length; j++)
+                {
+                    if (i == j)
+                    {
+                        minCache[i][j] = matrix[i][j];
+                        maxCache[i][j] = matrix[i][j];
+                        continue;
+                    }
+
+                    int maxVal = int.MinValue;
+                    int minVal = int.MaxValue;
+
+                    if (i > 0)
+                    {
+                        int tempMax = Math.Max(
+                                matrix[i][j] * maxCache[i -1][j],
+                                matrix[i][j] * minCache[i - 1][j]
+                            );
+                        maxVal = Math.Max(maxVal, tempMax);
+                        int tempMin = Math.Min(
+                                matrix[i][j] * maxCache[i - 1][j],
+                                matrix[i][j] * minCache[i - 1][j]
+                            );
+                        minVal = Math.Min(minVal, tempMin);
+                    }
+                    if (j > 0)
+                    {
+                        int tempMax = Math.Max(
+                                matrix[i][j] * maxCache[i][j - 1],
+                                matrix[i][j] * minCache[i][j - 1]
+                            );
+                        maxVal = Math.Max(maxVal, tempMax);
+                        int tempMin = Math.Min(
+                                matrix[i][j] * maxCache[i][j - 1],
+                                matrix[i][j] * minCache[i][j - 1]
+                            );
+                        minVal = Math.Min(minVal, tempMin);
+                    }
+
+                    maxCache[i][j] = maxVal;
+                    minCache[i][j] = minVal;
+                }
+            }
+
+            Console.WriteLine(maxCache[matrix.Length - 1][matrix[0].Length - 1]);
         }
 
         private static void RotateMatrix()
