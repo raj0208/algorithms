@@ -42,8 +42,9 @@ namespace JustDoIt
             //CloneLinkedList();
             //MoviesInFlight();
             //ZombieMatrix();
+            //Question1();
             //OrangesRotting();
-            FindPairWithSum();
+            //FindPairWithSum();
             //TopNCompetitors();
             //ReorderLogFiles();
             //ReorderLogFiles2();
@@ -57,8 +58,329 @@ namespace JustDoIt
             //LongestSubstring();
 
             //TreasureIsland();
+            //SpiralMatrix();
+            //PrisonCellAfterNDays();
 
+            //MaximumSumSubTree();
+            //LevelOrderTraversal();
             //Console.ReadLine();
+            FindElementInSortedRowColMatrix();
+            
+
+
+        }
+
+        private static void FindElementInSortedRowColMatrix()
+        {
+            int[][] matrix = {
+                new int[] { 15,20,40,85 },
+                new int[] { 20,35,80,95 },
+                new int[] { 30,55,95,105 },
+                new int[] { 40,80,100,120 },
+            };
+
+            int search = 55;
+
+            int row = 0;
+            int col = matrix[0].Length;
+
+            while (row < matrix.Length && col >= 0)
+            {
+                if (matrix[row][col] == search)
+                {
+                    Console.WriteLine($"Found {search} at {row},{col}");
+                }
+                else if (matrix[row][col] < search)
+                {
+                    col--;
+                }
+                else if (matrix[row][col] > search)
+                {
+                    row++;
+                }
+            }
+
+            Console.WriteLine($"Not found {search}");
+        }
+
+        private static void Question1()
+        {
+            int[,] grid = new int[5,5];
+
+
+            int[][] adjacentServers = {
+            new int[] { 0, 1 }, // down
+		    new int[] { 0, -1 }, // up
+		    new int[] { 1, 0 }, // right
+		    new int[] { -1, 0 }, // left
+		    };
+
+
+            Queue<int[]> allServers = new Queue<int[]>();
+            for (int i = 0; i < 5; i++)
+            {
+                for (int j = 0; j < 5; j++)
+                {
+                    if (grid[i, j] == 1) // queue all ok servers
+                        allServers.Enqueue(new int[] { i, j });
+                }
+            }
+
+            int totalServers = grid.Length;
+            int serverCount = allServers.Count;
+
+            if (serverCount == 0 || serverCount == totalServers)
+                return;
+
+            int days = 0;
+            while (allServers.Count > 0)
+            {
+                if (serverCount == totalServers) break;
+
+                int count = allServers.Count;
+
+                for (int i = 0; i < count; i++)
+                {
+                    var ser = allServers.Dequeue();
+
+                    foreach (var dir in adjacentServers)
+                    {
+                        int ni = ser[0] + dir[0];
+                        int nj = ser[1] + dir[1];
+
+                        if (ni >= 0 && ni < grid.GetUpperBound(0) &&
+                            nj >= 0 && nj < grid.GetUpperBound(1) &&
+                            grid[ni, nj] == 0)
+                        {
+                            // enquwuw
+                            serverCount++;
+                            grid[ni, nj] = 1;
+                            allServers.Enqueue(new int[] { i, nj });
+                        }
+                    }
+                }
+                days++;
+            }
+        }
+
+        private static void LevelOrderTraversal()
+        {
+            TreeNode root = new TreeNode(1);
+            Queue<TreeNode> queue = new Queue<TreeNode>();
+            queue.Enqueue(root);
+            while (queue.Count > 0)
+            {
+                var curr = queue.Dequeue();
+                Console.WriteLine(curr.val + " ");
+                if (curr.left != null) queue.Enqueue(curr.left);
+                if (curr.right != null) queue.Enqueue(curr.right);
+            }
+        }
+
+        class SumTreeNode
+        {
+            public int val;
+            public List<SumTreeNode> children;
+
+            SumTreeNode() { }
+            SumTreeNode(int val, List<SumTreeNode> children)
+            {
+                this.val = val;
+                this.children = children;
+            }
+        }
+
+        static int maxSum;
+        private static void MaximumSumSubTree()
+        {
+            SumTreeNode currMaxNode = null, root = null;
+            var curr = HelperMaxSumNode(root, currMaxNode);
+
+        }
+
+        private  static int[] HelperMaxSumNode(SumTreeNode node, SumTreeNode currMaxNode)
+        {
+            if (node == null) return new int[] { 0, 0 };
+
+            
+            int currSum = node.val;
+            int currCount = 1;
+
+            for (int i = 0; i < node.children.Count; i++)
+            {
+                var temp = HelperMaxSumNode(node.children[i], currMaxNode);
+                currSum += temp[0];
+                currCount += temp[1];
+            }
+
+            if (currCount > 1 && (currMaxNode == null || (currSum / currCount) > maxSum))
+            {
+                currMaxNode = node;
+                maxSum = currSum / currCount;
+            }
+
+            return new int[] { currSum, currCount };
+        }
+
+        private static void PrisonCellAfterNDays()
+        {
+            int[] cells = { 0, 1, 0, 1, 1, 0, 0, 1};
+            int N = 1000000000;
+            
+            Dictionary<string, int> map = new Dictionary<string, int>();
+
+            string cellsStr = string.Join("", cells);
+
+            for (int i = 0; i < N; i++)
+            {
+
+                map[cellsStr] = i; // keep track of the state and day
+
+                cells = NextDay(cells); // advance the state
+                cellsStr = string.Join("", cells); // serialize it
+
+                // if we've seen this state before, fast-forward
+                if (map.ContainsKey(cellsStr))
+                {
+                    int daysAgo = i + 1 - map[cellsStr]; // how many days ago was it when we saw this state?
+                    int daysLeft = N - (i + 1); // how many days do we have left (if we don't fast-forward)?
+                    //return DoLastNDays(cells, daysLeft % daysAgo);
+                    DoLastNDays(cells, daysLeft % daysAgo);
+                    break;
+                }
+
+            }
+
+            // if we never get a cycle, we can stay in the current for-loop
+            //return cells;
+
+            Console.WriteLine("Resilt:" + string.Join(",", cells));
+        }
+
+        private static int[] DoLastNDays(int[] cells, int N)
+        {
+            for (int i = 0; i < N; i++)
+            {
+                cells = NextDay(cells);
+            }
+
+            return cells;
+        }
+
+        // advance the state by one day
+        private static int[] NextDay(int[] cells)
+        {
+            int[] newCells = new int[cells.Length];
+
+            for (int i = 1; i < cells.Length - 1; i++)
+            {
+                if (cells[i - 1] == cells[i + 1])
+                    newCells[i] = 1;
+                else
+                    newCells[i] = 0;
+            }
+
+            return newCells;
+        }
+
+        public int[] PrisonAfterNDays(int[] cells, int N)
+        {
+            int[] first = new int[cells.Length];
+            int[] newCells = new int[cells.Length];
+
+            for (int cycle = 0; N > 0; N--, cycle++)
+            {
+                for (int i = 1; i < cells.Length - 1; i++)
+                    newCells[i] = cells[i - 1] == cells[i + 1] ? 1 : 0;
+
+                if (cycle == 0)
+                    first = Copy(newCells);
+                else
+                {
+                    string fc = string.Join("", first);
+                    string nc = string.Join("", newCells);
+                    if (fc.Equals(nc))
+                        N %= cycle;
+                }
+
+                cells = Copy(newCells);
+            }
+            return cells;
+
+        }
+
+        private int[] Copy(int[] newCells)
+        {
+            int[] copy = new int[newCells.Length];
+            for (int i = 0; i < newCells.Length; i++)
+            {
+                copy[i] = newCells[i];
+            }
+            return copy;
+        }
+
+        //public int[] prisonAfterNDays(int[] c, int N)
+        //{
+        //    int[] f_c = new int[c.Length], next_c = new int[c.Length];
+
+        //    for (int cycle = 0; N-- > 0; c = next_c.Clone()), ++cycle)
+        //    {
+        //        for (int i = 1; i < c.length - 1; ++i)
+        //            next_c[i] = (c[i - 1] == c[i + 1] ? 1 : 0);
+
+        //        if (cycle == 0)
+        //            f_c = next_c.clone();
+        //        else if (Arrays.equals(next_c, f_c))
+        //            N %= cycle;
+        //    }
+        //    return c;
+        //}
+
+        private static void SpiralMatrix()
+        {
+            int n = 5;
+            int[][] matrix = new int[n][];
+            for (int i = 0; i < n; i++)
+            {
+                matrix[i] = new int[n];
+            }
+
+            int rowStart = 0, rowEnd = n - 1;
+            int colStart = 0, colEnd = n - 1;
+
+            int counter = 1;
+            while (counter <= n*n)
+            {
+                // top row
+                for (int i = colStart; i <= colEnd; i++)
+                {
+                    matrix[rowStart][i] = counter--;
+                }
+                rowStart++;
+
+                for (int i = rowStart; i <= rowEnd; i++)
+                {
+                    matrix[i][colEnd] = counter--;
+                }
+                colEnd--;
+
+                for (int i = colEnd; i >= colStart; i--)
+                {
+                    matrix[rowEnd][i] = counter--;
+                }
+                rowEnd--;
+
+                for (int i = rowEnd; i >= rowStart; i--)
+                {
+                    matrix[i][colStart] = counter--;
+                }
+                colStart++;
+            }
+
+            foreach (var row in matrix)
+            {
+                Console.WriteLine(string.Join(",", row));
+            }
         }
 
         private static void TreasureIsland()
@@ -916,6 +1238,7 @@ namespace JustDoIt
                 new int[]{ 1, 0 }, // right
                 new int[]{ -1, 0 } // left
             };
+
 
             Queue<int[]> zombieQ = new Queue<int[]>(); // Get all zombies
             for (int i = 0; i < matrix.Length; i++)

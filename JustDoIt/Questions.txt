@@ -7,20 +7,21 @@ Top N Competitors/Buzzwords ⭐⭐ [Experienced]
 Reorder Data in Log Files ⭐⭐⭐ [Experienced]
 Subtree of Another Tree ⭐⭐ [New Grad]
 Product Suggestions ⭐⭐ [New Grad | Experienced]
+Treasure Island / Min Distance to Remove the Obstacle (BFS) ⭐⭐⭐ [Experienced]
 Number of Clusters ⭐⭐ [Experienced]
-
+Spiral Matrix ⭐ [New Grad]
+Prison Cells After N Days
+Subtree with Maximum Average
 
 Critical Routers ⭐⭐ [New Grad | Experienced]
 Optimal Utilization ⭐⭐⭐ [Experienced]
 Min Cost to Connect Ropes / Min Time to Merge Files ⭐⭐⭐[Experienced]
-Treasure Island / Min Distance to Remove the Obstacle (BFS) ⭐⭐⭐ [Experienced]
 Treasure Island II
 Merge Two Sorted Lists ⭐⭐ [New Grad | Intern]
 Search a 2D Matrix II ⭐⭐ [New Grad]
 Critical Connections ⭐ [New Grad]
 Favorite Genres ⭐⭐ [New Grad]
 Two Sum - Unique Pairs ⭐⭐ [New Grad]
-Spiral Matrix ⭐ [New Grad]
 Count substrings with exactly K distinct chars ⭐ [Intern]
 Max Of Min Altitudes ⭐⭐ [Intern]
 Longest Palindromic Substring ⭐⭐ [Intern]
@@ -29,9 +30,8 @@ Most Common Word ⭐⭐ [Intern]
 Generate Parentheses ⭐ [Intern]
 Min Cost to Connect All Nodes (a.k.a. Min Cost to Add New Roads)
 Min Cost to Repair Edges (MST)
-Prison Cells After N Days
 Partition Labels
-Subtree with Maximum Average
+
 
 AMCAT Interface
 
