@@ -25,7 +25,6 @@ namespace JustDoIt
             //LongestSequence();
             //MajorityElement();
 
-
             //ContainerWater();
             //MinCandies();
             //RangeSummary();
