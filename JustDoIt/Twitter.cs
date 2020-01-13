@@ -7,6 +7,9 @@ namespace JustDoIt
     {
         private Dictionary<int, TwitterUser> _users;
         private const int MAX_NEWS_FEEDS_TO_FETCH = 10;
+        private int tweetOrder = 0;
+        
+        
 
         /**
          * Your Twitter object will be instantiated and called as such:
@@ -28,50 +31,61 @@ namespace JustDoIt
         {
             if (_users.TryGetValue(userId, out TwitterUser user))
             {
-                user.AddTweet(tweetId);
-
-                foreach (var followeeId in user.Following)
-                {
-                    _users[followeeId].AddTweet(tweetId);
-                }
+                user.AddTweet(tweetId, ++tweetOrder);
             }
             else
             {
-                user = new TwitterUser(userId);
-                user.NewsFeeds.AddFirst(tweetId);
-                _users[userId] = user;
+                var nuser = new TwitterUser(userId);
+                nuser.Following.Add(nuser);
             }
         }
 
-        /** Retrieve the 10 most recent tweet ids in the user's news feed. Each item in the news feed must be posted by users who the user followed or by the user herself. Tweets must be ordered from most recent to least recent. */
+        /** Retrieve the 10 most recent tweet ids in the user's news feed.
+         * Each item in the news feed must be posted
+         * by users who the user followed or by the user herself.
+         * Tweets must be ordered from most recent to least recent. */
         public IList<int> GetNewsFeed(int userId)
         {
             IList<int> newsFeed = new List<int>();
 
             if (_users.TryGetValue(userId, out TwitterUser user))
             {
-                var newsFeeds = user.NewsFeeds;
-
-                for (int i = 0; i < MAX_NEWS_FEEDS_TO_FETCH; i++)
+                var newsFeeds = user.Tweets.GetEnumerator();
+                int count = 0;
+                while (count < MAX_NEWS_FEEDS_TO_FETCH && newsFeeds.MoveNext())
                 {
-                    //newsFeed.Add()
+                    //newsFeed.Add(newsFeeds.Current);
+                    count++;
                 }
             }
 
             return newsFeed;
-
         }
 
         /** Follower follows a followee. If the operation is invalid, it should be a no-op. */
         public void Follow(int followerId, int followeeId)
-        {
-
+        {            
+            //if (_users.TryGetValue(followerId, out var follower))
+            //    follower.Following.Add(followeeId);
         }
 
         /** Follower unfollows a followee. If the operation is invalid, it should be a no-op. */
         public void Unfollow(int followerId, int followeeId)
         {
+            //if (_users.TryGetValue(followerId, out var follower))
+            //    follower.Following.Remove(followeeId);
+        }
+    }
 
+    public class Tweet
+    {
+        public int Id { get; set; }
+        public int Timestamp { get; set; }
+
+        public Tweet(int id, int timestamp)
+        {
+            this.Id = id;
+            this.Timestamp = timestamp;
         }
     }
 
@@ -85,9 +99,9 @@ namespace JustDoIt
         /// <summary>
         /// News Feed
         /// </summary>
-        public LinkedList<int> NewsFeeds { get; private set; }
+        public List<Tweet> Tweets { get; private set; }
 
-        public HashSet<int> Following { get; private set; }
+        public List<TwitterUser> Following { get; private set; }
 
         /// <summary>
         /// Initialize TwitterUser
@@ -96,13 +110,13 @@ namespace JustDoIt
         public TwitterUser(int userId)
         {
             this.UserId = userId;
-            this.NewsFeeds = new LinkedList<int>();
-            this.Following = new HashSet<int>();
+            this.Tweets = new List<Tweet>();
+            this.Following = new List<TwitterUser>();
         }
 
-        public void AddTweet(int tweetId)
+        public void AddTweet(int tweetId, int timestamp)
         {
-            this.NewsFeeds.AddFirst(tweetId);
+            this.Tweets.Add(new Tweet(tweetId, timestamp));
         }
     }
 }
