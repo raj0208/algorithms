@@ -3,6 +3,65 @@ using System.Collections.Generic;
 
 namespace JustDoIt
 {
+    public class Tweet
+    {
+        public int Id;
+        public Tweet Next;
+        public int Timestamp;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="timestamp"></param>
+        public Tweet(int id, int timestamp)
+        {
+            this.Id = id;
+            this.Timestamp = timestamp;
+            Next = null;
+        }
+    }
+
+    public class User
+    {
+        private int _userId;
+        private Tweet _tweetHead;
+        private HashSet<int> _follow;
+
+        public User(int userId)
+        {
+            _userId = userId;
+            _tweetHead = null;
+            _follow = new HashSet<int>();
+            Follow(_userId);
+        }
+
+        public void Follow(int userId)
+        {
+            if (!_follow.Contains(userId))
+                _follow.Add(userId);
+        }
+
+        public void Unfollow(int userId)
+        {
+            _follow.Remove(userId);
+        }
+
+        public void PostTweet(Tweet tweet)
+        {
+            if (_tweetHead == null)
+                _tweetHead = tweet;
+            else
+            {
+                tweet.Next = _tweetHead;
+                _tweetHead = tweet;
+            }
+        }
+    }
+
+
+
+
     public class Twitter
     {
         private Dictionary<int, TwitterUser> _users;
@@ -77,17 +136,6 @@ namespace JustDoIt
         }
     }
 
-    public class Tweet
-    {
-        public int Id { get; set; }
-        public int Timestamp { get; set; }
-
-        public Tweet(int id, int timestamp)
-        {
-            this.Id = id;
-            this.Timestamp = timestamp;
-        }
-    }
 
     public class TwitterUser
     {

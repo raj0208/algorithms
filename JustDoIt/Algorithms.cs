@@ -66,9 +66,82 @@ namespace JustDoIt
             //FindElementInSortedRowColMatrix();
             //TwitterTest();
 
-            TwoPairSum();
+            //TwoPairSum();
+            //SmallestDivisor();
+            Tictactoe();
 
 
+
+        }
+
+        private static void Tictactoe()
+        {
+            //[[0,0],[1,1],[0,1],[0,2],[1,0],[2,0]]
+            List<int[]> moves = new List<int[]>
+            {
+                new int[] { 0,0 },
+                new int[] { 1,1 },
+                new int[] { 0,1 },
+                new int[] { 0,2 },
+                new int[] { 1,0 },
+                new int[] { 2,0 }
+            };
+
+            Console.WriteLine(Tictactoe(moves));
+        }
+
+        private static string Tictactoe(List<int[]> moves)
+        {
+            //int dimension = 3;
+            //int minMoves = dimension + (dimension - 1); 
+
+            if (moves.Count < 5) return "Pending";
+
+            // index 0,1,2: row, 3,4,5: col
+            // diagonal 6 TL, BR, 7: TR BL 
+            int[] playerA = new int[8];
+            int[] playerB = new int[8];
+            int[] player;
+            for (int i = 0; i < moves.Count; i++)
+            {
+                player = (i % 2 == 0) ? playerA : playerB;
+                int row = moves[i][0];
+                int col = moves[i][1];
+                player[row]++;
+                player[col + 3]++;
+                if (row == col) player[6]++;
+                if (row == (2 - col)) player[7]++;
+            }
+
+            for (int i = 0; i < 8; i++)
+            {
+                if (playerA[i] == 3) return "A";
+                if (playerB[i] == 3) return "B";
+            }
+
+            return (moves.Count == (3*3) ? "Draw" : "Pending";
+        }
+
+        private static void SmallestDivisor()
+        {
+            int[] A = { 1, 2, 5, 9 };
+            int threshold = 6;
+
+            int left = 1, right = (int)1e6;
+            while (left < right)
+            {
+                int m = (left + right) / 2, sum = 0;
+
+                foreach(int i in A)
+                    sum += (i + m - 1) / m;
+
+                if (sum > threshold)
+                    left = m + 1;
+                else
+                    right = m;
+            }
+
+            Console.WriteLine(left);
         }
 
         private static void TwoPairSum()
