@@ -68,10 +68,28 @@ namespace JustDoIt
 
             //TwoPairSum();
             //SmallestDivisor();
-            Tictactoe();
+            //Tictactoe();
+            //Duplicate();
+
+            int a = (int)'a';
+            int z = 'z';
+            int A = 'A';
+            int Z = 'Z';
+            int zero = '0';
+            int one = '1';
+            int nine = '9';
+
+            Console.WriteLine(string.Join(",", a,z,A,Z,zero, one, nine));
 
 
 
+        }
+
+        private static void Duplicate()
+        {
+            var s = "This sentence contains two words, one and two".Split(' ').ToList();
+
+            var ss = s.GroupBy(x => x == "two");
         }
 
         private static void Tictactoe()
@@ -119,7 +137,7 @@ namespace JustDoIt
                 if (playerB[i] == 3) return "B";
             }
 
-            return (moves.Count == (3*3) ? "Draw" : "Pending";
+            return moves.Count == (3*3) ? "Draw" : "Pending";
         }
 
         private static void SmallestDivisor()
@@ -148,6 +166,7 @@ namespace JustDoIt
         { 
             int[] arr = {61,719,754,140,424,280,997,688,530,550,438,867,950,194,196,298,417,287,106,489,283,456,735,115,702,317,672,787,264,314,356,186,54,913,809,833,946,314,757,322,559,647,983,482,145,197,223,130,162,536,451,174,467,45,660,293,440,254,25,155,511,746,650,187,314,475,23,169,19,788,906,959,392,203,626,478,415,315,825,335,875,373,160,834,71,488,298,519,178,774,271,764,669,193,986,103,481,214,628,803,100,528,626,544,925,24,973,62,182,4,433,506,594};
             int search = 146;
+            
             Dictionary<int, int> map = new Dictionary<int, int>();
             int missing = 0;
             for (int i = 0; i < arr.Length; i++)
@@ -750,7 +769,7 @@ namespace JustDoIt
             if (products == null || searchWord == null) return null;
 
             IList<IList<string>> result = new List<IList<string>>();
-
+            
             Array.Sort(products);
             int maxProductLength = 0;
             foreach (var product in products)
