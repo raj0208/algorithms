@@ -71,18 +71,44 @@ namespace JustDoIt
             //Tictactoe();
             //Duplicate();
 
-            int a = (int)'a';
-            int z = 'z';
-            int A = 'A';
-            int Z = 'Z';
-            int zero = '0';
-            int one = '1';
-            int nine = '9';
-
-            Console.WriteLine(string.Join(",", a,z,A,Z,zero, one, nine));
+            MaxPathSum();
 
 
+        }
 
+        private static void MaxPathSum()
+        {
+            int[][] input = new int[][]
+            {
+                new int[] { 1 },
+                new int[] { 3, 5 },
+                new int[] { 2, 1, 3},
+                new int[] { 1, 2, 1, 0},
+            };
+
+            int[] sum = input[input.Length - 1];
+            string[] path = new string[sum.Length];
+
+            for (int i = input.Length - 1; i >= 0; i--)
+            {
+                if (i == input.Length - 1) continue;
+
+                for (int j = 0; j < input[i].Length; j++)
+                {
+                    if (sum[j] + input[i][j] > sum[j + 1] + input[i][j])
+                    {
+                        sum[j] = input[i][j] + sum[j];
+                        path[j] = "L" + path[j] ?? string.Empty;
+                    }
+                    else
+                    {
+                        sum[j] = input[i][j] + sum[j + 1];
+                        path[j] = "R" + path[j+1] ?? string.Empty;
+                    }
+                }
+            }
+
+            Console.WriteLine($"Path : {path[0]}, Sum : {sum[0]}");
         }
 
         private static void Duplicate()
