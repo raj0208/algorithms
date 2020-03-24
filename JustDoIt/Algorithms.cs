@@ -63,7 +63,7 @@ namespace JustDoIt
             //MaximumSumSubTree();
             //LevelOrderTraversal();
             //Console.ReadLine();
-            //FindElementInSortedRowColMatrix();
+            FindElementInSortedRowColMatrix();
             //TwitterTest();
 
             //TwoPairSum();
@@ -71,9 +71,104 @@ namespace JustDoIt
             //Tictactoe();
             //Duplicate();
 
-            MaxPathSum();
+            //MaxPathSum();
 
+            //MaxSumSubArray();
 
+            //FindAllDuplicatesInArray();
+            //ProductExceptSelf();
+            //ProductExceptSelfWithConstantSpace();
+        }
+
+        private static void ProductExceptSelfWithConstantSpace()
+        {
+            var input = new int[] { 1, 2, 3, 4 };
+
+            int length = input.Length;
+
+            int[] output = new int[length];
+
+            output[0] = 1;
+            
+            for (int i = 1; i < length; i++)
+            {
+                output[i] = output[i - 1] * input[i - 1];
+            }
+            int right = 1;
+            for (int i = length - 1; i >= 0; i--)
+            {
+                output[i] = output[i] * right;
+                right = right * input[i];
+            }
+
+            Console.WriteLine(string.Join(",", output));
+        }
+
+        private static void ProductExceptSelf()
+        {
+            var input = new int[] { 1,2,3,4 };
+
+            int length = input.Length;
+
+            int[] left = new int[length];
+            int[] right = new int[length];
+            int[] output = new int[length];
+
+            left[0] = 1;
+            right[length - 1] = 1;
+
+            for (int i = 1; i < length; i++)
+            {
+                left[i] = left[i - 1] * input[i - 1];
+            }
+
+            for (int i = length - 2; i >= 0; i--)
+            {
+                right[i] = right[i + 1] * input[i + 1];
+            }
+
+            for (int i = 0; i < length; i++)
+            {
+                output[i] = left[i] * right[i];
+            }
+
+            Console.WriteLine(string.Join(",", output));
+        }
+
+        private static void FindAllDuplicatesInArray()
+        {
+            var input = new int[] { 4,3,2,7,8,2,3,1 };
+            var output = new List<int>();
+            for (int i = 0; i < input.Length; i++)
+            {
+                var index = Math.Abs(input[i]) - 1;
+                if (input[index] > 0)
+                {
+                    input[index] *= -1;
+                }
+                else
+                {
+                    output.Add(Math.Abs(input[i]));
+                }
+            }
+
+            Console.WriteLine(string.Join(",", output));
+        }
+
+        private static void MaxSumSubArray()
+        {
+            var inputArray = new int[] { -2,2,5,-11,6 };
+
+            var maxSum = inputArray[0];
+            var currSum = maxSum;
+
+            for (int i = 1; i < inputArray.Length; i++)
+            {
+                currSum = Math.Max(inputArray[i], inputArray[i] + currSum);
+                maxSum = Math.Max(maxSum, currSum);
+            }
+
+            Console.WriteLine(maxSum);
         }
 
         private static void MaxPathSum()
@@ -249,7 +344,7 @@ namespace JustDoIt
             int search = 55;
 
             int row = 0;
-            int col = matrix[0].Length;
+            int col = matrix[0].Length - 1;
 
             while (row < matrix.Length && col >= 0)
             {
@@ -257,11 +352,11 @@ namespace JustDoIt
                 {
                     Console.WriteLine($"Found {search} at {row},{col}");
                 }
-                else if (matrix[row][col] < search)
+                else if (matrix[row][col] > search)
                 {
                     col--;
                 }
-                else if (matrix[row][col] > search)
+                else if (matrix[row][col] < search)
                 {
                     row++;
                 }
