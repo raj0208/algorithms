@@ -63,7 +63,7 @@ namespace JustDoIt
             //MaximumSumSubTree();
             //LevelOrderTraversal();
             //Console.ReadLine();
-            FindElementInSortedRowColMatrix();
+            //FindElementInSortedRowColMatrix();
             //TwitterTest();
 
             //TwoPairSum();
@@ -71,13 +71,95 @@ namespace JustDoIt
             //Tictactoe();
             //Duplicate();
 
-            //MaxPathSum();
+            MaxPathSum();
 
             //MaxSumSubArray();
 
             //FindAllDuplicatesInArray();
             //ProductExceptSelf();
             //ProductExceptSelfWithConstantSpace();
+            //MergeIntervals();
+            Question11();
+            //Question12();
+            //Question13();
+        }
+
+        
+
+        private static void Question11()
+        {
+            List<string> products = new List<string>();
+            products.Add("yellowShirt");
+            products.Add("redHat");
+            products.Add("Blackshirt");
+            products.Add("redHat");
+            //products.GroupBy(x => x).OrderBy(x => x.Key).OrderBy(x => x.ToList().Count).Last();
+
+
+            var featureProduct = products.GroupBy(x => x)
+                  .Select(group =>
+                        new {
+                            Product = group.Key,
+                            Count = group.OrderByDescending(x => x)
+                        })
+                  .OrderBy(group => group.Product).OrderBy(group => group.Count).Last();
+            Console.WriteLine(featureProduct.Product);
+
+            //Dictionary<string, int> featureProducts = new Dictionary<string, int>();
+            
+        }
+
+        private static void Question12()
+        {
+            Console.ReadLine();
+        }
+
+        private static void Question13()
+        {
+            Console.ReadLine();
+        }
+
+        private static void MergeIntervals()
+        {
+            int[][] intervals = new int[][] {
+                new int[] {15,18 },
+                new int[] { 10,15 },
+                new int[] {2,6 },
+                new int[] {1,3 },
+                new int[] {8,10 }
+            };
+
+            if (intervals.Length <= 1) {
+                Console.WriteLine("Already merged");
+                return;
+            }
+
+            List<int[]> output = new List<int[]>();
+
+            Array.Sort(intervals, (x,y) => x[0] - y[0]);
+
+            int[] curr = intervals[0];
+            output.Add(curr);
+
+            for (int i = 1; i < intervals.Length; i++)
+            {
+                int currStart = curr[0];
+                int currEnd = curr[1];
+                int nextStart = intervals[i][0];
+                int nextEnd = intervals[i][1];
+
+                if (currEnd >= nextStart)
+                {
+                    curr[1] = Math.Max(nextEnd, currEnd);
+                }
+                else
+                {
+                    curr = intervals[i];
+                    output.Add(curr);
+                }
+            }
+
+            output.ForEach(x => Console.WriteLine(string.Join(",", x)));
         }
 
         private static void ProductExceptSelfWithConstantSpace()
@@ -166,6 +248,24 @@ namespace JustDoIt
             {
                 currSum = Math.Max(inputArray[i], inputArray[i] + currSum);
                 maxSum = Math.Max(maxSum, currSum);
+            }
+
+            Console.WriteLine(maxSum);
+        }
+
+        private static void MaxSumSubArrayKadaneAlgo () {
+            // Kadane's Algorithm
+            var inputArray = new int[] {-2,2,5,-11,6 };
+
+            var maxSum = inputArray[0];
+            var currSum = 0;
+
+            for (int i = 0; i < inputArray.Length; i++)
+            {
+                currSum += inputArray[i];
+                maxSum = Math.Max(currSum, maxSum);
+                if (currSum < 0)
+                    currSum = 0;
             }
 
             Console.WriteLine(maxSum);
